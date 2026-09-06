@@ -47,7 +47,9 @@ RTX 5070 Ti（CUDA）と 16 スレッドの CPU で、国書データベース�
 | CPU のみ | 数秒/コマ | 約 60〜100 秒/コマ | 約 7 秒 |
 
 初期化（セッション作成）は約 1 秒。CPU の遅さは fp16 encoder に由来する（int8 版は onnxruntime の CPU プロバイダで
-動かせない）。認識精度はブラウザ版と同じモデルなので原著作物の [技術情報](docs/tech.html) の評価がそのまま当てはまる。
+動かせない）。CPU で大量に処理する場合は GPU 版を使うか、行数の少ない画像に限るのが現実的。
+認識精度はブラウザ版と同じモデルなので原著作物の [技術情報](docs/tech.html) の評価がそのまま当てはまる。
+読み順・Koji 変換の原実装との比較と再現手順は [benchmarks/README.md](benchmarks/README.md) を参照。
 
 ## 使い方
 
@@ -84,13 +86,6 @@ JSON の各行は `reading_order`, `x`, `y`, `width`, `height`, `confidence`（�
 - encoder は fp16 版を使う。int8 版が使う ConvInteger 演算は onnxruntime の CPU/CUDA プロバイダに無い。
   対応する版は fp16 encoder が配布されている v16fs / v17 / v18。
 - 行検出は RTMDet のみ（ブラウザ版の 5 クラス YOLO は含まない）。
-
-## 速度
-
-encoder は fp16 のため CPU では 1 行に数秒かかる（RTX 5070 Ti では `--device cuda` で 1 行 0.1 秒程度）。
-CPU で大量に処理する場合は GPU 版を使うか、行数の少ない画像に限るのが現実的。
-
-読み順・Koji 変換の原実装との比較と再現手順は [benchmarks/README.md](benchmarks/README.md) を参照。
 
 ## 環境変数
 
