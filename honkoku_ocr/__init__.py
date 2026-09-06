@@ -7,9 +7,9 @@ from importlib.metadata import PackageNotFoundError, version
 
 from .koji import raw_to_koji, raw_to_plain
 from .layout import Box
-from .pipeline import OCR, LineResult, PageFailure, PageInput, PageResult, PreparedPage, ProcessingCancelled, ocr_image
+from .pipeline import OCR, LineResult, ModelSetupError, PageFailure, PageInput, PageResult, PreparedPage, ProcessingCancelled, ocr_image
 
-__all__ = ["OCR", "Box", "LineResult", "PageResult", "PreparedPage", "PageInput", "PageFailure", "ProcessingCancelled", "ocr_image", "raw_to_koji", "raw_to_plain"]
+__all__ = ["OCR", "Box", "LineResult", "PageResult", "PreparedPage", "PageInput", "PageFailure", "ProcessingCancelled", "ModelSetupError", "ocr_image", "raw_to_koji", "raw_to_plain"]
 
 try:
     __version__ = version("honkoku-ocr-py")

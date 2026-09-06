@@ -185,3 +185,18 @@ def test_batch_page_inputs_select_frames(tmp_path):
     Image.new('RGB', (10, 20)).save(path, save_all=True, append_images=[Image.new('RGB', (30, 40))])
     results = list(OCR().process_many([PageInput(path, [], 1), PageInput(path, [], 0)]))
     assert [(r.frame, r.width, r.height) for r in results] == [(1, 30, 40), (0, 10, 20)]
+
+
+def test_batch_model_setup_failure_aborts_without_retry(monkeypatch):
+    from honkoku_ocr import ModelSetupError
+    calls = []
+    def missing(*args, **kwargs):
+        calls.append(1)
+        raise FileNotFoundError('offline cache is missing')
+    monkeypatch.setattr(pipeline.models, 'ensure', missing)
+    def inputs():
+        yield Image.new('RGB', (10, 10))
+        pytest.fail('setup failure consumed a second page')
+    with pytest.raises(ModelSetupError, match='offline cache'):
+        list(OCR(offline=True).process_many(inputs()))
+    assert calls == [1]

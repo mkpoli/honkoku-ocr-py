@@ -123,6 +123,10 @@ class PageResult:
     warnings: list[str]
 
 
+class ModelSetupError(RuntimeError):
+    """Model resolution/session creation failed; retrying each page is inappropriate."""
+
+
 class ProcessingCancelled(Exception):
     """Cooperative cancellation; no partial page result is returned."""
 
@@ -223,18 +227,24 @@ class OCR:
     @property
     def detector(self) -> Detector:
         if self._detector is None:
-            self._detector = LayoutDetector(self.paths(["layout"])["layout"], self.device,
-                                             threads=self.threads)
+            try:
+                self._detector = LayoutDetector(self.paths(["layout"])["layout"], self.device,
+                                                 threads=self.threads)
+            except Exception as error:
+                raise ModelSetupError(safe_error(error)) from error
         return self._detector
 
     @property
     def recognizer(self) -> LineRecognizer:
         if self._recognizer is None:
-            self._recognizer = Recognizer(self.resolved_paths(["encoder", "prefill", "step"]),
-                                          self.version, self.device, threads=self.threads,
-                                          decoder_threads=self.decoder_threads,
-                                          encoder_precision=self.encoder_precision, quiet=self.quiet,
-                                          resolved_encoder=self._resolved_encoder)
+            try:
+                self._recognizer = Recognizer(self.resolved_paths(["encoder", "prefill", "step"]),
+                                              self.version, self.device, threads=self.threads,
+                                              decoder_threads=self.decoder_threads,
+                                              encoder_precision=self.encoder_precision, quiet=self.quiet,
+                                              resolved_encoder=self._resolved_encoder)
+            except Exception as error:
+                raise ModelSetupError(safe_error(error)) from error
         return self._recognizer
 
     @property
@@ -308,7 +318,7 @@ class OCR:
 
         Each input is a source accepted by process(), or PageInput for per-page
         boxes/frame selection. Indices are one-based. Progress runs once before
-        each yield, including failures; callback and input-iterator errors propagate.
+        each yield, including failures; callback, input-iterator and model-setup errors propagate.
         Cancellation is checked before consuming an input and between lines. It
         ends the iterator without yielding an unfinished page. An in-flight model
         call completes before cancellation takes effect. Caller-owned images and
@@ -330,6 +340,8 @@ class OCR:
                                       layout_only=layout_only, cancelled=cancelled)
             except ProcessingCancelled:
                 return
+            except ModelSetupError:
+                raise
             except Exception as error:
                 result = PageFailure(index, job.frame, type(error).__name__, safe_error(error))
             if progress is not None:
