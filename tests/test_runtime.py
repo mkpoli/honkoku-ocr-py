@@ -1,7 +1,9 @@
 import subprocess
 import sys
 from types import SimpleNamespace
+
 import pytest
+
 from honkoku_ocr import runtime
 
 
@@ -41,3 +43,17 @@ def test_cuda_session_must_actually_use_cuda(monkeypatch):
     monkeypatch.setattr(runtime, '_runtime', lambda: fake)
     with pytest.raises(RuntimeError, match='CUDA session could not be created'):
         runtime.session('model.onnx', 'cuda')
+
+
+def test_thread_limits_are_passed_to_sessions(monkeypatch):
+    options = []
+    class Options:
+        pass
+    def create(path, opts, **kwargs):
+        options.append(opts)
+        return SimpleNamespace(get_providers=lambda: ['CPUExecutionProvider'])
+    monkeypatch.setattr(runtime, '_runtime', lambda: SimpleNamespace(SessionOptions=Options, InferenceSession=create))
+    runtime.session('model.onnx', threads=2)
+    assert options[0].intra_op_num_threads == 2
+    with pytest.raises(ValueError, match='nonnegative'):
+        runtime.session('model.onnx', threads=-1)

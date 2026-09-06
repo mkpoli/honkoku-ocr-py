@@ -8,15 +8,20 @@
   5. /255 の後 ImageNet 平均・分散で正規化、NCHW
 """
 from __future__ import annotations
-import math, re
+
+import math
+import re
+from dataclasses import dataclass
+from time import perf_counter
+
 import numpy as np
 from PIL import Image
+
 from . import models
 from .runtime import session
 
 CLS, SEP = 2, 3
 STRUCT = {0, 1, 2, 3, 4}
-MAX_LEN = 192
 REPEAT_WINDOW = 12
 SKEW_MAX, SKEW_COARSE, SKEW_MIN_APPLY, SKEW_DOWNSCALE = 12, 3, 2, 120
 MEAN = np.array([0.485, 0.456, 0.406], np.float32)
@@ -106,43 +111,90 @@ def decode_ids(ids: list[int], vocab: list[str]) -> str:
     out = re.sub(r"＿([ぁ-ゖ]+)", lambda m: "＿" + _HIRA(m.group(1)), out)
     return out
 
+@dataclass
+class RecognitionResult:
+    raw: str
+    stop_reason: str
+    token_count: int
+    timings: dict[str, float]
+
+
 class Recognizer:
-    def __init__(self, paths: dict, version: str = models.DEFAULT_VERSION, device: str = "cpu"):
+    def __init__(self, paths: dict, version: str = models.DEFAULT_VERSION, device: str = "cpu",
+                 *, threads: int = 0, decoder_threads: int = 0, encoder_precision: str = "auto", quiet: bool = False, resolved_encoder=None):
+        spec = models.specification(version)
         self.version = version
-        self.img_h, self.img_w = models.IMG_DIMS[version]
+        self.img_h, self.img_w = spec.image_height, spec.image_width
+        self.max_tokens = spec.max_tokens
         self.vocab = models.vocab(version)
-        self.enc = session(paths["encoder"], device)
-        self.pre = session(paths["prefill"], "cpu")
-        self.step = session(paths["step"], "cpu")
+        self.encoder_path = resolved_encoder if resolved_encoder is not None else models.encoder_path(
+            paths["encoder"], device, precision=encoder_precision, quiet=quiet, digest=True)
+        self.enc = session(self.encoder_path, device, threads=threads)
+        self.pre = session(paths["prefill"], "cpu", threads=decoder_threads)
+        self.step = session(paths["step"], "cpu", threads=decoder_threads)
         self.enc_in = self.enc.get_inputs()[0].name
         self.past = [i.name for i in self.step.get_inputs() if i.name.startswith("past_")]
         self.present = [o.name for o in self.step.get_outputs() if o.name.startswith("present_")]
         self.pre_out = [o.name for o in self.pre.get_outputs()]
-        if len(self.past) != 24 or len(self.present) != 24 or [p[5:] for p in self.past] != [q[8:] for q in self.present]:
-            raise RuntimeError(f"unexpected decoder graph: {len(self.past)} past_/{len(self.present)} present_ tensors (24 expected, same order)")
+        if (len(self.past) != spec.cache_tensors or len(self.present) != spec.cache_tensors
+                or [p[5:] for p in self.past] != [q[8:] for q in self.present]
+                or not {"logits", *self.present}.issubset(self.pre_out)):
+            raise RuntimeError("incompatible decoder graph: cache inputs/outputs do not match the model specification")
+        for graph in (self.pre, self.step):
+            inputs = {i.name for i in graph.get_inputs()}
+            if not {"input_ids", "encoder_hidden_states"}.issubset(inputs):
+                raise RuntimeError("incompatible decoder graph: missing token or encoder inputs")
+            logits = next((o for o in graph.get_outputs() if o.name == "logits"), None)
+            if logits is None or (isinstance(logits.shape[-1], int) and logits.shape[-1] != len(self.vocab)):
+                raise RuntimeError("incompatible decoder graph: vocabulary size does not match logits")
 
-    def generate(self, crop: Image.Image) -> list[int]:
-        hidden = self.enc.run(None, {self.enc_in: to_pixel(crop, self.img_h, self.img_w)})[0]
-        out = dict(zip(self.pre_out, self.pre.run(None, {"input_ids": np.array([[CLS]], np.int64), "encoder_hidden_states": hidden})))
+    def _generate(self, crop: Image.Image) -> tuple[list[int], str, dict[str, float]]:
+        timings = {}
+        start = perf_counter()
+        pixels = to_pixel(crop, self.img_h, self.img_w)
+        timings["preprocess"] = perf_counter() - start
+        start = perf_counter()
+        hidden = self.enc.run(None, {self.enc_in: pixels})[0]
+        timings["encoder"] = perf_counter() - start
+        start = perf_counter()
+        out = dict(zip(self.pre_out, self.pre.run(None, {
+            "input_ids": np.array([[CLS]], np.int64), "encoder_hidden_states": hidden,
+        }), strict=True))
+        timings["prefill"] = perf_counter() - start
         best = int(out["logits"][0, -1].argmax())
         if best == SEP:
-            return []
+            timings["decode"] = 0.0
+            return [], "eos", timings
         gen = [best]
-        past = {p: out[q] for p, q in zip(self.past, self.present)}
+        past = {p: out[q] for p, q in zip(self.past, self.present, strict=True)}
         names = ["logits"] + self.present
-        for _ in range(1, MAX_LEN):
-            res = dict(zip(names, self.step.run(names, {"input_ids": np.array([[best]], np.int64), "encoder_hidden_states": hidden, **past})))
+        reason = "max_tokens"
+        start = perf_counter()
+        for _ in range(1, self.max_tokens):
+            res = dict(zip(names, self.step.run(names, {
+                "input_ids": np.array([[best]], np.int64), "encoder_hidden_states": hidden, **past,
+            }), strict=True))
             best = int(res["logits"][0, -1].argmax())
             if best == SEP:
+                reason = "eos"
                 break
             gen.append(best)
-            past = {p: res[q] for p, q in zip(self.past, self.present)}
-            p = degenerate_period(gen)
-            if p > 0:
-                del gen[len(gen) - (REPEAT_WINDOW - p):]
+            past = {p: res[q] for p, q in zip(self.past, self.present, strict=True)}
+            period = degenerate_period(gen)
+            if period > 0:
+                del gen[len(gen) - (REPEAT_WINDOW - period):]
+                reason = "repetition"
                 break
-        return gen
+        timings["decode"] = perf_counter() - start
+        return gen, reason, timings
+
+    def generate(self, crop: Image.Image) -> list[int]:
+        return self._generate(crop)[0]
+
+    def recognize_result(self, crop: Image.Image) -> RecognitionResult:
+        ids, reason, timings = self._generate(crop)
+        return RecognitionResult(decode_ids(ids, self.vocab), reason, len(ids), timings)
 
     def recognize(self, crop: Image.Image) -> str:
-        """行画像 → 特殊トークン込みの生文字列。"""
-        return decode_ids(self.generate(crop), self.vocab)
+        """Recognize one line crop, returning text with structural tokens."""
+        return self.recognize_result(crop).raw

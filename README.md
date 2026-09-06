@@ -45,24 +45,24 @@ is the fp16 export rather than the browser's int8 one, so line texts can differ 
 
 ## 比較
 
-| | **honkoku-ocr-py** | [みんなで翻刻OCR](https://yuta1984.github.io/honkoku-ocr-web/)（ブラウザ版） | [NDL古典籍OCR-Lite](https://github.com/ndl-lab/ndlkotenocr-lite) |
-| :-- | :-: | :-: | :-: |
-| 動く場所 | Python / CLI / サーバ | ブラウザ（WebAssembly, Web Worker） | Python / デスクトップアプリ |
-| 一括処理 | ✅ ディレクトリ単位、失敗した画像を飛ばして続行、`--resume`で再開 | ❌ 画像を開いてボタンを押す | ✅ ディレクトリ単位 |
-| GPU | ✅ CUDA（行検出とencoder） | WebGPU対応端末のみ | CUDA（ベータ） |
-| 行認識モデル | ConvNeXt V2 + RoBERTa（kuzushiji v18） | 同じ重み | PARSeq |
-| 出力 | Koji記法 + JSON（行位置、読み順、停止理由、所要時間、モデルと設定の指紋） | Koji記法、縦書き表示 | 素テキスト + XML/JSON |
-| 行位置の持ち込み | ✅ `--boxes` / `process(image, boxes=...)` | 画面上でbboxを編集 | ❌ |
-| 行bboxの編集UI | ❌（`--preview`で番号付き画像を出す） | ✅ | ❌ |
-| モデルの検証 | 全ファイルのサイズとSHA-256を照合 | IndexedDBキャッシュ | 同梱 |
-| 精度 | 未測定（同じ重み。encoderの精度と画像補間がブラウザ版と異なる） | 本文plain micro CER 0.075（v18、原著の公表値） | NDL古典籍OCR ver.3より約2%低い |
+| | **honkoku-ocr-py** | [みんなで翻刻OCR](https://yuta1984.github.io/honkoku-ocr-web/)（ブラウザ版） |
+| :-- | :-: | :-: |
+| 動く場所 | Python / CLI / サーバ | ブラウザ（WebAssembly, Web Worker） |
+| 一括処理 | ディレクトリ単位。スクリプトやcronから呼べ、失敗した画像を飛ばして続行、`--resume`で再開 | タブに開いた複数画像を「全画像OCR実行」でまとめて処理。結果は画面から保存する |
+| GPU | CUDA（行検出とencoder） | WebGPU対応端末のみ |
+| 行認識モデル | ConvNeXt V2 + RoBERTa（kuzushiji v18） | 同じ重み |
+| 出力 | Koji記法 + JSON（行位置、読み順、停止理由、所要時間、モデルと設定の指紋） | Koji記法、縦書き表示 |
+| 行位置の持ち込み | `--boxes` / `process(image, boxes=...)` | 画面上でbboxを編集 |
+| 行bboxの編集UI | 無し（`--preview`で番号付き画像を出す） | あり |
+| モデルの検証 | 全ファイルのサイズとSHA-256を照合 | IndexedDBキャッシュ |
+| 精度 | 未測定（同じ重み。encoderの精度と画像補間がブラウザ版と異なる） | 本文plain micro CER 0.075（v18、[技術情報](docs/tech.html)の公表値） |
 
 ブラウザ版の強みは行bboxの手直しと縦書きの閲覧で、そこはこの移植には無い。自動化と大量処理、他のツールとの接続がこの移植の役割になる。
 
 ## なぜ移植したか
 
-ブラウザ版は1枚ずつ画像を開いてボタンを押す道具で、数十コマの写本を機械的に処理する用途には向かない。
-このリポジトリは同じ重みを、次の使い方ができる形にしたものである。
+ブラウザ版はタブに開いた画像をまとめて処理できるが、画像の読み込みも結果の保存も画面の操作で行う。
+他のプログラムから呼ぶ、夜間に数百コマを流す、結果をそのまま次の処理に渡す、という使い方のためにこのリポジトリがある。
 
 - **一括処理**: ディレクトリを渡せば全画像を順に翻刻し、画像ごとにKoji記法のtxtと、行位置・読み順・
   行検出スコア・所要時間を持つJSONを書き出す。読めない画像があっても残りを処理し、終了コードで知らせる。
@@ -73,8 +73,8 @@ is the fp16 export rather than the browser's int8 one, so line texts can differ 
   行検出結果をそのまま渡せば、二つのエンジンの読みを行ごとに一対一で比べられる。与えた座標はそのまま結果に戻る。
 - **GPU**: 行検出とencoderをCUDAで動かせる。行認識が支配的なので、GPUがあれば1コマ数秒で終わる。
 - **再現性**: モデルはバージョン名で固定し、取得時にサイズとSHA-256を照合する。JSONには入力画像・各モデル・語彙・
-  設定・パッケージとランタイムの版の指紋が入り、同じ環境で同じ入力を処理すれば同じ出力になる。
-  onnxruntimeの版やデバイスをまたいだ一致は確かめていない。
+  設定・パッケージとランタイムの版の指紋が入り、どの重みと設定から得た出力かを後から確かめられる。
+  onnxruntimeの版やデバイスをまたいで出力が一致するかは確かめていない。
 - **ブラウザ不要**: サーバやWSL、ヘッドレス環境で動く。IndexedDBのキャッシュもWeb Workerもいらない。
 
 出力はブラウザ版と同じKoji記法なので、ブラウザ版で作った翻刻と混ぜて扱える。
@@ -100,8 +100,9 @@ is the fp16 export rather than the browser's int8 one, so line texts can differ 
 CUDAの行は同じ見開きを1回の暖機のあと3回処理した中央値（1.508、1.444、1.464秒）で、3回とも同じ文字列を出した。モデルの遅延読み込みを含む最初の1コマは3.51秒、プロセスのピークRSSは約2.0GiB。decoderはCUDAでもCPUで動く。
 
 ブラウザ版とこの移植では同じ見開きで検出行数（22行と21行）も行の読みも一部異なる。
-どちらが正しいかは正解翻刻との照合が要る。[benchmarks/ocr.py](benchmarks/ocr.py)は画像と翻刻の一覧（manifest）を受け取って
-ページ単位の所要時間とCERを出す。読み順とKoji変換の原実装との比較は[benchmarks/README.md](benchmarks/README.md)を参照。
+どちらが正しいかは正解翻刻との照合が要る。測定に使った見開きは公開許諾を確かめていない手元のスキャンで、
+このリポジトリには含めない。[benchmarks/ocr.py](benchmarks/ocr.py)は`attribution`（出典）と`samples`（各要素は`id`、`image`、任意の`frame`と正解`reference`）を持つ
+JSON manifestを受け取り、ページ単位の所要時間と、正解があればCERを出す。手元の画像と翻刻で同じ測定ができる。読み順とKoji変換の原実装との比較は[benchmarks/README.md](benchmarks/README.md)を参照。
 
 ## 使い方
 
@@ -109,14 +110,14 @@ CUDAの行は同じ見開きを1回の暖機のあと3回処理した中央値�
 uv sync --extra cpu          # onnxruntime (CPU)
 uv sync --extra gpu          # onnxruntime-gpu と CUDA 12 のランタイム (cpu とは排他)
 
-uv run honkoku-ocr --download                    # モデルを取得して照合 (約 250 MB、~/.cache/honkoku-ocr/models)
+uv run honkoku-ocr --download                    # モデルを取得して照合 (4 ファイル 289 MB、~/.cache/honkoku-ocr/models)
 uv run honkoku-ocr page.jpg -o out               # out/page__<hash>.txt (Koji 記法、読み順) と out/page__<hash>.json
 uv run honkoku-ocr pages/ -o out --device cuda   # ディレクトリ内の画像を一括処理
 uv run honkoku-ocr pages/ -o out --resume        # 済んだページを飛ばして続きから
 uv run honkoku-ocr page.jpg -o out --plain       # タグ無しの素テキスト
 uv run honkoku-ocr page.jpg -o out --preview     # 行 bbox と読み順を描いた PNG も書く
 uv run honkoku-ocr page.jpg -o out --layout-only # 行検出だけ (行認識モデルを読まない)
-uv run honkoku-ocr page.jpg -o out --boxes out/page__<hash>.json   # 行位置を与えて認識だけ
+uv run honkoku-ocr page.jpg -o out --boxes 'out/page__<hash>.json'   # 行位置を与えて認識だけ
 uv run honkoku-ocr scans.tif -o out --frame 3    # 多ページ TIFF の 4 コマ目だけ (省略時は全コマ)
 ```
 
@@ -139,7 +140,8 @@ hexは入力の絶対パスのSHA-256の先頭16桁で、同じstemの画像が�
 
 **0.1.0からの変更**。0.1.0の出力は`<stem>.txt`と`<stem>.json`で、JSONの行は`confidence`を持ち、`--version`はモデルの版を選ぶ
 オプションだった。0.2.0では出力名に上のhexが付き、行のスコアは`detection_confidence`、モデルの版は`--model`で選び、
-`--version`はパッケージの版を表示する。古い出力を読む処理は`__`以降を除いてstemを取り出すか、JSONの`image`フィールドを見ればよい。
+`--version`はパッケージの版を表示する。出力ファイルと入力画像の対応はJSONの`image`フィールドで取る（stemに`__`を含む
+ファイル名もあるので、名前を切って戻さない）。
 
 **再開**。各ページのJSONは完了記録で、txt（とpreview）を書き終えてから最後に置かれる。書き込みは一時ファイル経由なので
 途中で止めても壊れたファイルは残らない。`--resume`はJSONの指紋（画像のSHA-256、コマ番号、各モデルと語彙のSHA-256、
@@ -152,10 +154,12 @@ hexは入力の絶対パスのSHA-256の先頭16桁で、同じstemの画像が�
 ## Pythonから
 
 ```python
+from pathlib import Path
+
 from honkoku_ocr import OCR, Box
 
 ocr = OCR("v18", device="cuda")          # モデルは最初に使う段階で読み込む
-for path in sorted(pages.glob("*.jpg")):
+for path in sorted(Path("pages").glob("*.jpg")):
     page = ocr.process(path)             # PageResult
     for line in page.lines:
         print(line.reading_order, line.koji)   # line.raw にタグ付きの生文字列、line.plain に素テキスト
@@ -166,12 +170,14 @@ for path in sorted(pages.glob("*.jpg")):
 
 - `ocr.process(image, boxes=None, *, frame=0, layout_only=False)`は`PageResult`を返す。`image`はパス、
   `PIL.Image`、または`ocr.prepare(path)`が返す`PreparedPage`。
+  `PreparedPage`は`with ocr.prepare(path) as prepared:`で使うか、使用後に`prepared.close()`で閉じる。
 - `ocr.run(image, boxes=None)`は`process(...).lines`、`ocr.layout(image)`は行検出だけを行い`Box`の一覧を返す。
   どちらも必要なモデルしか読まない。
 - 座標はすべてEXIFの向きを反映した元画像のもの（`settings.coordinate_space`は`exif_oriented_original`）。
   処理は長辺3,500pxに縮小した画像で行い、結果は元画像の座標に戻す。
 - `boxes=[Box(x, y, w, h, confidence), ...]`を与えると行検出を飛ばし、与えた順を読み順、与えた座標をそのまま
-  結果の座標とする。boxは元画像の内側で幅と高さが正、confidenceは0〜1でなければならない。
+  結果の座標とする。幅と高さは正、confidenceは0〜1で、boxが元画像と重なっている必要がある。
+  はみ出した部分は認識用の切り出しで除くが、返す座標は変更しない。
 - 行検出器や行認識器を差し替えるには`OCR(detector=..., recognizer=...)`。`detect(image, conf_threshold, ios_threshold)`と
   `recognize_result(crop)`を実装したオブジェクトであればよい。
 
@@ -227,14 +233,14 @@ CLIのJSONは`PageResult`に`image`（入力のファイル名）、`fingerprint
                "vocabulary": "cf0621e68b09…"},
     "settings": {"device": "cpu", "...": "..."},
     "model": "v18", "plain": false, "layout_only": false, "boxes": null,
-    "package_version": "0.1.0", "code_sha256": "dfde67eac894…",
+    "package_version": "0.2.0", "code_sha256": "dfde67eac894…",
     "runtime_versions": {"numpy": "2.5.2", "pillow": "12.3.0", "onnxruntime": "1.29.0", "onnx": "1.22.0"}
   },
   "artifacts": {"0003__5de8f1b5d7a5d622.txt": "ca6949193d5e…"}
 }
 ```
 
-txtは`koji`（`--plain`なら`plain`）を読み順に1行ずつ並べたもの。上の例の`package_version`は0.2.0へ上げる前の開発中のcheckoutで測ったときの値。
+txtは`koji`（`--plain`なら`plain`）を読み順に1行ずつ並べたもの。上の例は構造を示すため、行の一部とハッシュ値を省略している。
 
 ## ブラウザ版との違い
 
@@ -244,12 +250,12 @@ txtは`koji`（`--plain`なら`plain`）を読み順に1行ずつ並べたもの
 - decoderは`--device cuda`でもCPUで動く。
 - 拡大縮小と回転はPillow（縮小はLanczos、回転はbicubic）で、ブラウザのcanvasとは補間が異なる。
 - 画像の端にかかる行では傾き推定の二値化閾値が異なる。ブラウザ版は画像外の画素を透明（輝度0）のまま平均に入れ、
-  この移植は白で埋めてから平均を取る。端から45px以内の行だけに影響する。
+  この移植は白で埋めてから平均を取る。処理画像で既定の余白45pxが画像外にはみ出す行に影響する。
 - 行検出はRTMDetのみ（ブラウザ版の5クラスYOLOは含まない）。
 
 ## 環境変数
 
-- `HONKOKU_OCR_MODELS` … モデルの保存先（既定`~/.cache/honkoku-ocr/models`）。fp32変換したencoderと来歴ファイル
+- `HONKOKU_OCR_MODELS` … モデルの保存先（既定`~/.cache/honkoku-ocr/models`）。fp32変換したencoder（366MB）と来歴ファイル
   `<name>.json`も同じ場所に置く。
 - `HONKOKU_OCR_MODEL_URL` … モデル配信元（既定は原著作物と同じ公開バケット）
 
@@ -265,8 +271,8 @@ txtは`koji`（`--plain`なら`plain`）を読み順に1行ずつ並べたもの
   `fingerprint.models.encoder.file`が`-fp32.onnx`になっているか確かめる。
 - **`DecompressionBombWarning` / `DecompressionBombError`** … Pillowの既定は約8,900万画素で警告、その2倍で停止する。
   それより大きなスキャンは事前に縮小するか、`PIL.Image.MAX_IMAGE_PIXELS`を上げる。
-- **`box must lie within the EXIF-oriented image`** … `--boxes`のbboxが画像の外にはみ出している。座標は回転を反映した
-  元画像のもので、幅と高さは正、confidenceは0〜1。
+- **`box must overlap the EXIF-oriented image`** … `--boxes`のbboxが画像と重なっていない。座標は回転を反映した
+  元画像のもの。少しはみ出したboxは認識時に画像内へ切り詰め、返す座標は元のままにする。
 - **メモリ** … CPUのfp32 encoderは約1GB、CUDAのfp16 encoderはVRAM約1GBを使う。ワーカーを並列に立てるなら
   その分だけ増える。
 
@@ -278,7 +284,7 @@ uv run pytest
 uv run ruff check .
 ```
 
-CIはPython 3.10〜3.13でlintとテストを走らせ、ビルドしたwheelから語彙ファイルが読めることを確かめる。
+CIはPython 3.10〜3.14でlintとテストを走らせ、ビルドしたwheelから語彙ファイルが読めることを確かめる。
 
 ## ライセンスと帰属
 

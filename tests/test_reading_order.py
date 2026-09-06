@@ -1,5 +1,6 @@
 from honkoku_ocr.reading_order import order
 
+
 def test_vertical_columns_read_right_to_left():
     # three vertical columns, x increasing to the right; reading order must start at the rightmost
     boxes = [(10, 0, 40, 900), (110, 0, 40, 900), (210, 0, 40, 900)]
@@ -17,6 +18,7 @@ def test_trivial_inputs():
 
 def test_histogram_accumulates_without_uint8_overflow():
     import numpy as np
+
     from honkoku_ocr.reading_order import _hist
     xh, yh = _hist(np.ones((300, 400), dtype=np.uint8), 0, 0, 400, 300)
     assert xh == [300] * 400

@@ -4,11 +4,14 @@
 出力 dets [1,N,5] (x1,y1,x2,y2,score; NMS 済)。入れ子 box (IoS ≥ 0.8) は大きい方を残す。
 """
 from __future__ import annotations
+
 from dataclasses import dataclass
+
 import numpy as np
 from PIL import Image
-from .runtime import session
+
 from .recognizer import js_round
+from .runtime import session
 
 SIZE = 1024
 PAD = 114
@@ -24,8 +27,8 @@ class Box:
     confidence: float
 
 class LayoutDetector:
-    def __init__(self, model_path, device: str = "cpu"):
-        self.sess = session(model_path, device)
+    def __init__(self, model_path, device: str = "cpu", *, threads: int = 0):
+        self.sess = session(model_path, device, threads=threads)
         self.input = self.sess.get_inputs()[0].name
 
     def detect(self, image: Image.Image, conf_threshold: float = 0.3, ios_threshold: float = 0.8) -> list[Box]:
@@ -47,7 +50,7 @@ class LayoutDetector:
     def _letterbox(image: Image.Image):
         rgb = image.convert("RGB")
         scale = min(SIZE / rgb.width, SIZE / rgb.height)
-        nw, nh = js_round(rgb.width * scale), js_round(rgb.height * scale)
+        nw, nh = max(1, js_round(rgb.width * scale)), max(1, js_round(rgb.height * scale))
         pad_x, pad_y = (SIZE - nw) // 2, (SIZE - nh) // 2
         canvas = Image.new("RGB", (SIZE, SIZE), (PAD, PAD, PAD))
         canvas.paste(rgb.resize((nw, nh), Image.BILINEAR), (pad_x, pad_y))

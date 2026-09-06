@@ -1,79 +1,295 @@
-"""画像 1 枚のレイアウト認識と行認識をまとめて行う。"""
+"""Reusable OCR components and page processing in EXIF-oriented coordinates."""
 from __future__ import annotations
-from dataclasses import dataclass, asdict
-from pathlib import Path
+
+import json
+import math
+from dataclasses import asdict, dataclass, field, replace
+from time import perf_counter
+from typing import Protocol
+
 from PIL import Image, ImageOps
+
 from . import models
-from .layout import LayoutDetector, Box
-from .reading_order import order
-from .recognizer import Recognizer, crop_with_margin, js_round
 from .koji import raw_to_koji, raw_to_plain
+from .layout import Box, LayoutDetector
+from .reading_order import order
+from .recognizer import RecognitionResult, Recognizer, crop_with_margin, js_round
 
 MAX_IMAGE_DIM = 3500
 MARGIN = 45
+SCHEMA_VERSION = 1
+
+
+class Detector(Protocol):
+    def detect(self, image: Image.Image, conf_threshold: float = 0.3,
+               ios_threshold: float = 0.8) -> list[Box]: ...
+
+
+class LineRecognizer(Protocol):
+    def recognize_result(self, crop: Image.Image) -> RecognitionResult: ...
+
+
+@dataclass
+class PreparedPage:
+    image: Image.Image
+    original_width: int
+    original_height: int
+    scale_x: float
+    scale_y: float
+    frame: int = 0
+
+    @classmethod
+    def load(cls, source, *, frame: int = 0, max_dimension: int = MAX_IMAGE_DIM):
+        if max_dimension < 1 or frame < 0:
+            raise ValueError("max_dimension must be positive and frame nonnegative")
+        if isinstance(source, Image.Image):
+            if frame:
+                raise ValueError("frame selection requires a file; PIL images use their current frame")
+            img = ImageOps.exif_transpose(source).convert("RGB")
+        else:
+            with Image.open(source) as opened:
+                opened.seek(frame)
+                img = ImageOps.exif_transpose(opened).convert("RGB")
+        width, height = img.size
+        scale = min(1.0, max_dimension / max(width, height))
+        nw, nh = max(1, js_round(width * scale)), max(1, js_round(height * scale))
+        if img.size != (nw, nh):
+            original = img
+            img = img.resize((nw, nh), Image.Resampling.LANCZOS)
+            original.close()
+        return cls(img, width, height, nw / width, nh / height, frame)
+
+    def close(self):
+        self.image.close()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        self.close()
+
+    def scale_box(self, box: Box) -> Box:
+        self.validate_box(box)
+        x, y = max(0, box.x), max(0, box.y)
+        clipped = Box(x, y, min(self.original_width, box.x + box.width) - x,
+                      min(self.original_height, box.y + box.height) - y, box.confidence)
+        scaled = _scale(clipped, self.scale_x, self.scale_y)
+        return replace(scaled, width=max(1, scaled.width), height=max(1, scaled.height))
+
+    def original_box(self, box: Box) -> Box:
+        return _unscale(box, self.scale_x, self.scale_y)
+
+    def validate_box(self, box: Box):
+        values = (box.x, box.y, box.width, box.height, box.x + box.width, box.y + box.height, box.confidence)
+        if not all(math.isfinite(v) for v in values):
+            raise ValueError("box coordinates and confidence must be finite")
+        if box.width <= 0 or box.height <= 0 or not 0 <= box.confidence <= 1:
+            raise ValueError("box dimensions must be positive and confidence between 0 and 1")
+        if (box.x >= self.original_width or box.y >= self.original_height
+                or box.x + box.width <= 0 or box.y + box.height <= 0):
+            raise ValueError("box must overlap the EXIF-oriented image")
+
 
 @dataclass
 class LineResult:
     reading_order: int
-    x: int
-    y: int
-    width: int
-    height: int
-    confidence: float
+    x: float
+    y: float
+    width: float
+    height: float
+    detection_confidence: float
     raw: str
     koji: str
     plain: str
+    stop_reason: str = "eos"
+    token_count: int = 0
+    timings: dict[str, float] = field(default_factory=dict)
+
+
+@dataclass
+class PageResult:
+    schema_version: int
+    width: int
+    height: int
+    processed_width: int
+    processed_height: int
+    frame: int
+    model: str
+    settings: dict
+    lines: list[LineResult]
+    timings: dict[str, float]
+    warnings: list[str]
+
 
 class OCR:
-    def __init__(self, version: str = models.DEFAULT_VERSION, device: str = "cpu", quiet: bool = False):
-        paths = models.ensure(version, quiet=quiet)
-        self.detector = LayoutDetector(paths["layout"], device)
-        self.recognizer = Recognizer(paths, version, device)
+    """Reuse one instance across pages. Model sessions load only when needed.
 
-    @staticmethod
-    def _load(image) -> tuple[Image.Image, float, float]:
-        """EXIF の向きを反映し、長辺 3500 px に縮小。戻り値は (画像, x 倍率, y 倍率)。"""
-        img = image if isinstance(image, Image.Image) else Image.open(image)
-        img = ImageOps.exif_transpose(img).convert("RGB")
-        scale = min(1.0, MAX_IMAGE_DIM / max(img.size))
-        if scale < 1:
-            nw, nh = js_round(img.width * scale), js_round(img.height * scale)
-            sx, sy = nw / img.width, nh / img.height
-            img = img.resize((nw, nh), Image.LANCZOS)
-            return img, sx, sy
-        return img, 1.0, 1.0
+    Injected components implement Detector/LineRecognizer; the caller owns their
+    lifecycle. Supplied boxes are validated in EXIF-oriented source coordinates
+    and retain both their coordinates and input order in the result.
+    """
+
+    def __init__(self, version: str = models.DEFAULT_VERSION, device: str = "cpu",
+                 quiet: bool = False, *, detector: Detector | None = None,
+                 recognizer: LineRecognizer | None = None, offline: bool = False,
+                 threads: int = 0, decoder_threads: int = 0,
+                 encoder_precision: str = "auto", max_dimension: int = MAX_IMAGE_DIM,
+                 margin: int = MARGIN, conf_threshold: float = 0.3,
+                 ios_threshold: float = 0.8):
+        models.specification(version)
+        if device not in {"cpu", "cuda"}:
+            raise ValueError("device must be cpu or cuda")
+        if threads < 0 or decoder_threads < 0 or max_dimension < 1 or margin < 0:
+            raise ValueError("invalid thread count, maximum dimension or margin")
+        if encoder_precision not in {"auto", "fp16", "fp32"}:
+            raise ValueError("encoder_precision must be auto, fp16 or fp32")
+        if not 0 <= conf_threshold <= 1 or not 0 <= ios_threshold <= 1:
+            raise ValueError("thresholds must be between 0 and 1")
+        self.version, self.device, self.quiet = version, device, quiet
+        self.offline, self.threads, self.decoder_threads = offline, threads, decoder_threads
+        self.encoder_precision = encoder_precision
+        self.max_dimension, self.margin = max_dimension, margin
+        self.conf_threshold, self.ios_threshold = conf_threshold, ios_threshold
+        self._detector, self._recognizer = detector, recognizer
+        self._paths = {}
+        self._resolved_encoder = None
+        self._identity = {}
+
+    def paths(self, roles) -> dict:
+        missing = [role for role in roles if role not in self._paths]
+        if missing:
+            self._paths.update(models.ensure(self.version, roles=missing, quiet=self.quiet,
+                                              offline=self.offline, digest=True))
+        return {role: self._paths[role] for role in roles}
+
+    def resolved_paths(self, roles) -> dict:
+        paths = self.paths(roles)
+        if "encoder" in paths:
+            if self._resolved_encoder is None:
+                self._resolved_encoder = models.encoder_path(paths["encoder"], self.device,
+                                                              precision=self.encoder_precision,
+                                                              quiet=self.quiet, digest=True)
+            paths["encoder"] = self._resolved_encoder
+        return paths
+
+    def model_identity(self, roles) -> dict:
+        paths = self.resolved_paths(roles)
+        for role, path in paths.items():
+            if role in self._identity:
+                continue
+            sidecar = path.with_suffix(path.suffix + ".json")
+            if role == "encoder" and path != self._paths[role]:
+                # resolved_paths validated the derived bytes against this record.
+                metadata = json.loads(sidecar.read_text(encoding="utf-8"))
+                digest = metadata["sha256"]
+                self._identity["encoder_conversion"] = models._sha256(sidecar)
+            else:
+                # paths() verifies the distributed files before caching them.
+                digest = models.EXPECTED.get(path.name, (None, None))[1] or models._sha256(path)
+            self._identity[role] = {"file": path.name, "sha256": digest}
+        if "encoder" in paths and "vocabulary" not in self._identity:
+            self._identity["vocabulary"] = models._sha256(models.specification(self.version).vocabulary)
+        selected = set(roles) | ({"vocabulary", "encoder_conversion"} if "encoder" in roles else set())
+        return {key: value for key, value in self._identity.items() if key in selected}
+
+    @property
+    def detector(self) -> Detector:
+        if self._detector is None:
+            self._detector = LayoutDetector(self.paths(["layout"])["layout"], self.device,
+                                             threads=self.threads)
+        return self._detector
+
+    @property
+    def recognizer(self) -> LineRecognizer:
+        if self._recognizer is None:
+            self._recognizer = Recognizer(self.resolved_paths(["encoder", "prefill", "step"]),
+                                          self.version, self.device, threads=self.threads,
+                                          decoder_threads=self.decoder_threads,
+                                          encoder_precision=self.encoder_precision, quiet=self.quiet,
+                                          resolved_encoder=self._resolved_encoder)
+        return self._recognizer
+
+    @property
+    def settings(self) -> dict:
+        return {"device": self.device, "threads": self.threads,
+                "decoder_threads": self.decoder_threads, "encoder_precision": self.encoder_precision,
+                "max_dimension": self.max_dimension, "margin": self.margin,
+                "conf_threshold": self.conf_threshold, "ios_threshold": self.ios_threshold,
+                "coordinate_space": "exif_oriented_original"}
+
+    def prepare(self, image, *, frame: int = 0) -> PreparedPage:
+        return PreparedPage.load(image, frame=frame, max_dimension=self.max_dimension)
+
+    def process(self, image, boxes: list[Box] | None = None, *, frame: int = 0,
+                layout_only: bool = False) -> PageResult:
+        total = perf_counter()
+        page = image if isinstance(image, PreparedPage) else self.prepare(image, frame=frame)
+        timings = {"load": perf_counter() - total}
+        try:
+            if boxes is not None:
+                for box in boxes:
+                    page.validate_box(box)
+                work = [(page.scale_box(box), replace(box)) for box in boxes]
+            else:
+                start = perf_counter()
+                detector = self.detector
+                timings["detector_setup"] = perf_counter() - start
+                start = perf_counter()
+                detected = detector.detect(page.image, self.conf_threshold, self.ios_threshold)
+                timings["layout"] = perf_counter() - start
+                start = perf_counter()
+                ranks = order([(b.x, b.y, b.width, b.height) for b in detected])
+                work = [(b, page.original_box(b)) for _, b in sorted(
+                    zip(ranks, detected, strict=True), key=lambda pair: pair[0])]
+                timings["reading_order"] = perf_counter() - start
+            lines, warnings = [], []
+            recognizer = None
+            if work and not layout_only:
+                start = perf_counter()
+                recognizer = self.recognizer
+                timings["recognizer_setup"] = perf_counter() - start
+            for rank, (scaled, original) in enumerate(work, 1):
+                result = RecognitionResult("", "not_run", 0, {})
+                if recognizer is not None:
+                    with crop_with_margin(page.image, scaled.x, scaled.y,
+                                          scaled.width, scaled.height, self.margin) as crop:
+                        result = recognizer.recognize_result(crop)
+                    if result.stop_reason != "eos":
+                        warnings.append(f"line {rank}: generation stopped by {result.stop_reason}")
+                for stage, elapsed in result.timings.items():
+                    timings[stage] = timings.get(stage, 0.0) + elapsed
+                lines.append(LineResult(rank, original.x, original.y, original.width,
+                                        original.height, original.confidence, result.raw,
+                                        raw_to_koji(result.raw), raw_to_plain(result.raw),
+                                        result.stop_reason, result.token_count, result.timings))
+            timings["total"] = perf_counter() - total
+            return PageResult(SCHEMA_VERSION, page.original_width, page.original_height,
+                              page.image.width, page.image.height, page.frame, self.version,
+                              self.settings, lines, timings, warnings)
+        finally:
+            if not isinstance(image, PreparedPage):
+                page.image.close()
 
     def layout(self, image) -> list[Box]:
-        """行 bbox を元画像の座標で返す (読み順にソート済み)。"""
-        img, sx, sy = self._load(image)
-        boxes = self.detector.detect(img)
-        ranks = order([(b.x, b.y, b.width, b.height) for b in boxes])
-        ordered = [b for _, b in sorted(zip(ranks, boxes), key=lambda t: t[0])]
-        return [_unscale(b, sx, sy) for b in ordered]
+        return [Box(line.x, line.y, line.width, line.height, line.detection_confidence)
+                for line in self.process(image, layout_only=True).lines]
 
     def run(self, image, boxes: list[Box] | None = None) -> list[LineResult]:
-        """boxes を与えなければレイアウト認識から行う。boxes は元画像の座標。"""
-        img, sx, sy = self._load(image)
-        if boxes is None:
-            det = self.detector.detect(img)
-            ranks = order([(b.x, b.y, b.width, b.height) for b in det])
-            work = [(r, b) for r, b in sorted(zip(ranks, det), key=lambda t: t[0])]
-        else:
-            work = [(i, _scale(b, sx, sy)) for i, b in enumerate(boxes)]
-        results = []
-        for rank, b in work:
-            raw = self.recognizer.recognize(crop_with_margin(img, b.x, b.y, b.width, b.height, MARGIN))
-            o = _unscale(b, sx, sy)
-            results.append(LineResult(rank + 1, o.x, o.y, o.width, o.height, b.confidence, raw, raw_to_koji(raw), raw_to_plain(raw)))
-        return results
+        return self.process(image, boxes).lines
+
 
 def _scale(b: Box, sx: float, sy: float) -> Box:
     x0, y0 = js_round(b.x * sx), js_round(b.y * sy)
-    return Box(x0, y0, js_round((b.x + b.width) * sx) - x0, js_round((b.y + b.height) * sy) - y0, b.confidence)
+    return Box(x0, y0, js_round((b.x + b.width) * sx) - x0,
+               js_round((b.y + b.height) * sy) - y0, b.confidence)
+
 
 def _unscale(b: Box, sx: float, sy: float) -> Box:
     x0, y0 = js_round(b.x / sx), js_round(b.y / sy)
-    return Box(x0, y0, js_round((b.x + b.width) / sx) - x0, js_round((b.y + b.height) / sy) - y0, b.confidence)
+    return Box(x0, y0, js_round((b.x + b.width) / sx) - x0,
+               js_round((b.y + b.height) / sy) - y0, b.confidence)
+
 
 def ocr_image(image, version: str = models.DEFAULT_VERSION, device: str = "cpu") -> list[dict]:
-    return [asdict(r) for r in OCR(version, device).run(image)]
+    """One-shot convenience; reuse OCR for a collection of pages."""
+    return [asdict(result) for result in OCR(version, device).run(image)]

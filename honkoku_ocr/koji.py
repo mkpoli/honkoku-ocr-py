@@ -7,6 +7,7 @@
 <TATE>                                → ー
 """
 from __future__ import annotations
+
 import re
 
 _RUBY = re.compile(r"<ruby>([^<]*)<rt>([^<]*)</rt>(?:<rt2>([^<]*)</rt2>)?</ruby>")

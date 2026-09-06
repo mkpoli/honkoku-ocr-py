@@ -1,18 +1,24 @@
 [project]
 name = "honkoku-ocr-py"
-version = "0.1.0"
+version = "0.2.0"
 description = "みんなで翻刻OCR の行認識・レイアウト認識を Python (onnxruntime) で動かす移植版"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
 license-files = ["LICENSE", "NOTICE.md", "LICENSES/*"]
 authors = [{ name = "mkpoli" }]
-dependencies = ["numpy>=1.26", "pillow>=10", "httpx>=0.27"]
+dependencies = ["numpy>=1.26", "pillow>=10", "httpx>=0.27", "onnx>=1.17"]
 
 [project.optional-dependencies]
-cpu = ["onnxruntime>=1.20"]
-gpu = ["onnxruntime-gpu>=1.20", "nvidia-cudnn-cu12", "nvidia-cublas-cu12", "nvidia-cuda-runtime-cu12", "nvidia-cuda-nvrtc-cu12", "nvidia-cufft-cu12", "nvidia-curand-cu12"]
-dev = ["pytest>=8"]
+cpu = [
+  "onnxruntime>=1.21,<1.24; python_version < '3.11'",
+  "onnxruntime>=1.21; python_version >= '3.11'",
+]
+gpu = [
+  "onnxruntime-gpu>=1.21,<1.24; python_version < '3.11'",
+  "onnxruntime-gpu>=1.21; python_version >= '3.11'",
+  "nvidia-cudnn-cu12", "nvidia-cublas-cu12", "nvidia-cuda-runtime-cu12", "nvidia-cuda-nvrtc-cu12", "nvidia-cufft-cu12", "nvidia-curand-cu12",
+]
 
 [project.scripts]
 honkoku-ocr = "honkoku_ocr.cli:main"
@@ -28,5 +34,18 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["honkoku_ocr"]
 
+[dependency-groups]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+[tool.uv]
+conflicts = [[{ extra = "cpu" }, { extra = "gpu" }]]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 200
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E4", "E9", "F", "B", "UP", "I"]

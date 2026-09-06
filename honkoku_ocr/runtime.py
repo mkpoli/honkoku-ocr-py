@@ -26,11 +26,17 @@ def providers(device: str) -> list[str]:
         return ["CUDAExecutionProvider", "CPUExecutionProvider"]
     return ["CPUExecutionProvider"]
 
-def session(path, device: str = "cpu"):
+def session(path, device: str = "cpu", *, threads: int = 0, profile: str | None = None):
+    if threads < 0:
+        raise ValueError("threads must be nonnegative")
     selected = providers(device)
     ort = _runtime()
     so = ort.SessionOptions()
     so.log_severity_level = 3
+    so.intra_op_num_threads = threads
+    if profile:
+        so.enable_profiling = True
+        so.profile_file_prefix = profile
     sess = ort.InferenceSession(str(path), so, providers=selected)
     if device == "cuda" and sess.get_providers()[0] != "CUDAExecutionProvider":
         raise RuntimeError("CUDA session could not be created for " + str(path))

@@ -1,5 +1,6 @@
 from honkoku_ocr.koji import raw_to_koji, raw_to_plain
 
+
 def test_ruby_after_kanji_gets_slash():
     assert raw_to_koji("本<ruby>漢字<rt>かんじ</rt></ruby>") == "本／漢字（かんじ）"
 

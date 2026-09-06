@@ -3,7 +3,9 @@
 NDL古典籍OCR-Lite の block_xy_cut と honkoku-ocr-web の reading-order.ts に従う。
 """
 from __future__ import annotations
+
 from dataclasses import dataclass, field
+
 import numpy as np
 
 GRID = 100

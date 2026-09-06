@@ -1,9 +1,11 @@
-from concurrent.futures import ThreadPoolExecutor
-from contextlib import contextmanager
 import hashlib
 import threading
+from concurrent.futures import ThreadPoolExecutor
+from contextlib import contextmanager
+
 import httpx
 import pytest
+
 from honkoku_ocr import models
 
 
@@ -60,3 +62,16 @@ def test_interrupted_stream_cleans_temporary_file(cache, monkeypatch):
     with pytest.raises(httpx.ReadError):
         models.fetch('test.onnx', quiet=True)
     assert list(cache.iterdir()) == []
+
+
+def test_offline_missing_cache_never_contacts_network(cache, monkeypatch):
+    monkeypatch.setattr(models.httpx, 'stream', lambda *a, **k: pytest.fail('network request'))
+    with pytest.raises(FileNotFoundError, match='offline'):
+        models.fetch('test.onnx', offline=True)
+
+
+def test_role_validation_happens_before_download(monkeypatch):
+    monkeypatch.setattr(models, 'fetch', lambda *a, **k: pytest.fail('download'))
+    with pytest.raises(ValueError, match='unknown model roles'):
+        models.ensure(roles=['bad'])
+    assert models.ensure(roles=[]) == {}
