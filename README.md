@@ -95,6 +95,9 @@ WindowsのヘッドレスChromeでは同じRTX 5070 TiのWebGPUアダプター�
 | honkoku-ocr-py CPU、encoder fp16（`--encoder-precision fp16`） | 0.2秒 | 約150秒 | 152秒 |
 | honkoku-ocr-py CUDA（RTX 5070 Ti、encoder fp16、`--threads 2 --decoder-threads 2`） | 0.04秒 | 1.1秒（encoder 0.48秒、decoder 0.36秒、前処理 0.21秒） | 1.46秒（warm、3回の中央値） |
 
+表の値はすべて、行検出の入力縮小を平均化しない双一次補間に改める前に測った。改めた後もこの見開きの検出は21行で、
+1,024px入力への縮小が変わっただけなので、所要時間は変わらない。
+
 配信されているencoderはfp16で、onnxruntimeのCPUプロバイダではこれをそのまま動かすと1行7.3秒かかる。
 同じ重みをfp32に直したファイルは1行0.86秒で、hidden stateの差は最大1e-3程度、この見開きでは21行中1行が
 行末の全角空白の有無だけ違った。CPUでは初回に変換してキャッシュし（366MB、数秒）、CUDAではfp16のまま使う。
@@ -267,7 +270,8 @@ txtは`koji`（`--plain`なら`plain`）を読み順に1行ずつ並べたもの
 - encoderはfp16版を使う。ブラウザ版のWebAssembly経路が使うint8版のConvInteger演算はonnxruntimeのCPU/CUDAプロバイダに無い。
   CPUではfp16版をfp32に変換したファイルを使う。対応する版はfp16 encoderが配布されているv16fs / v17 / v18。
 - decoderは`--device cuda`でもCPUで動く。
-- 拡大縮小と回転はPillow（縮小はLanczos、回転はbicubic）で、ブラウザのcanvasとは補間が異なる。
+- 行検出の入力（1024×1024）への縮小はブラウザのcanvasと同じ平均化しない双一次補間で行う。ページの長辺3,500pxへの縮小と
+  行画像の縮小・回転はPillow（Lanczos、bicubic）で、ブラウザのcanvasとは補間が異なる。
 - 画像の端にかかる行では傾き推定の二値化閾値が異なる。ブラウザ版は画像外の画素を透明（輝度0）のまま平均に入れ、
   この移植は白で埋めてから平均を取る。処理画像で既定の余白45pxが画像外にはみ出す行に影響する。
 - 行検出はRTMDetのみ（ブラウザ版の5クラスYOLOは含まない）。

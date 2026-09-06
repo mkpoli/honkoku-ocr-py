@@ -36,3 +36,14 @@ def test_extremely_thin_images_keep_nonzero_resize_dimensions():
     tensor, scale, _, _ = LayoutDetector._letterbox(Image.new('RGB', (1, 3500)))
     assert tensor.shape == (1, 3, 1024, 1024)
     assert scale > 0
+
+
+def test_letterbox_does_not_average_pixels_when_shrinking():
+    # one-pixel vertical stripes: an averaging resize turns them grey, point sampling keeps the contrast
+    stripes = np.zeros((2485, 3500, 3), np.uint8)
+    stripes[:, ::2] = 255
+    tensor, scale, px, py = LayoutDetector._letterbox(Image.fromarray(stripes))
+    row = tensor[0, 0, py + 100, px:px + 1024]
+    assert row.max() - row.min() > 3.0          # normalised span of black vs white is about 4.4
+    averaged = np.asarray(Image.fromarray(stripes).resize((1024, 727), Image.BILINEAR), np.float32)[100, :, 0]
+    assert averaged.max() - averaged.min() < 40  # the averaging resize flattens the stripes
