@@ -1,29 +1,23 @@
 <div align="center">
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./docs/logo-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="./docs/logo-light.svg">
-  <img src="./docs/logo-light.svg" alt="みんなで翻刻くずし字OCR ローカル版 — honkoku-ocr-py" width="520">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/mkpoli/honkoku-ocr-py/main/docs/logo-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/mkpoli/honkoku-ocr-py/main/docs/logo-light.svg">
+  <img src="https://raw.githubusercontent.com/mkpoli/honkoku-ocr-py/main/docs/logo-light.svg" alt="みんなで翻刻くずし字OCR ローカル版 — honkoku-ocr-py" width="520">
 </picture>
 
-**ブラウザで動く「みんなで翻刻OCR」をPythonに移植。くずし字の画像から「みんなで翻刻」記法の翻刻をコマンドラインで一括生成する。**
-
-[![MIT](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
-[![models CC BY 4.0](https://img.shields.io/badge/models-CC_BY_4.0-orange)](./NOTICE.md)
+[![PyPI](https://img.shields.io/pypi/v/honkoku-ocr-py?color=0b7285)](https://pypi.org/project/honkoku-ocr-py/)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white)](./pyproject.toml)
-[![onnxruntime](https://img.shields.io/badge/runs%20on-onnxruntime-5C3EE8)](https://onnxruntime.ai/)
-[![CUDA optional](https://img.shields.io/badge/GPU-CUDA_optional-76B900?logo=nvidia&logoColor=white)](#性能)
-[![model v18](https://img.shields.io/badge/model-kuzushiji_v18-0b7285)](https://yuta1984.github.io/honkoku-ocr-web/tech.html)
-[![ci](https://github.com/mkpoli/honkoku-ocr-py/actions/workflows/ci.yml/badge.svg)](https://github.com/mkpoli/honkoku-ocr-py/actions/workflows/ci.yml)
+[![MIT](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
 [![upstream](https://img.shields.io/badge/upstream-honkoku--ocr--web-8a2f1f)](https://github.com/yuta1984/honkoku-ocr-web)
 
 </div>
 
 <p align="center">
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./docs/demo-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="./docs/demo-light.svg">
-  <img src="./docs/demo-light.svg" alt="honkoku-ocrがディレクトリの画像を一括翻刻し、行画像とKoji記法の翻刻を出力する様子" width="760">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/mkpoli/honkoku-ocr-py/main/docs/demo-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/mkpoli/honkoku-ocr-py/main/docs/demo-light.svg">
+  <img src="https://raw.githubusercontent.com/mkpoli/honkoku-ocr-py/main/docs/demo-light.svg" alt="honkoku-ocrがディレクトリの画像を一括翻刻し、行画像とKoji記法の翻刻を出力する様子" width="760">
 </picture>
 </p>
 
@@ -141,8 +135,11 @@ uv run honkoku-ocr scans.tif -o out --frame 3    # 多ページ TIFF の 4 コ�
 **出力の名前**。1画像につき`<stem>__<16桁hex>.json`と`.txt`（`--preview`なら`.preview.png`も）。
 hexは入力の絶対パスのSHA-256の先頭16桁で、同じstemの画像が別のディレクトリにあっても衝突せず、
 別の呼び出しで一部だけ処理しても名前が変わらない。多ページ画像はさらに`__p0001`のようにコマ番号が付く。
-入力ディレクトリを移動すると名前が変わる。以前の版は`<stem>.txt`という名前だったので、
-古い出力を使う処理は`__`以降を除いてstemを取り出すか、JSONの`image`フィールドを見ればよい。
+入力ディレクトリを移動すると名前が変わる。
+
+**0.1.0からの変更**。0.1.0の出力は`<stem>.txt`と`<stem>.json`で、JSONの行は`confidence`を持ち、`--version`はモデルの版を選ぶ
+オプションだった。0.2.0では出力名に上のhexが付き、行のスコアは`detection_confidence`、モデルの版は`--model`で選び、
+`--version`はパッケージの版を表示する。古い出力を読む処理は`__`以降を除いてstemを取り出すか、JSONの`image`フィールドを見ればよい。
 
 **再開**。各ページのJSONは完了記録で、txt（とpreview）を書き終えてから最後に置かれる。書き込みは一時ファイル経由なので
 途中で止めても壊れたファイルは残らない。`--resume`はJSONの指紋（画像のSHA-256、コマ番号、各モデルと語彙のSHA-256、
@@ -237,7 +234,7 @@ CLIのJSONは`PageResult`に`image`（入力のファイル名）、`fingerprint
 }
 ```
 
-txtは`koji`（`--plain`なら`plain`）を読み順に1行ずつ並べたもの。
+txtは`koji`（`--plain`なら`plain`）を読み順に1行ずつ並べたもの。上の例の`package_version`は0.2.0へ上げる前の開発中のcheckoutで測ったときの値。
 
 ## ブラウザ版との違い
 
