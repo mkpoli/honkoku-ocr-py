@@ -113,7 +113,9 @@ WebGPU版は初回の行認識が4.65秒、その後の認識のみの再実行�
 ブラウザ版とこの移植では同じ見開きで検出行数（22行と21行）も行の読みも一部異なる。
 どちらが正しいかは正解翻刻との照合が要る。測定に使った見開きは公開許諾を確かめていない手元のスキャンで、
 このリポジトリには含めない。[benchmarks/ocr.py](benchmarks/ocr.py)は`attribution`（出典）と`samples`（各要素は`id`、`image`、任意の`frame`と正解`reference`）を持つ
-JSON manifestを受け取り、ページ単位の所要時間と、正解があればCERを出す。手元の画像と翻刻で同じ測定ができる。読み順とKoji変換の原実装との比較は[benchmarks/README.md](benchmarks/README.md)を参照。
+JSON manifestを受け取り、ページ単位の所要時間と、正解があればCERを出す。手元の画像と翻刻で同じ測定ができる。
+みんなで翻刻の翻刻文そのものとの突き合わせは[benchmarks/README.md](benchmarks/README.md)の「Whole pages against みんなで翻刻 transcriptions」に
+ある。20コマで、文字の取りこぼしは正規化後6.6%、読み順と行の切り方まで含めた文字誤り率は13.7%だった。読み順とKoji変換の原実装との比較は[benchmarks/README.md](benchmarks/README.md)を参照。
 
 ## 使い方
 
