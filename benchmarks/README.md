@@ -339,6 +339,14 @@ projects, seed 20260907) was then run the same way (`corpus-honkoku-60-page-eval
 | normalised CER, column sort 0.75 | 0.163 |
 | normalised CER, column sort 1.0 | 0.248 |
 
+The extra-character share on this set is dominated by pages whose transcription
+covers only part of the page: one 図 page has 8 transcription lines against 38
+detected labels, one 医療 page 12 against 22 lines of continuous text. On such
+pages "extra" is text the transcriber left out, not text the OCR invented, so
+the missed share is the better recognition figure of the two. 23 of the 1,476
+lines stopped on the repetition guard or the token limit, and 48 predicted
+lines hold at most one character, mostly seals and marks.
+
 The column sort at 0.5 is better on 13 pages, worse on 11 and equal on 36; its
 worst regressions are on 草双紙 pages with illustrations and separate text blocks
 (one page goes from 0.36 to 1.03), its best gains on pages with marginal notes
