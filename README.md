@@ -106,6 +106,17 @@ JSON manifestを受け取り、ページ単位の所要時間と、正解があ�
 
 ## 使い方
 
+PyPIから:
+
+```sh
+uvx --from "honkoku-ocr-py[cpu]" honkoku-ocr page.jpg -o out   # 環境を作らずに実行
+uv tool install "honkoku-ocr-py[cpu]"                            # honkoku-ocr コマンドを常設
+uv tool install "honkoku-ocr-py[gpu]"                            # CUDA 12 / cuDNN 9 の環境向け
+pip install "honkoku-ocr-py[cpu]"
+```
+
+リポジトリから:
+
 ```sh
 uv sync --extra cpu          # onnxruntime (CPU)
 uv sync --extra gpu          # onnxruntime-gpu と CUDA 12 のランタイム (cpu とは排他)
