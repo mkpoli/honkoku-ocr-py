@@ -117,3 +117,25 @@ HONKOKU_OCR_REAL_MODELS=1 uv run pytest tests/test_real_encoder.py   # キャッ
 一つの論理的変更につき一つのコミット。座標や丸め、余白、閾値、正規化の定数を変えるときは原実装の
 該当箇所（`text-recognizer.ts`, `layout-detector.ts`, `reading-order.ts`, `koji.ts`, `useOCRWorker.ts`）と
 突き合わせ、変えた理由をNOTICEに書く。
+
+## リリースの確かめ方
+
+`v*`のタグを押すとGitHub Actionsがテストを通してPyPIへ公開する。公開後、checkoutとは別の場所で
+PyPIから入れて確かめる。モデルキャッシュも空の場所を指す。
+
+```sh
+mkdir /tmp/verify && cd /tmp/verify && export HONKOKU_OCR_MODELS=$PWD/models
+uv venv --python 3.12 cpu && VIRTUAL_ENV=$PWD/cpu uv pip install --no-cache "honkoku-ocr-py[cpu,pdf]==0.3.0"
+cpu/bin/honkoku-ocr --doctor && cpu/bin/honkoku-ocr --download && cpu/bin/honkoku-ocr --verify-cache
+cpu/bin/honkoku-ocr page.jpg book.pdf -o out --page-xml --preview --threads 8 --decoder-threads 2
+cpu/bin/honkoku-ocr page.jpg book.pdf -o out --page-xml --preview --resume        # 2 skipped
+cpu/bin/honkoku-ocr page.jpg -o layout --layout-only && cpu/bin/honkoku-ocr page.jpg -o boxes --boxes layout/*.json
+cpu/bin/honkoku-ocr --iiif https://dl.ndl.go.jp/api/iiif/2540583/manifest.json --pages 30 -o iiif --offline
+uv venv --python 3.12 gpu && VIRTUAL_ENV=$PWD/gpu uv pip install --no-cache "honkoku-ocr-py[gpu,pdf]==0.3.0"   # 約3GB
+gpu/bin/honkoku-ocr --doctor                                                       # CUDA: yes
+gpu/bin/honkoku-ocr page.jpg book.pdf -o cuda --device cuda --page-xml && gpu/bin/honkoku-ocr page.jpg -o cuda2 --device cuda --overlap
+```
+
+0.3.0はこの手順で確かめた。CPU（Python 3.12と3.10）とCUDA（RTX 5070 Ti）で同じページを処理し、
+`--boxes`の結果は全体処理と一致、`--overlap`の結果は逐次処理と一致、CUDA（fp16）とCPU（fp32）は
+24行中2行が異なった。PyPIの0.2.0も同じ環境で動く。
