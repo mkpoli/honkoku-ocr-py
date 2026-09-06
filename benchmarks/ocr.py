@@ -12,7 +12,7 @@ from pathlib import Path
 from time import perf_counter
 
 from honkoku_ocr import OCR, Box, models
-from honkoku_ocr.cli import atomic_write, package_version, safe_error
+from honkoku_ocr.output import atomic_write, package_version, safe_error
 
 
 def edit_distance(reference: str, hypothesis: str) -> int:
@@ -101,15 +101,16 @@ def main(argv=None):
             total_errors += sum(errors)
             reference_characters += len(reference) * len(predictions)
         records.append(record)
-    paths = ocr._paths.copy()
-    if "encoder" in paths:
-        paths["encoder"] = models.encoder_path(paths["encoder"], args.device, precision=args.encoder_precision, digest=True)
+    roles = ["encoder", "prefill", "step"]
+    if any("boxes" not in sample for sample in manifest["samples"]):
+        roles.append("layout")
+    identity = ocr.model_identity(roles)
     report = {"manifest_sha256": hashlib.sha256(args.manifest.read_bytes()).hexdigest(),
               "attribution": manifest["attribution"], "package_version": package_version(),
               "python": platform.python_version(), "platform": platform.system(),
               "onnxruntime": __import__("onnxruntime").__version__,
               "model": args.model, "settings": ocr.settings,
-              "models": {role: {"file": p.name, "sha256": models._sha256(p)} for role, p in paths.items()},
+              "models": identity,
               "format": args.format, "normalization": "none (Unicode code points; newlines count)",
               "warmups": args.warmups, "repeats": args.repeats,
               "first_page_seconds_including_setup": first_page_seconds,

@@ -5,6 +5,7 @@ import pytest
 from PIL import Image
 
 from honkoku_ocr import cli
+from honkoku_ocr import output as output_io
 from honkoku_ocr.pipeline import OCR
 from honkoku_ocr.recognizer import RecognitionResult
 
@@ -81,16 +82,16 @@ def test_resume_verifies_input_settings_and_artifacts(tmp_path, fake_models):
 def test_failed_output_is_reprocessed_on_resume(tmp_path, fake_models, monkeypatch):
     page, output = tmp_path / 'page.png', tmp_path / 'out'
     Image.new('RGB', (30, 30)).save(page)
-    original = cli.atomic_write
+    original = output_io.atomic_write
     def fail_json(path, data):
         if path.suffix == '.json':
             raise OSError('simulated interruption')
         original(path, data)
-    monkeypatch.setattr(cli, 'atomic_write', fail_json)
+    monkeypatch.setattr(output_io, 'atomic_write', fail_json)
     args = [str(page), '-o', str(output), '--resume']
     assert cli.main(args) == 1
     assert not list(output.glob('*.json'))
-    monkeypatch.setattr(cli, 'atomic_write', original)
+    monkeypatch.setattr(output_io, 'atomic_write', original)
     assert cli.main(args) == 0
     assert len(fake_models) == 2
 
@@ -120,9 +121,9 @@ def test_atomic_write_cleans_failed_temporary_file(tmp_path, monkeypatch):
     target.write_bytes(b'original')
     def fail(*args):
         raise OSError('replace failed')
-    monkeypatch.setattr(cli.os, 'replace', fail)
+    monkeypatch.setattr(output_io.os, 'replace', fail)
     with pytest.raises(OSError):
-        cli.atomic_write(target, b'new')
+        output_io.atomic_write(target, b'new')
     assert target.read_bytes() == b'original'
     assert not list(tmp_path.glob('*.part'))
 

@@ -3,56 +3,28 @@ from __future__ import annotations
 
 import argparse
 import hashlib
-import io
 import json
 import os
-import re
 import sys
-import tempfile
 from dataclasses import asdict
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageOps
+from PIL import Image
 
 from . import models
+from . import output as output_io
 from .layout import Box
+from .output import _digest, package_version, safe_error
 from .pipeline import OCR, SCHEMA_VERSION
 
 EXTS = {".jpg", ".jpeg", ".png", ".tif", ".tiff", ".bmp", ".webp"}
-
-
-def package_version() -> str:
-    try:
-        return version("honkoku-ocr-py")
-    except PackageNotFoundError:
-        return "unknown"
-
-
-def safe_error(error) -> str:
-    return re.sub(r"/home/[^/\s'\"]+", "~", str(error))
 
 
 def _unique_names(files: list[Path]) -> dict[Path, str]:
     # The hash makes names independent of batch order or which files are selected.
     return {p: f"{p.stem}__{hashlib.sha256(os.fsencode(p.resolve())).hexdigest()[:16]}"
             for p in files}
-
-
-def atomic_write(path: Path, data: bytes):
-    fd, temporary = tempfile.mkstemp(prefix=path.name + ".", suffix=".part", dir=path.parent)
-    try:
-        with os.fdopen(fd, "wb") as stream:
-            stream.write(data)
-            stream.flush()
-            os.fsync(stream.fileno())
-        os.replace(temporary, path)
-    finally:
-        Path(temporary).unlink(missing_ok=True)
-
-
-def _digest(data: bytes) -> str:
-    return hashlib.sha256(data).hexdigest()
 
 
 def _resume_matches(path: Path, fingerprint: dict, expected: set[str]) -> bool:
@@ -77,30 +49,6 @@ def _boxes(path: Path) -> list[Box]:
         raise ValueError("box input must be a list or a page JSON with lines")
     return [Box(row["x"], row["y"], row["width"], row["height"],
                 row.get("detection_confidence", row.get("confidence", 1.0))) for row in rows]
-
-
-def _preview(source: Path, frame: int, lines) -> bytes:
-    with Image.open(source) as opened:
-        opened.seek(frame)
-        image = ImageOps.exif_transpose(opened).convert("RGB")
-    try:
-        width, height = image.size
-        image.thumbnail((1600, 1600))
-        sx, sy = image.width / width, image.height / height
-        draw = ImageDraw.Draw(image)
-        for line in lines:
-            x, y = max(0, line.x) * sx, max(0, line.y) * sy
-            right = min(width, line.x + line.width) * sx
-            bottom = min(height, line.y + line.height) * sy
-            draw.rectangle((x, y, right, bottom),
-                           outline="red", width=2)
-            draw.text((x + 2, y + 2), str(line.reading_order), fill="red", stroke_width=1,
-                      stroke_fill="white")
-        buffer = io.BytesIO()
-        image.save(buffer, format="PNG")
-        return buffer.getvalue()
-    finally:
-        image.close()
 
 
 def _model_identity(ocr: OCR, roles: list[str]) -> dict:
@@ -228,16 +176,9 @@ def main(argv=None) -> int:
                 print(f"[{index}/{len(jobs)}] {label}: skipped", file=sys.stderr)
                 continue
             result = ocr.process(path, supplied, frame=frame, layout_only=args.layout_only)
-            text = "\n".join(line.plain if args.plain else line.koji for line in result.lines) + "\n"
-            artifacts = {f"{stem}.txt": text.encode("utf-8")}
-            if args.preview:
-                artifacts[f"{stem}.preview.png"] = _preview(path, frame, result.lines)
-            record = {**asdict(result), "image": path.name, "fingerprint": fingerprint,
-                      "artifacts": {name: _digest(data) for name, data in artifacts.items()}}
-            # The JSON is the completion record; publish it after every artifact.
-            for name, data in artifacts.items():
-                atomic_write(args.output / name, data)
-            atomic_write(output, (json.dumps(record, ensure_ascii=False, indent=2) + "\n").encode("utf-8"))
+            output_io.write_page(output, result, image=path.name, fingerprint=fingerprint,
+                                 plain=args.plain,
+                                 preview_png=output_io.preview(path, frame, result.lines) if args.preview else None)
             completed += 1
             print(f"[{index}/{len(jobs)}] {label}: {len(result.lines)} lines, {result.timings['total']:.2f}s", file=sys.stderr)
         except Exception as error:

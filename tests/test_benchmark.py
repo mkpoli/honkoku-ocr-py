@@ -35,7 +35,8 @@ def test_manifest_benchmark_writes_timings_and_cer(tmp_path, monkeypatch):
         {'id': 'page', 'image': 'page.png', 'reference': '本文'}]}))
     class FakeOCR:
         settings = {'device': 'cpu'}
-        _paths = {}
+        def model_identity(self, roles):
+            return {}
         def __init__(self, *a, **k):
             pass
         def process(self, *a, **k):
