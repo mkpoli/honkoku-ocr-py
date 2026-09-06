@@ -4,8 +4,8 @@ version = "0.1.0"
 description = "みんなで翻刻OCR の行認識・レイアウト認識を Python (onnxruntime) で動かす移植版"
 readme = "README.md"
 requires-python = ">=3.10"
-license = "CC-BY-4.0"
-license-files = ["LICENSE", "NOTICE.md"]
+license = "MIT"
+license-files = ["LICENSE", "NOTICE.md", "LICENSES/*"]
 authors = [{ name = "mkpoli" }]
 dependencies = ["numpy>=1.26", "pillow>=10", "httpx>=0.27"]
 
