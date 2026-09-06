@@ -47,3 +47,12 @@ def test_letterbox_does_not_average_pixels_when_shrinking():
     assert row.max() - row.min() > 3.0          # normalised span of black vs white is about 4.4
     averaged = np.asarray(Image.fromarray(stripes).resize((1024, 727), Image.BILINEAR), np.float32)[100, :, 0]
     assert averaged.max() - averaged.min() < 40  # the averaging resize flattens the stripes
+
+
+def test_letterbox_releases_its_intermediates_but_not_the_caller_image():
+    image = Image.new('RGB', (200, 100))
+    LayoutDetector._letterbox(image)
+    assert image.getpixel((0, 0)) == (0, 0, 0)
+    grey = Image.new('L', (200, 100))
+    LayoutDetector._letterbox(grey)
+    assert grey.getpixel((0, 0)) == 0

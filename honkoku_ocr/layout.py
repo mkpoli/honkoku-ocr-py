@@ -5,6 +5,7 @@
 """
 from __future__ import annotations
 
+from contextlib import closing
 from dataclasses import dataclass
 
 import numpy as np
@@ -49,14 +50,16 @@ class LayoutDetector:
     @staticmethod
     def _letterbox(image: Image.Image):
         rgb = image if image.mode == "RGB" else image.convert("RGB")
-        scale = min(SIZE / rgb.width, SIZE / rgb.height)
-        nw, nh = max(1, js_round(rgb.width * scale)), max(1, js_round(rgb.height * scale))
-        pad_x, pad_y = (SIZE - nw) // 2, (SIZE - nh) // 2
-        with Image.new("RGB", (SIZE, SIZE), (PAD, PAD, PAD)) as canvas, _point_sampled_resize(rgb, nw, nh) as resized:
-            canvas.paste(resized, (pad_x, pad_y))
-            a = np.asarray(canvas, np.float32)[..., ::-1]  # BGR
-        if rgb is not image:
-            rgb.close()
+        try:
+            scale = min(SIZE / rgb.width, SIZE / rgb.height)
+            nw, nh = max(1, js_round(rgb.width * scale)), max(1, js_round(rgb.height * scale))
+            pad_x, pad_y = (SIZE - nw) // 2, (SIZE - nh) // 2
+            with closing(Image.new("RGB", (SIZE, SIZE), (PAD, PAD, PAD))) as canvas, closing(_point_sampled_resize(rgb, nw, nh)) as resized:
+                canvas.paste(resized, (pad_x, pad_y))
+                a = np.asarray(canvas, np.float32)[..., ::-1]  # BGR
+        finally:
+            if rgb is not image:
+                rgb.close()
         a = (a - MEAN_BGR) / STD_BGR
         return np.ascontiguousarray(a.transpose(2, 0, 1)[None]), scale, pad_x, pad_y
 
@@ -66,7 +69,7 @@ def _point_sampled_resize(image: Image.Image, width: int, height: int) -> Image.
     Pillowのresizeは縮小時に元画素を平均する（アンチエイリアス）。ブラウザ版のcanvas drawImageは
     既定では平均化せず、Chromium 153のヘッドレス環境で同じ見開きを比べると、平均化する縮小では
     RTMDetのスコアが行あたり平均0.09ずれて0.3の閾値付近の行の有無が変わり、点標本の双一次補間では
-    ずれが平均0.01に収まり閾値を越える候補の数も一致した。canvasの標本化はブラウザや設定で変わりうるので
+    ずれが平均0.01に収まり、閾値を越える候補の数も51と52でほぼ揃った。canvasの標本化はブラウザや設定で変わりうるので
     画素の完全一致は保証しない。
     """
     sx, sy = image.width / width, image.height / height
