@@ -139,6 +139,7 @@ uv sync --extra gpu          # onnxruntime-gpu と CUDA 12 のランタイム (c
 uv sync --extra cpu --extra pdf   # PDF も読む (pypdfium2)
 
 uv run honkoku-ocr --download                    # モデルを取得して照合 (4 ファイル 289 MB、~/.cache/honkoku-ocr/models)
+uv run honkoku-ocr --doctor                      # ランタイム、プロバイダ、モデルキャッシュ、実効設定を表示
 uv run honkoku-ocr page.jpg -o out               # out/page__<hash>.txt (Koji 記法、読み順) と out/page__<hash>.json
 uv run honkoku-ocr pages/ -o out --device cuda   # ディレクトリ内の画像を一括処理
 uv run honkoku-ocr pages/ -o out --resume        # 済んだページを飛ばして続きから
@@ -318,6 +319,9 @@ txtは`koji`（`--plain`なら`plain`）を読み順に1行ずつ並べたもの
 - `HONKOKU_OCR_MODEL_URL` … モデル配信元（既定は原著作物と同じ公開バケット）
 
 ## トラブルシューティング
+
+まず`honkoku-ocr --doctor`を実行する。onnxruntimeの版と使えるプロバイダ、PDF対応、モデルキャッシュの各ファイルの有無と
+サイズ照合、fp32変換の来歴、実効設定を1画面に出す。
 
 - **`CUDAExecutionProvider is not available`** … `uv sync --extra gpu`でonnxruntime-gpuとCUDA 12 / cuDNN 9のランタイムを入れる。
   cpuとgpuのextraは同時に入らない。`--device cpu`に戻せば動く。

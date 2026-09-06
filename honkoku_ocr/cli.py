@@ -10,7 +10,7 @@ from dataclasses import asdict
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 
-from . import iiif, models, pagexml
+from . import doctor, iiif, models, pagexml
 from . import output as output_io
 from .layout import Box
 from .output import _digest, package_version, safe_error
@@ -68,6 +68,7 @@ def main(argv=None) -> int:
     ap.add_argument("--decoder-threads", type=int, default=0)
     ap.add_argument("--plain", action="store_true", help="write plain text instead of Koji")
     ap.add_argument("--download", action="store_true", help="download and validate model files, then exit")
+    ap.add_argument("--doctor", action="store_true", help="report runtime, providers, model cache and settings, then exit")
     ap.add_argument("--verify-cache", action="store_true", help="verify cached model hashes without network access")
     ap.add_argument("--offline", action="store_true")
     ap.add_argument("--resume", action="store_true", help="skip matching, complete outputs")
@@ -100,6 +101,9 @@ def main(argv=None) -> int:
              ["layout"] if args.layout_only else
              ["encoder", "prefill", "step"] if args.boxes else
              ["layout", "encoder", "prefill", "step"])
+    if args.doctor:
+        print(doctor.render(doctor.report(args.model, ocr.settings)))
+        return 0
     if args.download or args.verify_cache:
         try:
             for role, path in models.ensure(args.model, roles=roles, digest=True,

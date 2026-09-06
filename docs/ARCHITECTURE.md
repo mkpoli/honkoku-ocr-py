@@ -18,6 +18,7 @@
 | `iiif.py` | IIIF Presentation v2/v3のマニフェストからキャンバスの画像URLを取り、取得して置く |
 | `pagexml.py` | `PageResult`をPAGE XML（PRImA 2019-07-15）にする |
 | `output.py` | 原子的なファイル書き出し、ページ記録の生成、プレビュー画像、エラー文字列の秘匿 |
+| `doctor.py` | `--doctor`の報告。ランタイム、プロバイダ、モデルキャッシュ、fp32来歴、設定。何も取得せず変えない |
 | `cli.py` | `honkoku-ocr`コマンド。入力の列挙、指紋、再開、終了コード |
 
 `honkoku_ocr`をimportしてもonnxruntimeは読み込まれない。`raw_to_koji`や`order`はモデル無しで使える。
