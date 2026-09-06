@@ -10,7 +10,7 @@ from dataclasses import asdict
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 
-from . import iiif, models
+from . import iiif, models, pagexml
 from . import output as output_io
 from .layout import Box
 from .output import _digest, package_version, safe_error
@@ -74,6 +74,7 @@ def main(argv=None) -> int:
     ap.add_argument("--layout-only", action="store_true")
     ap.add_argument("--boxes", type=Path, help="box list or page JSON for a single image frame")
     ap.add_argument("--preview", action="store_true", help="write a numbered bbox overlay PNG")
+    ap.add_argument("--page-xml", action="store_true", help="also write PAGE XML (PRImA 2019-07-15) per page")
     ap.add_argument("--frame", type=int, help="zero-based frame; default processes every frame")
     ap.add_argument("--iiif", action="append", default=[], metavar="MANIFEST",
                     help="IIIF Presentation manifest (URL or file); its page images are downloaded and processed")
@@ -179,7 +180,7 @@ def main(argv=None) -> int:
         label = f"{path.name} [{frame + 1}/{count}]"
         stem = names[path] + (f"__p{frame + 1:04d}" if count > 1 else "")
         output = args.output / f"{stem}.json"
-        expected = {f"{stem}.txt"} | ({f"{stem}.preview.png"} if args.preview else set())
+        expected = {f"{stem}.txt"} | ({f"{stem}.preview.png"} if args.preview else set()) | ({f"{stem}.page.xml"} if args.page_xml else set())
         try:
             if path not in source_hashes:
                 source_hashes[path] = models._sha256(path)
@@ -196,7 +197,8 @@ def main(argv=None) -> int:
             result = ocr.process(path, supplied, frame=frame, layout_only=args.layout_only)
             output_io.write_page(output, result, image=path.name, fingerprint=fingerprint,
                                  plain=args.plain,
-                                 preview_png=output_io.preview(path, frame, result.lines) if args.preview else None)
+                                 preview_png=output_io.preview(path, frame, result.lines) if args.preview else None,
+                                 page_xml=pagexml.page_xml(result, path.name, plain=args.plain) if args.page_xml else None)
             completed += 1
             print(f"[{index}/{len(jobs)}] {label}: {len(result.lines)} lines, {result.timings['total']:.2f}s", file=sys.stderr)
         except ModelSetupError as error:

@@ -193,3 +193,14 @@ def test_iiif_manifest_pages_are_downloaded_and_processed(tmp_path, fake_models,
     assert fetched == ["/2.png", "/3.png"]
     assert sorted(p.name.split("__")[0] for p in output.glob("*.json")) == ["0002", "0003"]
     assert sorted(p.name for p in (output / "iiif").glob("*/*.jpg")) == ["0002.jpg", "0003.jpg"]
+
+
+def test_page_xml_artifact_is_written_and_recorded(tmp_path, fake_models):
+    Image.new("RGB", (40, 60), (255, 255, 255)).save(tmp_path / "a.png")
+    output = tmp_path / "out"
+    assert cli.main([str(tmp_path / "a.png"), "-o", str(output), "--page-xml"]) == 0
+    xml = next(output.glob("*.page.xml"))
+    assert b"PcGts" in xml.read_bytes()
+    record = json.loads(next(output.glob("*.json")).read_text())
+    assert xml.name in record["artifacts"]
+    assert cli.main([str(tmp_path / "a.png"), "-o", str(output), "--page-xml", "--resume"]) == 0

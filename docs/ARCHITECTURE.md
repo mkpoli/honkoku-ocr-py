@@ -16,6 +16,7 @@
 | `pipeline.py` | 1ページの処理（`OCR.process`）、複数ページ（`OCR.process_many`）、結果の型 |
 | `sources.py` | 入力の読み込み。画像はPillow、PDFはpypdfium2で1ページを長辺3,500pxに描画。EXIFの向きを反映 |
 | `iiif.py` | IIIF Presentation v2/v3のマニフェストからキャンバスの画像URLを取り、取得して置く |
+| `pagexml.py` | `PageResult`をPAGE XML（PRImA 2019-07-15）にする |
 | `output.py` | 原子的なファイル書き出し、ページ記録の生成、プレビュー画像、エラー文字列の秘匿 |
 | `cli.py` | `honkoku-ocr`コマンド。入力の列挙、指紋、再開、終了コード |
 

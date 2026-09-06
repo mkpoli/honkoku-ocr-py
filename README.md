@@ -51,7 +51,7 @@ is the fp16 export rather than the browser's int8 one, so line texts can differ 
 | 一括処理 | ディレクトリ単位。スクリプトやcronから呼べ、失敗した画像を飛ばして続行、`--resume`で再開 | タブに開いた複数画像を「全画像OCR実行」でまとめて処理。結果は画面から保存する |
 | GPU | CUDA（行検出とencoder） | WebGPU対応端末のみ |
 | 行認識モデル | ConvNeXt V2 + RoBERTa（kuzushiji v18） | 同じ重み |
-| 出力 | Koji記法 + JSON（行位置、読み順、停止理由、所要時間、モデルと設定の指紋） | Koji記法、縦書き表示 |
+| 出力 | Koji記法 + JSON（行位置、読み順、停止理由、所要時間、モデルと設定の指紋）+ PAGE XML | Koji記法、縦書き表示、XML/docx |
 | 行位置の持ち込み | `--boxes` / `process(image, boxes=...)` | 画面上でbboxを編集 |
 | 行bboxの編集UI | 無し（`--preview`で番号付き画像を出す） | あり |
 | モデルの検証 | 全ファイルのサイズとSHA-256を照合 | IndexedDBキャッシュ |
@@ -144,6 +144,7 @@ uv run honkoku-ocr pages/ -o out --device cuda   # ディレクトリ内の画�
 uv run honkoku-ocr pages/ -o out --resume        # 済んだページを飛ばして続きから
 uv run honkoku-ocr page.jpg -o out --plain       # タグ無しの素テキスト
 uv run honkoku-ocr page.jpg -o out --preview     # 行 bbox と読み順を描いた PNG も書く
+uv run honkoku-ocr page.jpg -o out --page-xml    # PAGE XML (PRImA 2019-07-15) も書く
 uv run honkoku-ocr page.jpg -o out --layout-only # 行検出だけ (行認識モデルを読まない)
 uv run honkoku-ocr page.jpg -o out --boxes 'out/page__<hash>.json'   # 行位置を与えて認識だけ
 uv run honkoku-ocr scans.tif -o out --frame 3    # 多ページ TIFF の 4 コマ目だけ (省略時は全コマ)
@@ -165,7 +166,7 @@ uv run honkoku-ocr --iiif https://dl.ndl.go.jp/api/iiif/2540583/manifest.json --
 | `--verify-cache` | キャッシュ済みモデルのSHA-256を照合して終了 |
 | `--max-dimension` `--margin` `--confidence-threshold` `--ios-threshold` | 縮小の長辺（3500）、行cropの余白（45）、行検出のスコア閾値（0.3）、入れ子除去の閾値（0.8） |
 
-**出力の名前**。1画像につき`<stem>__<16桁hex>.json`と`.txt`（`--preview`なら`.preview.png`も）。
+**出力の名前**。1画像につき`<stem>__<16桁hex>.json`と`.txt`（`--preview`なら`.preview.png`、`--page-xml`なら`.page.xml`も）。
 hexは入力の絶対パスのSHA-256の先頭16桁で、同じstemの画像が別のディレクトリにあっても衝突せず、
 別の呼び出しで一部だけ処理しても名前が変わらない。多ページ画像はさらに`__p0001`のようにコマ番号が付く。
 入力ディレクトリを移動すると名前が変わる。
@@ -294,7 +295,9 @@ CLIのJSONは`PageResult`に`image`（入力のファイル名）、`fingerprint
 }
 ```
 
-txtは`koji`（`--plain`なら`plain`）を読み順に1行ずつ並べたもの。上の例は構造を示すため、行の一部とハッシュ値を省略している。
+txtは`koji`（`--plain`なら`plain`）を読み順に1行ずつ並べたもの。
+`--page-xml`のPAGE XMLは1ページを1つの`TextRegion`とし、行ごとに`TextLine`（矩形の`Coords`、`TextEquiv`にKoji記法か素テキスト、
+`conf`に行検出スコア）を読み順に並べる。座標はJSONと同じ元画像のもの。TranskribusやeScriptoriumに読み込める形式である。上の例は構造を示すため、行の一部とハッシュ値を省略している。
 
 ## ブラウザ版との違い
 

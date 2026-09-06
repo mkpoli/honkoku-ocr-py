@@ -69,7 +69,7 @@ def preview(source: Path, frame: int, lines) -> bytes:
 
 
 def write_page(path: Path, result: PageResult, *, image: str, fingerprint: dict,
-               plain: bool = False, preview_png: bytes | None = None) -> None:
+               plain: bool = False, preview_png: bytes | None = None, page_xml: bytes | None = None) -> None:
     """Publish text/preview first, then JSON as the completion record.
 
     The caller creates the output directory and supplies provenance. A failed
@@ -81,6 +81,8 @@ def write_page(path: Path, result: PageResult, *, image: str, fingerprint: dict,
     artifacts = {path.with_suffix(".txt").name: text.encode("utf-8")}
     if preview_png is not None:
         artifacts[path.with_suffix(".preview.png").name] = preview_png
+    if page_xml is not None:
+        artifacts[path.with_suffix(".page.xml").name] = page_xml
     record = {**asdict(result), "image": image, "fingerprint": fingerprint,
               "artifacts": {name: _digest(data) for name, data in artifacts.items()}}
     for name, data in artifacts.items():
