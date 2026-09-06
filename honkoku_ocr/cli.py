@@ -10,15 +10,14 @@ from dataclasses import asdict
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 
-from PIL import Image
-
 from . import models
 from . import output as output_io
 from .layout import Box
 from .output import _digest, package_version, safe_error
 from .pipeline import OCR, SCHEMA_VERSION, ModelSetupError
+from .sources import SUFFIXES, frame_count
 
-EXTS = {".jpg", ".jpeg", ".png", ".tif", ".tiff", ".bmp", ".webp"}
+EXTS = SUFFIXES
 
 
 def _unique_names(files: list[Path]) -> dict[Path, str]:
@@ -121,13 +120,12 @@ def main(argv=None) -> int:
     jobs = []
     for path in files:
         try:
-            with Image.open(path) as image:
-                count = getattr(image, "n_frames", 1)
-                frames = range(count) if args.frame is None else [args.frame]
-                for frame in frames:
-                    if frame >= count:
-                        raise ValueError(f"frame {frame} out of range (image has {count} frames)")
-                    jobs.append((path, frame, count))
+            count = frame_count(path)
+            frames = range(count) if args.frame is None else [args.frame]
+            for frame in frames:
+                if frame >= count:
+                    raise ValueError(f"frame {frame} out of range (image has {count} frames)")
+                jobs.append((path, frame, count))
         except Exception as error:
             failures += 1
             print(f"{path.name}: {safe_error(error)}", file=sys.stderr)

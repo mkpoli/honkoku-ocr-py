@@ -14,6 +14,7 @@
 | `recognizer.py` | 行画像の前処理（傾き補正、回転、縮小、正規化）、encoder、KVキャッシュ付きgreedy復号、トークン列の後処理 |
 | `koji.py` | 特殊トークン列とKoji記法・素テキストの変換 |
 | `pipeline.py` | 1ページの処理（`OCR.process`）、複数ページ（`OCR.process_many`）、結果の型 |
+| `sources.py` | 入力の読み込み。画像はPillow、PDFはpypdfium2で1ページを長辺3,500pxに描画。EXIFの向きを反映 |
 | `output.py` | 原子的なファイル書き出し、ページ記録の生成、プレビュー画像、エラー文字列の秘匿 |
 | `cli.py` | `honkoku-ocr`コマンド。入力の列挙、指紋、再開、終了コード |
 

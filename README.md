@@ -136,6 +136,7 @@ pip install "honkoku-ocr-py[cpu]"
 ```sh
 uv sync --extra cpu          # onnxruntime (CPU)
 uv sync --extra gpu          # onnxruntime-gpu と CUDA 12 のランタイム (cpu とは排他)
+uv sync --extra cpu --extra pdf   # PDF も読む (pypdfium2)
 
 uv run honkoku-ocr --download                    # モデルを取得して照合 (4 ファイル 289 MB、~/.cache/honkoku-ocr/models)
 uv run honkoku-ocr page.jpg -o out               # out/page__<hash>.txt (Koji 記法、読み順) と out/page__<hash>.json
@@ -146,6 +147,7 @@ uv run honkoku-ocr page.jpg -o out --preview     # 行 bbox と読み順を描�
 uv run honkoku-ocr page.jpg -o out --layout-only # 行検出だけ (行認識モデルを読まない)
 uv run honkoku-ocr page.jpg -o out --boxes 'out/page__<hash>.json'   # 行位置を与えて認識だけ
 uv run honkoku-ocr scans.tif -o out --frame 3    # 多ページ TIFF の 4 コマ目だけ (省略時は全コマ)
+uv run honkoku-ocr book.pdf -o out               # PDF は 1 ページ 1 コマ (長辺 3,500 px で描画)
 ```
 
 主なオプション。全体は`honkoku-ocr --help`。
@@ -224,6 +226,7 @@ for outcome in ocr.process_many(sorted(Path("pages").glob("*.jpg")), cancelled=s
   どちらも必要なモデルしか読まない。
 - 座標はすべてEXIFの向きを反映した元画像のもの（`settings.coordinate_space`は`exif_oriented_original`）。
   処理は長辺3,500pxに縮小した画像で行い、結果は元画像の座標に戻す。
+  PDFのページは長辺3,500pxで描画した画像として扱うので、座標はその描画画像のもの（`width`と`height`がその大きさ）。
 - `boxes=[Box(x, y, w, h, confidence), ...]`を与えると行検出を飛ばし、与えた順を読み順、与えた座標をそのまま
   結果の座標とする。幅と高さは正、confidenceは0〜1で、boxが元画像と重なっている必要がある。
   はみ出した部分は認識用の切り出しで除くが、返す座標は変更しない。
@@ -293,7 +296,7 @@ txtは`koji`（`--plain`なら`plain`）を読み順に1行ずつ並べたもの
 
 ## ブラウザ版との違い
 
-- UI（画像ビューア、bboxの編集、縦書き表示、PDF/HEICの読み込み、IIIF、LLM連携）は含まない。多ページTIFFは読める。
+- UI（画像ビューア、bboxの編集、縦書き表示、HEICの読み込み、IIIF、LLM連携）は含まない。多ページTIFFとPDF（`pdf` extra）は読める。
 - encoderはfp16版を使う。ブラウザ版のWebAssembly経路が使うint8版のConvInteger演算はonnxruntimeのCPU/CUDAプロバイダに無い。
   CPUではfp16版をfp32に変換したファイルを使う。対応する版はfp16 encoderが配布されているv16fs / v17 / v18。
 - decoderは`--device cuda`でもCPUで動く。

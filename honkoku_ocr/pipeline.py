@@ -19,6 +19,7 @@ from .layout import Box, LayoutDetector
 from .output import safe_error
 from .reading_order import order
 from .recognizer import EncodedLine, RecognitionResult, Recognizer, crop_with_margin, js_round
+from .sources import load_frame
 
 MAX_IMAGE_DIM = 3500
 MARGIN = 45
@@ -58,9 +59,7 @@ class PreparedPage:
                 raise ValueError("frame selection requires a file; PIL images use their current frame")
             img = ImageOps.exif_transpose(source).convert("RGB")
         else:
-            with Image.open(source) as opened:
-                opened.seek(frame)
-                img = ImageOps.exif_transpose(opened).convert("RGB")
+            img = load_frame(source, frame, max_dimension=max_dimension)
         width, height = img.size
         scale = min(1.0, max_dimension / max(width, height))
         nw, nh = max(1, js_round(width * scale)), max(1, js_round(height * scale))

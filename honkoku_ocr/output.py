@@ -12,7 +12,9 @@ from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from PIL import Image, ImageDraw, ImageOps
+from PIL import ImageDraw
+
+from .sources import load_frame
 
 if TYPE_CHECKING:
     from .pipeline import PageResult
@@ -45,9 +47,7 @@ def _digest(data: bytes) -> str:
 
 
 def preview(source: Path, frame: int, lines) -> bytes:
-    with Image.open(source) as opened:
-        opened.seek(frame)
-        image = ImageOps.exif_transpose(opened).convert("RGB")
+    image = load_frame(source, frame, max_dimension=None)
     try:
         width, height = image.size
         image.thumbnail((1600, 1600))

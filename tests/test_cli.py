@@ -162,3 +162,12 @@ def test_model_setup_failure_stops_cli_batch(tmp_path, fake_models, monkeypatch,
     assert cli.main([str(tmp_path), '-o', str(tmp_path / 'out')]) == 1
     assert attempts == ['a.png']
     assert 'batch stopped (1 not attempted)' in capsys.readouterr().err
+
+
+def test_pdf_pages_become_numbered_outputs(tmp_path, fake_models):
+    pytest.importorskip("pypdfium2")
+    pages = [Image.new("RGB", (40, 60), (255, 255, 255)), Image.new("RGB", (40, 60), (255, 255, 255))]
+    pages[0].save(tmp_path / "scans.pdf", save_all=True, append_images=pages[1:])
+    output = tmp_path / "out"
+    assert cli.main([str(tmp_path / "scans.pdf"), "-o", str(output)]) == 0
+    assert sorted(p.name[-11:] for p in output.glob("*.json")) == ["_p0001.json", "_p0002.json"]
