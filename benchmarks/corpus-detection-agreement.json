@@ -1,0 +1,147 @@
+{
+ "manifest": "benchmarks/corpus/manifest.json",
+ "manifest_sha256": "89fcd83a1d3bbc20fba2afa453f3a4425bfc9e412fcf44cef9fd0ca620829bca",
+ "model": "v18",
+ "device": "cpu",
+ "iou_threshold": 0.5,
+ "settings": {
+  "device": "cpu",
+  "threads": 0,
+  "decoder_threads": 0,
+  "encoder_precision": "auto",
+  "max_dimension": 3500,
+  "margin": 45,
+  "conf_threshold": 0.3,
+  "ios_threshold": 0.8,
+  "coordinate_space": "exif_oriented_original",
+  "overlap": false
+ },
+ "models": {
+  "layout": {
+   "file": "rtmdet-s-1280x1280.onnx",
+   "sha256": "f46267754d406431f6e035f9e20b8552af8ff1ab5ca13bcac8f4b1abbd02090c"
+  }
+ },
+ "package_version": "0.2.0",
+ "pages": [
+  {
+   "id": "kamosha-799137F6-029",
+   "frame": 0,
+   "source_sha256": "c1421a8e99a5e1dc84152f64ec12f05f29095d09ab36af8180ff65cee44f6561",
+   "reference": 24,
+   "detected": 24,
+   "matched": 22,
+   "mean_matched_iou": 0.9072724980133686,
+   "unmatched_detected": [
+    {
+     "x": 3599,
+     "y": 912,
+     "width": 168,
+     "height": 3130,
+     "confidence": 0.8838464021682739
+    },
+    {
+     "x": 973,
+     "y": 906,
+     "width": 197,
+     "height": 3197,
+     "confidence": 0.8949400186538696
+    }
+   ],
+   "unmatched_reference": [
+    16,
+    18
+   ]
+  },
+  {
+   "id": "kamosha-799137F6-030",
+   "frame": 0,
+   "source_sha256": "bfae35340e90eace060a412be571861622783ef31233f90136f5aa73fb13f065",
+   "reference": 20,
+   "detected": 24,
+   "matched": 20,
+   "mean_matched_iou": 0.9227642875475501,
+   "unmatched_detected": [
+    {
+     "x": 5122,
+     "y": 943,
+     "width": 201,
+     "height": 3175,
+     "confidence": 0.8937993049621582
+    },
+    {
+     "x": 4936,
+     "y": 926,
+     "width": 192,
+     "height": 3216,
+     "confidence": 0.8804988861083984
+    },
+    {
+     "x": 1347,
+     "y": 945,
+     "width": 185,
+     "height": 3179,
+     "confidence": 0.9023126363754272
+    },
+    {
+     "x": 1165,
+     "y": 967,
+     "width": 178,
+     "height": 3149,
+     "confidence": 0.9064066410064697
+    }
+   ],
+   "unmatched_reference": []
+  },
+  {
+   "id": "iryotoyojo-DC7F12BC-028",
+   "frame": 0,
+   "source_sha256": "0a5898ae5b7c883152da89d155887b86f8c5cc3939f9e130e914ee0b852df759",
+   "reference": 20,
+   "detected": 22,
+   "matched": 20,
+   "mean_matched_iou": 0.9156823602973884,
+   "unmatched_detected": [
+    {
+     "x": 2783,
+     "y": 707,
+     "width": 156,
+     "height": 3142,
+     "confidence": 0.8842443227767944
+    },
+    {
+     "x": 2577,
+     "y": 707,
+     "width": 150,
+     "height": 3152,
+     "confidence": 0.8944971561431885
+    }
+   ],
+   "unmatched_reference": []
+  },
+  {
+   "id": "iryotoyojo-DC7F12BC-030",
+   "frame": 0,
+   "source_sha256": "5f64c8f73ac505e8fea05ff37713776c5dd76c26ec38f45d355eedfb4172a2e1",
+   "reference": 21,
+   "detected": 22,
+   "matched": 21,
+   "mean_matched_iou": 0.930280106734571,
+   "unmatched_detected": [
+    {
+     "x": 1134,
+     "y": 708,
+     "width": 163,
+     "height": 3147,
+     "confidence": 0.883730947971344
+    }
+   ],
+   "unmatched_reference": []
+  }
+ ],
+ "totals": {
+  "reference": 85,
+  "detected": 92,
+  "matched": 83
+ }
+}

@@ -1,0 +1,2386 @@
+{
+  "manifest_sha256": "89fcd83a1d3bbc20fba2afa453f3a4425bfc9e412fcf44cef9fd0ca620829bca",
+  "attribution": "Images: 国立国会図書館デジタルコレクション (dl.ndl.go.jp), public-domain works. Line boxes and transcriptions: NDL古典籍OCR学習用データセット（みんなで翻刻加工データ）v2, ndl-lab/ndl-minhon-ocrdataset (2024-02-07), CC BY-SA 4.0, derived from みんなで翻刻 data (yuta1984/honkoku-data, CC BY-SA 4.0). Transcriptions were matched to line images mechanically by NDL and can contain errors; the v18 model was trained on みんなで翻刻 data, so these pages may overlap its training set.",
+  "package_version": "0.2.0",
+  "python": "3.12.7",
+  "platform": "Linux",
+  "onnxruntime": "1.29.0",
+  "model": "v18",
+  "settings": {
+    "device": "cpu",
+    "threads": 0,
+    "decoder_threads": 0,
+    "encoder_precision": "auto",
+    "max_dimension": 3500,
+    "margin": 45,
+    "conf_threshold": 0.3,
+    "ios_threshold": 0.8,
+    "coordinate_space": "exif_oriented_original",
+    "overlap": false
+  },
+  "models": {
+    "encoder_conversion": "34c45ef4e7db0c00c377097d68191eb0a585b3e754539d6b1536227eb89b895c",
+    "encoder": {
+      "file": "kuzushiji-v18-encoder-fp32.onnx",
+      "sha256": "3b3c359bd42609b2be21ab7fdbf28d9b86d5160577ea44598d4e590f7d4dfd1c"
+    },
+    "prefill": {
+      "file": "kuzushiji-v18-decoder-prefill-int8.onnx",
+      "sha256": "6f3f19011f8d08f9d5dc9cf9c2e672d9d68cb512438a90486e5b6d7267a129dc"
+    },
+    "step": {
+      "file": "kuzushiji-v18-decoder-step-int8.onnx",
+      "sha256": "bf0e72a807168393acb7b6c0cb1b85b7d6107f2d6f4d6bb8fbb6736be2ac4bae"
+    },
+    "vocabulary": "cf0621e68b0997ea8a9815b156f55c5481084b3c7a8d763fd8753178e0a56f25"
+  },
+  "format": "plain",
+  "normalization": "none (Unicode code points; newlines count)",
+  "warmups": 0,
+  "repeats": 1,
+  "first_page_seconds_including_setup": 29.3352560919011,
+  "process_peak_rss_bytes": 1688645632,
+  "reference_characters_across_repeats": 1853,
+  "character_errors_across_repeats": 357,
+  "aggregate_cer": 0.1926605504587156,
+  "samples": [
+    {
+      "id": "kamosha-799137F6-029",
+      "source_sha256": "c1421a8e99a5e1dc84152f64ec12f05f29095d09ab36af8180ff65cee44f6561",
+      "frame": 0,
+      "boxes": [
+        {
+          "x": 5510,
+          "y": 880,
+          "width": 144,
+          "height": 927,
+          "confidence": 1.0
+        },
+        {
+          "x": 5297,
+          "y": 1060,
+          "width": 180,
+          "height": 3079,
+          "confidence": 1.0
+        },
+        {
+          "x": 5120,
+          "y": 1083,
+          "width": 135,
+          "height": 853,
+          "confidence": 1.0
+        },
+        {
+          "x": 4915,
+          "y": 908,
+          "width": 186,
+          "height": 3195,
+          "confidence": 1.0
+        },
+        {
+          "x": 4736,
+          "y": 877,
+          "width": 179,
+          "height": 3259,
+          "confidence": 1.0
+        },
+        {
+          "x": 4552,
+          "y": 884,
+          "width": 168,
+          "height": 3237,
+          "confidence": 1.0
+        },
+        {
+          "x": 4350,
+          "y": 835,
+          "width": 178,
+          "height": 3316,
+          "confidence": 1.0
+        },
+        {
+          "x": 4159,
+          "y": 724,
+          "width": 182,
+          "height": 3446,
+          "confidence": 1.0
+        },
+        {
+          "x": 3995,
+          "y": 844,
+          "width": 160,
+          "height": 2141,
+          "confidence": 1.0
+        },
+        {
+          "x": 3787,
+          "y": 743,
+          "width": 167,
+          "height": 3352,
+          "confidence": 1.0
+        },
+        {
+          "x": 3414,
+          "y": 888,
+          "width": 171,
+          "height": 3251,
+          "confidence": 1.0
+        },
+        {
+          "x": 3010,
+          "y": 854,
+          "width": 174,
+          "height": 3324,
+          "confidence": 1.0
+        },
+        {
+          "x": 2825,
+          "y": 872,
+          "width": 168,
+          "height": 3236,
+          "confidence": 1.0
+        },
+        {
+          "x": 2638,
+          "y": 865,
+          "width": 173,
+          "height": 3215,
+          "confidence": 1.0
+        },
+        {
+          "x": 2437,
+          "y": 869,
+          "width": 192,
+          "height": 3212,
+          "confidence": 1.0
+        },
+        {
+          "x": 2261,
+          "y": 871,
+          "width": 192,
+          "height": 3250,
+          "confidence": 1.0
+        },
+        {
+          "x": 2117,
+          "y": 1639,
+          "width": 162,
+          "height": 2418,
+          "confidence": 1.0
+        },
+        {
+          "x": 2075,
+          "y": 878,
+          "width": 203,
+          "height": 3187,
+          "confidence": 1.0
+        },
+        {
+          "x": 2066,
+          "y": 879,
+          "width": 164,
+          "height": 877,
+          "confidence": 1.0
+        },
+        {
+          "x": 1897,
+          "y": 862,
+          "width": 199,
+          "height": 3127,
+          "confidence": 1.0
+        },
+        {
+          "x": 1718,
+          "y": 772,
+          "width": 191,
+          "height": 3313,
+          "confidence": 1.0
+        },
+        {
+          "x": 1528,
+          "y": 863,
+          "width": 156,
+          "height": 1720,
+          "confidence": 1.0
+        },
+        {
+          "x": 1352,
+          "y": 892,
+          "width": 171,
+          "height": 3232,
+          "confidence": 1.0
+        },
+        {
+          "x": 1159,
+          "y": 865,
+          "width": 171,
+          "height": 3260,
+          "confidence": 1.0
+        }
+      ],
+      "median_seconds": 25.76619310094975,
+      "timings_seconds": [
+        {
+          "load": 1.3507492860080674,
+          "recognizer_setup": 3.817025572061539e-06,
+          "preprocess": 0.4169836400542408,
+          "encoder": 22.379561790148728,
+          "prefill": 0.24693337792996317,
+          "decode": 1.3584878119872883,
+          "total": 25.76619310094975
+        }
+      ],
+      "predictions": [
+        "相定け條之内\n雖為奉公人非番有之方は当参之衆中可為\n同前候事\n何様之事も有之に付亦々今度再願書被差出に付\n予も常勤非番有之身分故此間已来胡保弁顕\n植季予等追々内談有之今日口上書草案出来\n尚右之輩夫々相鍛候上近々老若中へ可被差出筈也\n十二日丁寅晴珍法子息嫁被迎に付今日祝酒被通旨\nに而被相様處留主中故不参也\n十七日壬申雨今度日数再願之義此間已来願書\n相鍛候處何れも存念無之に付今日清書出来桓季\nより会所保仲迄被附置也右願人々数昨年十二月\n初而願書被差出節は季端古顕尋直保命経行\n祥顕胡保式顕弁顕経徳経良恒季氏眉保守等\n十五人也其後経行卒去式顕保守等は奉公退\n身に付右三人今度除之予一人加之已上十一人也\n方鷹司准后政煕公御息女皇子御降\n今日女御之方鷹司准后政煕公御息女皇子御降\n今日女御之方\n誕也　主上初度之御誕生也恐悦〳〵九月目云々\n十九日甲戌曇時々雨降三頭人豊顕より汁講参\n会に付父子被相招罷向了\n細川候伏見御通行に付今日御家門政所御方へ御立\n寄有之奥向より表奥向へ被為入之由也今度二度"
+      ],
+      "repeat_outputs_identical": true,
+      "cer": [
+        0.08275862068965517
+      ],
+      "lines": [
+        {
+          "reading_order": 1,
+          "x": 5510,
+          "y": 880,
+          "width": 144,
+          "height": 927,
+          "detection_confidence": 1.0,
+          "raw": "相定け條之内",
+          "koji": "相定け條之内",
+          "plain": "相定け條之内",
+          "stop_reason": "eos",
+          "token_count": 7,
+          "timings": {
+            "preprocess": 0.009642885066568851,
+            "encoder": 0.729012363939546,
+            "prefill": 0.007893332047387958,
+            "decode": 0.016764843021519482
+          }
+        },
+        {
+          "reading_order": 2,
+          "x": 5297,
+          "y": 1060,
+          "width": 180,
+          "height": 3079,
+          "detection_confidence": 1.0,
+          "raw": "雖為奉公人非番有之方は当参之衆中可為",
+          "koji": "雖為奉公人非番有之方は当参之衆中可為",
+          "plain": "雖為奉公人非番有之方は当参之衆中可為",
+          "stop_reason": "eos",
+          "token_count": 19,
+          "timings": {
+            "preprocess": 0.015583964064717293,
+            "encoder": 0.9360643139807507,
+            "prefill": 0.007841252023354173,
+            "decode": 0.055054878001101315
+          }
+        },
+        {
+          "reading_order": 3,
+          "x": 5120,
+          "y": 1083,
+          "width": 135,
+          "height": 853,
+          "detection_confidence": 1.0,
+          "raw": "同前候事",
+          "koji": "同前候事",
+          "plain": "同前候事",
+          "stop_reason": "eos",
+          "token_count": 5,
+          "timings": {
+            "preprocess": 0.02403287694323808,
+            "encoder": 1.2043393780477345,
+            "prefill": 0.01282919105142355,
+            "decode": 0.01826470100786537
+          }
+        },
+        {
+          "reading_order": 4,
+          "x": 4915,
+          "y": 908,
+          "width": 186,
+          "height": 3195,
+          "detection_confidence": 1.0,
+          "raw": "何様之事も有之に付亦々今度再願書被差出に付",
+          "koji": "何様之事も有之に付亦々今度再願書被差出に付",
+          "plain": "何様之事も有之に付亦々今度再願書被差出に付",
+          "stop_reason": "eos",
+          "token_count": 22,
+          "timings": {
+            "preprocess": 0.016069105942733586,
+            "encoder": 1.1913574010832235,
+            "prefill": 0.012808326981030405,
+            "decode": 0.09611992095597088
+          }
+        },
+        {
+          "reading_order": 5,
+          "x": 4736,
+          "y": 877,
+          "width": 179,
+          "height": 3259,
+          "detection_confidence": 1.0,
+          "raw": "予も常勤非番有之身分故此間已来胡保弁顕",
+          "koji": "予も常勤非番有之身分故此間已来胡保弁顕",
+          "plain": "予も常勤非番有之身分故此間已来胡保弁顕",
+          "stop_reason": "eos",
+          "token_count": 20,
+          "timings": {
+            "preprocess": 0.02044026309158653,
+            "encoder": 1.0213663600152358,
+            "prefill": 0.012300863047130406,
+            "decode": 0.06355968699790537
+          }
+        },
+        {
+          "reading_order": 6,
+          "x": 4552,
+          "y": 884,
+          "width": 168,
+          "height": 3237,
+          "detection_confidence": 1.0,
+          "raw": "植季予等追々内談有之今日口上書草案出来",
+          "koji": "植季予等追々内談有之今日口上書草案出来",
+          "plain": "植季予等追々内談有之今日口上書草案出来",
+          "stop_reason": "eos",
+          "token_count": 20,
+          "timings": {
+            "preprocess": 0.018201857921667397,
+            "encoder": 0.9980623839655891,
+            "prefill": 0.006560522015206516,
+            "decode": 0.06429665209725499
+          }
+        },
+        {
+          "reading_order": 7,
+          "x": 4350,
+          "y": 835,
+          "width": 178,
+          "height": 3316,
+          "detection_confidence": 1.0,
+          "raw": "尚右之輩夫々相鍛候上近々老若中へ可被差出筈也",
+          "koji": "尚右之輩夫々相鍛候上近々老若中へ可被差出筈也",
+          "plain": "尚右之輩夫々相鍛候上近々老若中へ可被差出筈也",
+          "stop_reason": "eos",
+          "token_count": 23,
+          "timings": {
+            "preprocess": 0.01738669804763049,
+            "encoder": 1.0734395619947463,
+            "prefill": 0.008316754014231265,
+            "decode": 0.09402474795933813
+          }
+        },
+        {
+          "reading_order": 8,
+          "x": 4159,
+          "y": 724,
+          "width": 182,
+          "height": 3446,
+          "detection_confidence": 1.0,
+          "raw": "十二日丁寅晴珍法子息嫁被迎に付今日祝酒被通旨",
+          "koji": "十二日丁寅晴珍法子息嫁被迎に付今日祝酒被通旨",
+          "plain": "十二日丁寅晴珍法子息嫁被迎に付今日祝酒被通旨",
+          "stop_reason": "eos",
+          "token_count": 23,
+          "timings": {
+            "preprocess": 0.020885572070255876,
+            "encoder": 1.0165663089137524,
+            "prefill": 0.01669820595998317,
+            "decode": 0.12033507006708533
+          }
+        },
+        {
+          "reading_order": 9,
+          "x": 3995,
+          "y": 844,
+          "width": 160,
+          "height": 2141,
+          "detection_confidence": 1.0,
+          "raw": "に而被相様處留主中故不参也",
+          "koji": "に而被相様處留主中故不参也",
+          "plain": "に而被相様處留主中故不参也",
+          "stop_reason": "eos",
+          "token_count": 14,
+          "timings": {
+            "preprocess": 0.0170526800211519,
+            "encoder": 1.6142056450480595,
+            "prefill": 0.006406735046766698,
+            "decode": 0.03385100397281349
+          }
+        },
+        {
+          "reading_order": 10,
+          "x": 3787,
+          "y": 743,
+          "width": 167,
+          "height": 3352,
+          "detection_confidence": 1.0,
+          "raw": "十七日壬申雨今度日数再願之義此間已来願書",
+          "koji": "十七日壬申雨今度日数再願之義此間已来願書",
+          "plain": "十七日壬申雨今度日数再願之義此間已来願書",
+          "stop_reason": "eos",
+          "token_count": 21,
+          "timings": {
+            "preprocess": 0.014607444987632334,
+            "encoder": 0.7317541930824518,
+            "prefill": 0.008623959962278605,
+            "decode": 0.053465379984118044
+          }
+        },
+        {
+          "reading_order": 11,
+          "x": 3414,
+          "y": 888,
+          "width": 171,
+          "height": 3251,
+          "detection_confidence": 1.0,
+          "raw": "相鍛候處何れも存念無之に付今日清書出来桓季",
+          "koji": "相鍛候處何れも存念無之に付今日清書出来桓季",
+          "plain": "相鍛候處何れも存念無之に付今日清書出来桓季",
+          "stop_reason": "eos",
+          "token_count": 22,
+          "timings": {
+            "preprocess": 0.01499271101783961,
+            "encoder": 0.8226690490264446,
+            "prefill": 0.006635778001509607,
+            "decode": 0.04934804001823068
+          }
+        },
+        {
+          "reading_order": 12,
+          "x": 3010,
+          "y": 854,
+          "width": 174,
+          "height": 3324,
+          "detection_confidence": 1.0,
+          "raw": "より会所保仲迄被附置也右願人々数昨年十二月",
+          "koji": "より会所保仲迄被附置也右願人々数昨年十二月",
+          "plain": "より会所保仲迄被附置也右願人々数昨年十二月",
+          "stop_reason": "eos",
+          "token_count": 22,
+          "timings": {
+            "preprocess": 0.016530373017303646,
+            "encoder": 0.920495267957449,
+            "prefill": 0.008621825953014195,
+            "decode": 0.06251045200042427
+          }
+        },
+        {
+          "reading_order": 13,
+          "x": 2825,
+          "y": 872,
+          "width": 168,
+          "height": 3236,
+          "detection_confidence": 1.0,
+          "raw": "初而願書被差出節は季端古顕尋直保命経行",
+          "koji": "初而願書被差出節は季端古顕尋直保命経行",
+          "plain": "初而願書被差出節は季端古顕尋直保命経行",
+          "stop_reason": "eos",
+          "token_count": 20,
+          "timings": {
+            "preprocess": 0.014633744955062866,
+            "encoder": 0.6899408120661974,
+            "prefill": 0.0037028840743005276,
+            "decode": 0.047515794984064996
+          }
+        },
+        {
+          "reading_order": 14,
+          "x": 2638,
+          "y": 865,
+          "width": 173,
+          "height": 3215,
+          "detection_confidence": 1.0,
+          "raw": "祥顕胡保式顕弁顕経徳経良恒季氏眉保守等",
+          "koji": "祥顕胡保式顕弁顕経徳経良恒季氏眉保守等",
+          "plain": "祥顕胡保式顕弁顕経徳経良恒季氏眉保守等",
+          "stop_reason": "eos",
+          "token_count": 20,
+          "timings": {
+            "preprocess": 0.01963260001502931,
+            "encoder": 0.6785588460043073,
+            "prefill": 0.009342965902760625,
+            "decode": 0.03876297001261264
+          }
+        },
+        {
+          "reading_order": 15,
+          "x": 2437,
+          "y": 869,
+          "width": 192,
+          "height": 3212,
+          "detection_confidence": 1.0,
+          "raw": "十五人也其後経行卒去式顕保守等は奉公退",
+          "koji": "十五人也其後経行卒去式顕保守等は奉公退",
+          "plain": "十五人也其後経行卒去式顕保守等は奉公退",
+          "stop_reason": "eos",
+          "token_count": 20,
+          "timings": {
+            "preprocess": 0.01590600109193474,
+            "encoder": 0.7740206040907651,
+            "prefill": 0.010760030010715127,
+            "decode": 0.05298836890142411
+          }
+        },
+        {
+          "reading_order": 16,
+          "x": 2261,
+          "y": 871,
+          "width": 192,
+          "height": 3250,
+          "detection_confidence": 1.0,
+          "raw": "身に付右三人今度除之予一人加之已上十一人也",
+          "koji": "身に付右三人今度除之予一人加之已上十一人也",
+          "plain": "身に付右三人今度除之予一人加之已上十一人也",
+          "stop_reason": "eos",
+          "token_count": 22,
+          "timings": {
+            "preprocess": 0.014800611999817193,
+            "encoder": 1.0269614059943706,
+            "prefill": 0.018253460992127657,
+            "decode": 0.06591246591415256
+          }
+        },
+        {
+          "reading_order": 17,
+          "x": 2117,
+          "y": 1639,
+          "width": 162,
+          "height": 2418,
+          "detection_confidence": 1.0,
+          "raw": "方<WARI>鷹司准后政煕公御息女皇子御降</WARI>",
+          "koji": "方《割書：鷹司准后政煕公御息女皇子御降》",
+          "plain": "方鷹司准后政煕公御息女皇子御降",
+          "stop_reason": "eos",
+          "token_count": 18,
+          "timings": {
+            "preprocess": 0.015229349955916405,
+            "encoder": 0.9424503289628774,
+            "prefill": 0.004806348937563598,
+            "decode": 0.03887836902868003
+          }
+        },
+        {
+          "reading_order": 18,
+          "x": 2075,
+          "y": 878,
+          "width": 203,
+          "height": 3187,
+          "detection_confidence": 1.0,
+          "raw": "今日女御之方<WARI>鷹司准后政煕公御息女皇子御降</WARI>",
+          "koji": "今日女御之方《割書：鷹司准后政煕公御息女皇子御降》",
+          "plain": "今日女御之方鷹司准后政煕公御息女皇子御降",
+          "stop_reason": "eos",
+          "token_count": 23,
+          "timings": {
+            "preprocess": 0.015856651938520372,
+            "encoder": 0.8394872710341588,
+            "prefill": 0.014401333988644183,
+            "decode": 0.058935390086844563
+          }
+        },
+        {
+          "reading_order": 19,
+          "x": 2066,
+          "y": 879,
+          "width": 164,
+          "height": 877,
+          "detection_confidence": 1.0,
+          "raw": "今日女御之方",
+          "koji": "今日女御之方",
+          "plain": "今日女御之方",
+          "stop_reason": "eos",
+          "token_count": 7,
+          "timings": {
+            "preprocess": 0.01286301005166024,
+            "encoder": 0.733366193016991,
+            "prefill": 0.010273347026668489,
+            "decode": 0.023073485936038196
+          }
+        },
+        {
+          "reading_order": 20,
+          "x": 1897,
+          "y": 862,
+          "width": 199,
+          "height": 3127,
+          "detection_confidence": 1.0,
+          "raw": "誕也　主上初度之御誕生也恐悦〳〵九月目云々",
+          "koji": "誕也　主上初度之御誕生也恐悦〳〵九月目云々",
+          "plain": "誕也　主上初度之御誕生也恐悦〳〵九月目云々",
+          "stop_reason": "eos",
+          "token_count": 22,
+          "timings": {
+            "preprocess": 0.015330357011407614,
+            "encoder": 0.7406109300209209,
+            "prefill": 0.008509539067745209,
+            "decode": 0.08356226503383368
+          }
+        },
+        {
+          "reading_order": 21,
+          "x": 1718,
+          "y": 772,
+          "width": 191,
+          "height": 3313,
+          "detection_confidence": 1.0,
+          "raw": "十九日甲戌曇時々雨降三頭人豊顕より汁講参",
+          "koji": "十九日甲戌曇時々雨降三頭人豊顕より汁講参",
+          "plain": "十九日甲戌曇時々雨降三頭人豊顕より汁講参",
+          "stop_reason": "eos",
+          "token_count": 21,
+          "timings": {
+            "preprocess": 0.03254892898257822,
+            "encoder": 0.6614157089497894,
+            "prefill": 0.004881066968664527,
+            "decode": 0.05190621502697468
+          }
+        },
+        {
+          "reading_order": 22,
+          "x": 1528,
+          "y": 863,
+          "width": 156,
+          "height": 1720,
+          "detection_confidence": 1.0,
+          "raw": "会に付父子被相招罷向了",
+          "koji": "会に付父子被相招罷向了",
+          "plain": "会に付父子被相招罷向了",
+          "stop_reason": "eos",
+          "token_count": 12,
+          "timings": {
+            "preprocess": 0.019743923912756145,
+            "encoder": 0.8501135469414294,
+            "prefill": 0.012704895925708115,
+            "decode": 0.03318461193703115
+          }
+        },
+        {
+          "reading_order": 23,
+          "x": 1352,
+          "y": 892,
+          "width": 171,
+          "height": 3232,
+          "detection_confidence": 1.0,
+          "raw": "細川候伏見御通行に付今日御家門政所御方へ御立",
+          "koji": "細川候伏見御通行に付今日御家門政所御方へ御立",
+          "plain": "細川候伏見御通行に付今日御家門政所御方へ御立",
+          "stop_reason": "eos",
+          "token_count": 23,
+          "timings": {
+            "preprocess": 0.015286528039723635,
+            "encoder": 1.0687468950636685,
+            "prefill": 0.013041089987382293,
+            "decode": 0.06535128504037857
+          }
+        },
+        {
+          "reading_order": 24,
+          "x": 1159,
+          "y": 865,
+          "width": 171,
+          "height": 3260,
+          "detection_confidence": 1.0,
+          "raw": "寄有之奥向より表奥向へ被為入之由也今度二度",
+          "koji": "寄有之奥向より表奥向へ被為入之由也今度二度",
+          "plain": "寄有之奥向より表奥向へ被為入之由也今度二度",
+          "stop_reason": "eos",
+          "token_count": 22,
+          "timings": {
+            "preprocess": 0.019725499907508492,
+            "encoder": 1.1145570209482685,
+            "prefill": 0.020719668944366276,
+            "decode": 0.07082121400162578
+          }
+        }
+      ],
+      "reference": "相定ケ条之内\n雖為奉公人非番有之方者当参之衆中可為\n同前候事\n何様之事も有之ニ付亦々今度再願書被差出ニ付\n予も常勤非番有之身分故此間已来胡保弁類\n季予等追々内談有之今日口上書草葉出来\n尚右之輩夫々相候上近々老若中へ可被差出筈\n十二日丙寅晴珍法子息嫁被迎ニ付今日祝酒被通旨\nに而被相招処留主中故不参也\n十七日壬申雨今度日数再願之義此間已来願書\n相詫候処何れも存念無之に付今日清書出来桓字\nより会所保仲迄被附置也右願人々数昨年十二月\n初而願書被差出節ハ季端古顕尋直保命経行\n祥顕胡保式顕弁類経徳経徳良恒季氏眉保字等\n十五人也其後経行卒去式芸保守等は奉公退\n身ニ付右三人今度除之予一人加之已上十一人也\n則鷹司准后政公御息女皇子御降\n今日女御之方鷹司准后政公御息女皇子御降\n今日女御方\n誕也主上初度之御誕生也恐悦九月目云々\n十九日甲キ雲時之雨降三頃人豊顕より汁講祭\n会に付父子被相招罷向了\n細川候伏見御通行に付今日御家門政所御方へ御立\n寄有之奥向より表奥向へ被為入候由也今度二度",
+      "character_errors": [
+        36
+      ]
+    },
+    {
+      "id": "kamosha-799137F6-030",
+      "source_sha256": "bfae35340e90eace060a412be571861622783ef31233f90136f5aa73fb13f065",
+      "frame": 0,
+      "boxes": [
+        {
+          "x": 5535,
+          "y": 901,
+          "width": 179,
+          "height": 3297,
+          "confidence": 1.0
+        },
+        {
+          "x": 5334,
+          "y": 914,
+          "width": 176,
+          "height": 3229,
+          "confidence": 1.0
+        },
+        {
+          "x": 4775,
+          "y": 924,
+          "width": 168,
+          "height": 3222,
+          "confidence": 1.0
+        },
+        {
+          "x": 4598,
+          "y": 916,
+          "width": 148,
+          "height": 1458,
+          "confidence": 1.0
+        },
+        {
+          "x": 4393,
+          "y": 756,
+          "width": 181,
+          "height": 3129,
+          "confidence": 1.0
+        },
+        {
+          "x": 4211,
+          "y": 898,
+          "width": 169,
+          "height": 3204,
+          "confidence": 1.0
+        },
+        {
+          "x": 4044,
+          "y": 912,
+          "width": 138,
+          "height": 2018,
+          "confidence": 1.0
+        },
+        {
+          "x": 3818,
+          "y": 768,
+          "width": 198,
+          "height": 3334,
+          "confidence": 1.0
+        },
+        {
+          "x": 3674,
+          "y": 928,
+          "width": 124,
+          "height": 347,
+          "confidence": 1.0
+        },
+        {
+          "x": 3456,
+          "y": 771,
+          "width": 195,
+          "height": 3395,
+          "confidence": 1.0
+        },
+        {
+          "x": 3030,
+          "y": 892,
+          "width": 180,
+          "height": 3230,
+          "confidence": 1.0
+        },
+        {
+          "x": 2832,
+          "y": 888,
+          "width": 175,
+          "height": 3228,
+          "confidence": 1.0
+        },
+        {
+          "x": 2651,
+          "y": 882,
+          "width": 172,
+          "height": 2974,
+          "confidence": 1.0
+        },
+        {
+          "x": 2487,
+          "y": 749,
+          "width": 147,
+          "height": 588,
+          "confidence": 1.0
+        },
+        {
+          "x": 2276,
+          "y": 898,
+          "width": 186,
+          "height": 3249,
+          "confidence": 1.0
+        },
+        {
+          "x": 2128,
+          "y": 939,
+          "width": 121,
+          "height": 828,
+          "confidence": 1.0
+        },
+        {
+          "x": 1927,
+          "y": 828,
+          "width": 184,
+          "height": 3328,
+          "confidence": 1.0
+        },
+        {
+          "x": 1742,
+          "y": 930,
+          "width": 170,
+          "height": 3234,
+          "confidence": 1.0
+        },
+        {
+          "x": 1551,
+          "y": 934,
+          "width": 171,
+          "height": 3229,
+          "confidence": 1.0
+        },
+        {
+          "x": 973,
+          "y": 935,
+          "width": 184,
+          "height": 3242,
+          "confidence": 1.0
+        }
+      ],
+      "median_seconds": 28.780785329057835,
+      "timings_seconds": [
+        {
+          "load": 0.6184765789657831,
+          "recognizer_setup": 2.4139881134033203e-06,
+          "preprocess": 0.41532046312931925,
+          "encoder": 25.78420758852735,
+          "prefill": 0.322295006015338,
+          "decode": 1.6290882441680878,
+          "total": 28.780785329057835
+        }
+      ],
+      "predictions": [
+        "御入也今度は表之沙汰に不及奥向女中之取計計計也\n頃日年雑掌直古云去る十一日比より当神主鳥\nより毎度例有之今度も伝奏へ相願御聞済\n之上罷下者也云々\n廿二日丁丑雨昨廿一日鷹司右府政通公左府\n宣下之御内意并花山院前内府愛徳公右府\n宣下等之御内意被仰出了\n廿三日戊寅雨去る十五日より連日大雨一日も晴\n無之\n廿四日己卯今日偶属晴出水處々橋引倒午刻\n過御家門へ出仕酉上刻斗　殿下思召子初依\n有之奥表之御殿内悉御清祓可仕旨御直に\n被　仰付即刻浴水着浄衣修清祓了\n六月大\n一朔日乙酉雨今日左府政通公右府愛徳公等御奏\n慶有之也\n四日戊子曇午刻後新宮已下惣老若也家翁出番\nに而出席旧冬より改正之往来田已下巻物之\n写清書出来披露有之書籍奉行中へ被\n議之處何分不容易義に付先今日者未決云々"
+      ],
+      "repeat_outputs_identical": true,
+      "cer": [
+        0.11926605504587157
+      ],
+      "lines": [
+        {
+          "reading_order": 1,
+          "x": 5535,
+          "y": 901,
+          "width": 179,
+          "height": 3297,
+          "detection_confidence": 1.0,
+          "raw": "御入也今度は表之沙汰に不及奥向女中之取計計計也",
+          "koji": "御入也今度は表之沙汰に不及奥向女中之取計計計也",
+          "plain": "御入也今度は表之沙汰に不及奥向女中之取計計計也",
+          "stop_reason": "eos",
+          "token_count": 24,
+          "timings": {
+            "preprocess": 0.011358219082467258,
+            "encoder": 0.8567400469910353,
+            "prefill": 0.006655661971308291,
+            "decode": 0.061286450014449656
+          }
+        },
+        {
+          "reading_order": 2,
+          "x": 5334,
+          "y": 914,
+          "width": 176,
+          "height": 3229,
+          "detection_confidence": 1.0,
+          "raw": "頃日年雑掌直古云去る十一日比より当神主鳥",
+          "koji": "頃日年雑掌直古云去る十一日比より当神主鳥",
+          "plain": "頃日年雑掌直古云去る十一日比より当神主鳥",
+          "stop_reason": "eos",
+          "token_count": 21,
+          "timings": {
+            "preprocess": 0.015042184968478978,
+            "encoder": 0.8040223640855402,
+            "prefill": 0.006853427970781922,
+            "decode": 0.0798592499922961
+          }
+        },
+        {
+          "reading_order": 3,
+          "x": 4775,
+          "y": 924,
+          "width": 168,
+          "height": 3222,
+          "detection_confidence": 1.0,
+          "raw": "より毎度例有之今度も伝奏へ相願御聞済",
+          "koji": "より毎度例有之今度も伝奏へ相願御聞済",
+          "plain": "より毎度例有之今度も伝奏へ相願御聞済",
+          "stop_reason": "eos",
+          "token_count": 19,
+          "timings": {
+            "preprocess": 0.01904139493126422,
+            "encoder": 1.0348308740649372,
+            "prefill": 0.0071075629675760865,
+            "decode": 0.0755863799713552
+          }
+        },
+        {
+          "reading_order": 4,
+          "x": 4598,
+          "y": 916,
+          "width": 148,
+          "height": 1458,
+          "detection_confidence": 1.0,
+          "raw": "之上罷下者也云々",
+          "koji": "之上罷下者也云々",
+          "plain": "之上罷下者也云々",
+          "stop_reason": "eos",
+          "token_count": 9,
+          "timings": {
+            "preprocess": 0.019016133970580995,
+            "encoder": 0.9964663420105353,
+            "prefill": 0.009934213012456894,
+            "decode": 0.03523731301538646
+          }
+        },
+        {
+          "reading_order": 5,
+          "x": 4393,
+          "y": 756,
+          "width": 181,
+          "height": 3129,
+          "detection_confidence": 1.0,
+          "raw": "廿二日丁丑雨昨廿一日鷹司右府政通公左府",
+          "koji": "廿二日丁丑雨昨廿一日鷹司右府政通公左府",
+          "plain": "廿二日丁丑雨昨廿一日鷹司右府政通公左府",
+          "stop_reason": "eos",
+          "token_count": 20,
+          "timings": {
+            "preprocess": 0.022244760999456048,
+            "encoder": 1.2226620590081438,
+            "prefill": 0.016468134941533208,
+            "decode": 0.056847432046197355
+          }
+        },
+        {
+          "reading_order": 6,
+          "x": 4211,
+          "y": 898,
+          "width": 169,
+          "height": 3204,
+          "detection_confidence": 1.0,
+          "raw": "宣下之御内意并花山院前内府愛徳公右府",
+          "koji": "宣下之御内意并花山院前内府愛徳公右府",
+          "plain": "宣下之御内意并花山院前内府愛徳公右府",
+          "stop_reason": "eos",
+          "token_count": 19,
+          "timings": {
+            "preprocess": 0.0169422950129956,
+            "encoder": 0.9836836110334843,
+            "prefill": 0.03908279608003795,
+            "decode": 0.10230747808236629
+          }
+        },
+        {
+          "reading_order": 7,
+          "x": 4044,
+          "y": 912,
+          "width": 138,
+          "height": 2018,
+          "detection_confidence": 1.0,
+          "raw": "宣下等之御内意被仰出了",
+          "koji": "宣下等之御内意被仰出了",
+          "plain": "宣下等之御内意被仰出了",
+          "stop_reason": "eos",
+          "token_count": 12,
+          "timings": {
+            "preprocess": 0.023284005001187325,
+            "encoder": 1.5163106879917905,
+            "prefill": 0.01706054399255663,
+            "decode": 0.06198315299116075
+          }
+        },
+        {
+          "reading_order": 8,
+          "x": 3818,
+          "y": 768,
+          "width": 198,
+          "height": 3334,
+          "detection_confidence": 1.0,
+          "raw": "廿三日戊寅雨去る十五日より連日大雨一日も晴",
+          "koji": "廿三日戊寅雨去る十五日より連日大雨一日も晴",
+          "plain": "廿三日戊寅雨去る十五日より連日大雨一日も晴",
+          "stop_reason": "eos",
+          "token_count": 22,
+          "timings": {
+            "preprocess": 0.01611195900477469,
+            "encoder": 0.83841741993092,
+            "prefill": 0.011852052062749863,
+            "decode": 0.05836656701285392
+          }
+        },
+        {
+          "reading_order": 9,
+          "x": 3674,
+          "y": 928,
+          "width": 124,
+          "height": 347,
+          "detection_confidence": 1.0,
+          "raw": "無之",
+          "koji": "無之",
+          "plain": "無之",
+          "stop_reason": "eos",
+          "token_count": 3,
+          "timings": {
+            "preprocess": 0.013029027031734586,
+            "encoder": 0.8569383000722155,
+            "prefill": 0.01714427093975246,
+            "decode": 0.009839860023930669
+          }
+        },
+        {
+          "reading_order": 10,
+          "x": 3456,
+          "y": 771,
+          "width": 195,
+          "height": 3395,
+          "detection_confidence": 1.0,
+          "raw": "廿四日己卯今日偶属晴出水處々橋引倒午刻",
+          "koji": "廿四日己卯今日偶属晴出水處々橋引倒午刻",
+          "plain": "廿四日己卯今日偶属晴出水處々橋引倒午刻",
+          "stop_reason": "eos",
+          "token_count": 20,
+          "timings": {
+            "preprocess": 0.017126439954154193,
+            "encoder": 0.8919023290509358,
+            "prefill": 0.004709015018306673,
+            "decode": 0.06513006496243179
+          }
+        },
+        {
+          "reading_order": 11,
+          "x": 3030,
+          "y": 892,
+          "width": 180,
+          "height": 3230,
+          "detection_confidence": 1.0,
+          "raw": "過御家門へ出仕酉上刻斗　殿下思召子初依",
+          "koji": "過御家門へ出仕酉上刻斗　殿下思召子初依",
+          "plain": "過御家門へ出仕酉上刻斗　殿下思召子初依",
+          "stop_reason": "eos",
+          "token_count": 20,
+          "timings": {
+            "preprocess": 0.014810158987529576,
+            "encoder": 0.7934992320369929,
+            "prefill": 0.004775225999765098,
+            "decode": 0.0501453320030123
+          }
+        },
+        {
+          "reading_order": 12,
+          "x": 2832,
+          "y": 888,
+          "width": 175,
+          "height": 3228,
+          "detection_confidence": 1.0,
+          "raw": "有之奥表之御殿内悉御清祓可仕旨御直に",
+          "koji": "有之奥表之御殿内悉御清祓可仕旨御直に",
+          "plain": "有之奥表之御殿内悉御清祓可仕旨御直に",
+          "stop_reason": "eos",
+          "token_count": 19,
+          "timings": {
+            "preprocess": 0.014903367031365633,
+            "encoder": 1.1628446480026469,
+            "prefill": 0.004228660953231156,
+            "decode": 0.043603537953458726
+          }
+        },
+        {
+          "reading_order": 13,
+          "x": 2651,
+          "y": 882,
+          "width": 172,
+          "height": 2974,
+          "detection_confidence": 1.0,
+          "raw": "被　仰付即刻浴水着浄衣修清祓了",
+          "koji": "被　仰付即刻浴水着浄衣修清祓了",
+          "plain": "被　仰付即刻浴水着浄衣修清祓了",
+          "stop_reason": "eos",
+          "token_count": 16,
+          "timings": {
+            "preprocess": 0.01554183999542147,
+            "encoder": 1.0544954290380701,
+            "prefill": 0.006267241085879505,
+            "decode": 0.03937045799102634
+          }
+        },
+        {
+          "reading_order": 14,
+          "x": 2487,
+          "y": 749,
+          "width": 147,
+          "height": 588,
+          "detection_confidence": 1.0,
+          "raw": "六月大",
+          "koji": "六月大",
+          "plain": "六月大",
+          "stop_reason": "eos",
+          "token_count": 4,
+          "timings": {
+            "preprocess": 0.014524285914376378,
+            "encoder": 0.878240630030632,
+            "prefill": 0.010250424966216087,
+            "decode": 0.009916294016875327
+          }
+        },
+        {
+          "reading_order": 15,
+          "x": 2276,
+          "y": 898,
+          "width": 186,
+          "height": 3249,
+          "detection_confidence": 1.0,
+          "raw": "一朔日乙酉雨今日左府政通公右府愛徳公等御奏",
+          "koji": "一朔日乙酉雨今日左府政通公右府愛徳公等御奏",
+          "plain": "一朔日乙酉雨今日左府政通公右府愛徳公等御奏",
+          "stop_reason": "eos",
+          "token_count": 22,
+          "timings": {
+            "preprocess": 0.01603598310612142,
+            "encoder": 0.8533939589979127,
+            "prefill": 0.01353524997830391,
+            "decode": 0.08275376609526575
+          }
+        },
+        {
+          "reading_order": 16,
+          "x": 2128,
+          "y": 939,
+          "width": 121,
+          "height": 828,
+          "detection_confidence": 1.0,
+          "raw": "慶有之也",
+          "koji": "慶有之也",
+          "plain": "慶有之也",
+          "stop_reason": "eos",
+          "token_count": 5,
+          "timings": {
+            "preprocess": 0.01598444499541074,
+            "encoder": 2.1290181969525293,
+            "prefill": 0.025104367057792842,
+            "decode": 0.07974762399680912
+          }
+        },
+        {
+          "reading_order": 17,
+          "x": 1927,
+          "y": 828,
+          "width": 184,
+          "height": 3328,
+          "detection_confidence": 1.0,
+          "raw": "四日戊子曇午刻後新宮已下惣老若也家翁出番",
+          "koji": "四日戊子曇午刻後新宮已下惣老若也家翁出番",
+          "plain": "四日戊子曇午刻後新宮已下惣老若也家翁出番",
+          "stop_reason": "eos",
+          "token_count": 21,
+          "timings": {
+            "preprocess": 0.03173186397179961,
+            "encoder": 2.315283075091429,
+            "prefill": 0.010110454983077943,
+            "decode": 0.10821207298431545
+          }
+        },
+        {
+          "reading_order": 18,
+          "x": 1742,
+          "y": 930,
+          "width": 170,
+          "height": 3234,
+          "detection_confidence": 1.0,
+          "raw": "に而出席旧冬より改正之往来田已下巻物之",
+          "koji": "に而出席旧冬より改正之往来田已下巻物之",
+          "plain": "に而出席旧冬より改正之往来田已下巻物之",
+          "stop_reason": "eos",
+          "token_count": 20,
+          "timings": {
+            "preprocess": 0.03140255808830261,
+            "encoder": 1.9445366100408137,
+            "prefill": 0.03417600702960044,
+            "decode": 0.25090584496501833
+          }
+        },
+        {
+          "reading_order": 19,
+          "x": 1551,
+          "y": 934,
+          "width": 171,
+          "height": 3229,
+          "detection_confidence": 1.0,
+          "raw": "写清書出来披露有之書籍奉行中へ被",
+          "koji": "写清書出来披露有之書籍奉行中へ被",
+          "plain": "写清書出来披露有之書籍奉行中へ被",
+          "stop_reason": "eos",
+          "token_count": 17,
+          "timings": {
+            "preprocess": 0.04338374303188175,
+            "encoder": 2.4546071650693193,
+            "prefill": 0.0315942179877311,
+            "decode": 0.21494503202848136
+          }
+        },
+        {
+          "reading_order": 20,
+          "x": 973,
+          "y": 935,
+          "width": 184,
+          "height": 3242,
+          "detection_confidence": 1.0,
+          "raw": "議之處何分不容易義に付先今日者未決云々",
+          "koji": "議之處何分不容易義に付先今日者未決云々",
+          "plain": "議之處何分不容易義に付先今日者未決云々",
+          "stop_reason": "eos",
+          "token_count": 20,
+          "timings": {
+            "preprocess": 0.043805798050016165,
+            "encoder": 2.1963146090274677,
+            "prefill": 0.04538547701667994,
+            "decode": 0.14304433402139693
+          }
+        }
+      ],
+      "reference": "ト入也今度ハ表之沙汰ニ不及奥向女中之取計討\n頃か年雑掌直古云去ル十一日比より当神主馬\nより毎度例有之今度も伝奏へ相願御聞済\n之上罷下者也云々\n廿二日丁丑両昨廿一日鷹は右府政通公左府\n宣下之御内意幷花山院前内府愛徳公右庫\n宣下等之御内意被仰出了\n廿三日戊寅雨去ル十五日より連候大雨一日も晴\n無之\n廿四日己卯今日偶属晴出水処々橋引漸午刻\n過御家つへ出仕酉上刻斗殿下思召子細依\n有之奥表之御殿内悉御清祓可仕旨御直\n被仰付即刻浴れ着浄衣修情報了三郎\n六月大\n朔日乙酉雨今日左府政通公右府挙徳公等御奏\n慶有之也\n四日戊子晴午刻後新宿已下惣老若也家翁出来\nにて出席旧冬より改正之往来田已下巻物之\n写請書出来披露有之書籍奉行中へ被\n議之処何分不容易義ニ付先今日は未決之",
+      "character_errors": [
+        39
+      ]
+    },
+    {
+      "id": "iryotoyojo-DC7F12BC-028",
+      "source_sha256": "0a5898ae5b7c883152da89d155887b86f8c5cc3939f9e130e914ee0b852df759",
+      "frame": 0,
+      "boxes": [
+        {
+          "x": 4883,
+          "y": 697,
+          "width": 165,
+          "height": 3195,
+          "confidence": 1.0
+        },
+        {
+          "x": 4673,
+          "y": 698,
+          "width": 167,
+          "height": 3195,
+          "confidence": 1.0
+        },
+        {
+          "x": 4467,
+          "y": 699,
+          "width": 158,
+          "height": 3171,
+          "confidence": 1.0
+        },
+        {
+          "x": 4255,
+          "y": 704,
+          "width": 167,
+          "height": 3167,
+          "confidence": 1.0
+        },
+        {
+          "x": 4027,
+          "y": 689,
+          "width": 183,
+          "height": 3172,
+          "confidence": 1.0
+        },
+        {
+          "x": 3825,
+          "y": 706,
+          "width": 171,
+          "height": 3175,
+          "confidence": 1.0
+        },
+        {
+          "x": 3614,
+          "y": 688,
+          "width": 168,
+          "height": 3165,
+          "confidence": 1.0
+        },
+        {
+          "x": 3401,
+          "y": 691,
+          "width": 167,
+          "height": 3153,
+          "confidence": 1.0
+        },
+        {
+          "x": 3195,
+          "y": 701,
+          "width": 168,
+          "height": 3150,
+          "confidence": 1.0
+        },
+        {
+          "x": 2982,
+          "y": 686,
+          "width": 168,
+          "height": 3191,
+          "confidence": 1.0
+        },
+        {
+          "x": 2379,
+          "y": 696,
+          "width": 164,
+          "height": 3184,
+          "confidence": 1.0
+        },
+        {
+          "x": 2166,
+          "y": 697,
+          "width": 163,
+          "height": 3165,
+          "confidence": 1.0
+        },
+        {
+          "x": 1948,
+          "y": 685,
+          "width": 173,
+          "height": 3193,
+          "confidence": 1.0
+        },
+        {
+          "x": 1741,
+          "y": 692,
+          "width": 177,
+          "height": 3167,
+          "confidence": 1.0
+        },
+        {
+          "x": 1529,
+          "y": 681,
+          "width": 167,
+          "height": 3199,
+          "confidence": 1.0
+        },
+        {
+          "x": 1317,
+          "y": 699,
+          "width": 172,
+          "height": 3164,
+          "confidence": 1.0
+        },
+        {
+          "x": 1097,
+          "y": 694,
+          "width": 170,
+          "height": 3189,
+          "confidence": 1.0
+        },
+        {
+          "x": 891,
+          "y": 696,
+          "width": 167,
+          "height": 3178,
+          "confidence": 1.0
+        },
+        {
+          "x": 679,
+          "y": 693,
+          "width": 173,
+          "height": 3178,
+          "confidence": 1.0
+        },
+        {
+          "x": 466,
+          "y": 685,
+          "width": 171,
+          "height": 3197,
+          "confidence": 1.0
+        }
+      ],
+      "median_seconds": 48.253755059908144,
+      "timings_seconds": [
+        {
+          "load": 0.6807946679182351,
+          "recognizer_setup": 8.309725672006607e-07,
+          "preprocess": 0.599342773668468,
+          "encoder": 40.38901145593263,
+          "prefill": 0.6204941177275032,
+          "decode": 5.923357464489527,
+          "total": 48.253755059908144
+        }
+      ],
+      "predictions": [
+        "爰に八月 始はじめの日松の尾をの神わざにて。鳥居のもとに相撲すまふを\nとる事ありけり。昼ひるよりすまふの場ばならしに。十一十二四五六迄\nの小すまひを始れば。次第〳〵に大きになるすくれたるとり\nてには先。立石藤つな小船返。孫の大竹むぐるま。岸きしめ白菊。女たみ\n良花なへし松風。雷電らいでん竹の介仁王をそねむ大兵ども。どんすひざや\nの三重まはり。大なで上に。半かう剃ぞり。其外たんばつの国ぢ伏み\n大津の陽気うはきもの者。所せき迄なみゐたり。社 務むの浅さん敷数十間段\n〳〵々に見物ある。筍斎も反だちがたらひいひ合。皆赤はだかに着き\n物をぬぎ。一 僕ぼくにかづかせ。防 主ずつぶりに鉢巻はちまきして。とりてと\n同し〳〵ならびゐぬ。小ずまふ漸半やう〳〵なかばになりて。行事筍斎\nされおとがひさすつて起をきなをる。又おしわけてとらすれば。そ\nりにいられてはねこかさる。是にもこりず出てはまけ。取てはつ\nよくなげらるゝ事すきまもなし。行事 余あまりに笑止せうしがり。弱よはき\n相手を拵こしらへかたするやうにしけるにぞ。やう〳〵かたやに押をしつけ三\n番ばん打を仕したりけり。いかめしくきそくし胸むないたをおしなで\n声作こはづくりしてひかゆるに。行事御 名乗なのりはと問とひけれどなのる用\n意ゐもあらばこそ。つれの男三人めん〳〵心 得え置たりとみえて\n一どにくち〳〵にぞいひける。ひとりの男はかしら巻まきと申といへば\nひとりは虎蠣しまがにといふ。今一人は闇やみの夜と申すと事やかまし\nく。行事聞取ず。此内に筍斎 拵こしらへてよしの漆うるしと名乗なのりぬ"
+      ],
+      "repeat_outputs_identical": true,
+      "cer": [
+        0.281767955801105
+      ],
+      "lines": [
+        {
+          "reading_order": 1,
+          "x": 4883,
+          "y": 697,
+          "width": 165,
+          "height": 3195,
+          "detection_confidence": 1.0,
+          "raw": "爰に八月 <ruby>始<rt>はじめ</rt></ruby>の日松の<ruby>尾<rt>を</rt></ruby>の神わざにて。鳥居のもとに<ruby>相撲<rt>すまふ</rt></ruby>を",
+          "koji": "爰に八月 始（はじめ）の日松の尾（を）の神わざにて。鳥居のもとに相撲（すまふ）を",
+          "plain": "爰に八月 始はじめの日松の尾をの神わざにて。鳥居のもとに相撲すまふを",
+          "stop_reason": "eos",
+          "token_count": 47,
+          "timings": {
+            "preprocess": 0.011948633939027786,
+            "encoder": 2.198285761056468,
+            "prefill": 0.024382254923693836,
+            "decode": 0.33657314791344106
+          }
+        },
+        {
+          "reading_order": 2,
+          "x": 4673,
+          "y": 698,
+          "width": 167,
+          "height": 3195,
+          "detection_confidence": 1.0,
+          "raw": "とる事ありけり。<ruby>昼<rt>ひる</rt></ruby>よりすまふの<ruby>場<rt>ば</rt></ruby>ならしに。十一十二四五六迄",
+          "koji": "とる事ありけり。昼（ひる）よりすまふの場（ば）ならしに。十一十二四五六迄",
+          "plain": "とる事ありけり。昼ひるよりすまふの場ばならしに。十一十二四五六迄",
+          "stop_reason": "eos",
+          "token_count": 41,
+          "timings": {
+            "preprocess": 0.03683084191288799,
+            "encoder": 2.0719864619895816,
+            "prefill": 0.03450621198862791,
+            "decode": 0.24260906293056905
+          }
+        },
+        {
+          "reading_order": 3,
+          "x": 4467,
+          "y": 699,
+          "width": 158,
+          "height": 3171,
+          "detection_confidence": 1.0,
+          "raw": "の小すまひを始れば。次第〳〵に大きになるすくれたるとり",
+          "koji": "の小すまひを始れば。次第〳〵に大きになるすくれたるとり",
+          "plain": "の小すまひを始れば。次第〳〵に大きになるすくれたるとり",
+          "stop_reason": "eos",
+          "token_count": 28,
+          "timings": {
+            "preprocess": 0.030569950002245605,
+            "encoder": 1.9914111639373004,
+            "prefill": 0.03426676499657333,
+            "decode": 0.1975830839946866
+          }
+        },
+        {
+          "reading_order": 4,
+          "x": 4255,
+          "y": 704,
+          "width": 167,
+          "height": 3167,
+          "detection_confidence": 1.0,
+          "raw": "てには先。立石藤つな小船返。孫の大竹むぐるま。<ruby>岸<rt>きしめ</rt></ruby>白菊。<ruby>女<rt>たみ</rt></ruby>",
+          "koji": "てには先。立石藤つな小船返。孫の大竹むぐるま。岸（きしめ）白菊。女（たみ）",
+          "plain": "てには先。立石藤つな小船返。孫の大竹むぐるま。岸きしめ白菊。女たみ",
+          "stop_reason": "eos",
+          "token_count": 42,
+          "timings": {
+            "preprocess": 0.03450284292921424,
+            "encoder": 1.701110846013762,
+            "prefill": 0.02414896700065583,
+            "decode": 0.2909657539566979
+          }
+        },
+        {
+          "reading_order": 5,
+          "x": 4027,
+          "y": 689,
+          "width": 183,
+          "height": 3172,
+          "detection_confidence": 1.0,
+          "raw": "<ruby>良花<rt>なへし</rt></ruby>松風。<ruby>雷電<rt>らいでん</rt></ruby>竹の介仁王をそねむ大兵ども。どんすひざや",
+          "koji": "良花（なへし）松風。雷電（らいでん）竹の介仁王をそねむ大兵ども。どんすひざや",
+          "plain": "良花なへし松風。雷電らいでん竹の介仁王をそねむ大兵ども。どんすひざや",
+          "stop_reason": "eos",
+          "token_count": 43,
+          "timings": {
+            "preprocess": 0.03701220394577831,
+            "encoder": 2.314268715097569,
+            "prefill": 0.018906450015492737,
+            "decode": 0.21355398802552372
+          }
+        },
+        {
+          "reading_order": 6,
+          "x": 3825,
+          "y": 706,
+          "width": 171,
+          "height": 3175,
+          "detection_confidence": 1.0,
+          "raw": "の三重まはり。大なで上に。半かう<ruby>剃<rt>ぞり</rt></ruby>。其外たんばつの国ぢ伏み",
+          "koji": "の三重まはり。大なで上に。半かう剃（ぞり）。其外たんばつの国ぢ伏み",
+          "plain": "の三重まはり。大なで上に。半かう剃ぞり。其外たんばつの国ぢ伏み",
+          "stop_reason": "eos",
+          "token_count": 36,
+          "timings": {
+            "preprocess": 0.017290500923991203,
+            "encoder": 1.6238107539247721,
+            "prefill": 0.033158467966131866,
+            "decode": 0.24586934898979962
+          }
+        },
+        {
+          "reading_order": 7,
+          "x": 3614,
+          "y": 688,
+          "width": 168,
+          "height": 3165,
+          "detection_confidence": 1.0,
+          "raw": "大津の<ruby>陽気<rt>うはきもの</rt></ruby>者。所せき迄なみゐたり。社 <ruby>務<rt>む</rt></ruby>の<ruby>浅<rt>さん</rt></ruby>敷数十間段",
+          "koji": "大津の陽気（うはきもの）者。所せき迄なみゐたり。社 務（む）の浅（さん）敷数十間段",
+          "plain": "大津の陽気うはきもの者。所せき迄なみゐたり。社 務むの浅さん敷数十間段",
+          "stop_reason": "eos",
+          "token_count": 48,
+          "timings": {
+            "preprocess": 0.04091936000622809,
+            "encoder": 1.7189346250379458,
+            "prefill": 0.026621058001182973,
+            "decode": 0.2893561569508165
+          }
+        },
+        {
+          "reading_order": 8,
+          "x": 3401,
+          "y": 691,
+          "width": 167,
+          "height": 3153,
+          "detection_confidence": 1.0,
+          "raw": "<WARI>〳〵<WARI_SEP>々</WARI>に見物ある。筍斎も反だちがたらひいひ合。皆赤はだかに<ruby>着<rt>き</rt></ruby>",
+          "koji": "《割書：〳〵｜々》に見物ある。筍斎も反だちがたらひいひ合。皆赤はだかに着（き）",
+          "plain": "〳〵々に見物ある。筍斎も反だちがたらひいひ合。皆赤はだかに着き",
+          "stop_reason": "eos",
+          "token_count": 39,
+          "timings": {
+            "preprocess": 0.031247870065271854,
+            "encoder": 2.270349796046503,
+            "prefill": 0.042067077942192554,
+            "decode": 0.3785648279590532
+          }
+        },
+        {
+          "reading_order": 9,
+          "x": 3195,
+          "y": 701,
+          "width": 168,
+          "height": 3150,
+          "detection_confidence": 1.0,
+          "raw": "物をぬぎ。一 <ruby>僕<rt>ぼく</rt></ruby>にかづかせ。防 <ruby>主<rt>ず</rt></ruby>つぶりに<ruby>鉢巻<rt>はちまき</rt></ruby>して。とりてと",
+          "koji": "物をぬぎ。一 僕（ぼく）にかづかせ。防 主（ず）つぶりに鉢巻（はちまき）して。とりてと",
+          "plain": "物をぬぎ。一 僕ぼくにかづかせ。防 主ずつぶりに鉢巻はちまきして。とりてと",
+          "stop_reason": "eos",
+          "token_count": 50,
+          "timings": {
+            "preprocess": 0.044569542980752885,
+            "encoder": 2.329842030070722,
+            "prefill": 0.05276107392273843,
+            "decode": 0.46359401498921216
+          }
+        },
+        {
+          "reading_order": 10,
+          "x": 2982,
+          "y": 686,
+          "width": 168,
+          "height": 3191,
+          "detection_confidence": 1.0,
+          "raw": "同し〳〵ならびゐぬ。小ずまふ<ruby>漸半<rt>やう〳〵なかば</rt></ruby>になりて。行事筍斎",
+          "koji": "同し〳〵ならびゐぬ。小ずまふ漸半（やう〳〵なかば）になりて。行事筍斎",
+          "plain": "同し〳〵ならびゐぬ。小ずまふ漸半やう〳〵なかばになりて。行事筍斎",
+          "stop_reason": "eos",
+          "token_count": 37,
+          "timings": {
+            "preprocess": 0.03546479495707899,
+            "encoder": 1.8523972040275112,
+            "prefill": 0.021914769080467522,
+            "decode": 0.4159139320254326
+          }
+        },
+        {
+          "reading_order": 11,
+          "x": 2379,
+          "y": 696,
+          "width": 164,
+          "height": 3184,
+          "detection_confidence": 1.0,
+          "raw": "されおとがひさすつて<ruby>起<rt>をき</rt></ruby>なをる。又おしわけてとらすれば。そ",
+          "koji": "されおとがひさすつて起（をき）なをる。又おしわけてとらすれば。そ",
+          "plain": "されおとがひさすつて起をきなをる。又おしわけてとらすれば。そ",
+          "stop_reason": "eos",
+          "token_count": 35,
+          "timings": {
+            "preprocess": 0.03359327500220388,
+            "encoder": 1.8541477710241452,
+            "prefill": 0.009584853891283274,
+            "decode": 0.12409718392882496
+          }
+        },
+        {
+          "reading_order": 12,
+          "x": 2166,
+          "y": 697,
+          "width": 163,
+          "height": 3165,
+          "detection_confidence": 1.0,
+          "raw": "りにいられてはねこかさる。是にもこりず出てはまけ。取てはつ",
+          "koji": "りにいられてはねこかさる。是にもこりず出てはまけ。取てはつ",
+          "plain": "りにいられてはねこかさる。是にもこりず出てはまけ。取てはつ",
+          "stop_reason": "eos",
+          "token_count": 30,
+          "timings": {
+            "preprocess": 0.01834026910364628,
+            "encoder": 2.6218439829535782,
+            "prefill": 0.020176102058030665,
+            "decode": 0.15177780797239393
+          }
+        },
+        {
+          "reading_order": 13,
+          "x": 1948,
+          "y": 685,
+          "width": 173,
+          "height": 3193,
+          "detection_confidence": 1.0,
+          "raw": "よくなげらるゝ事すきまもなし。行事 <ruby>余<rt>あまり</rt></ruby>に<ruby>笑止<rt>せうし</rt></ruby>がり。<ruby>弱<rt>よはき</rt></ruby>",
+          "koji": "よくなげらるゝ事すきまもなし。行事 余（あまり）に笑止（せうし）がり。弱（よはき）",
+          "plain": "よくなげらるゝ事すきまもなし。行事 余あまりに笑止せうしがり。弱よはき",
+          "stop_reason": "eos",
+          "token_count": 48,
+          "timings": {
+            "preprocess": 0.019600186962634325,
+            "encoder": 3.1356785089010373,
+            "prefill": 0.03596941800788045,
+            "decode": 0.40008261206094176
+          }
+        },
+        {
+          "reading_order": 14,
+          "x": 1741,
+          "y": 692,
+          "width": 177,
+          "height": 3167,
+          "detection_confidence": 1.0,
+          "raw": "相手を<ruby>拵<rt>こしらへ</rt></ruby>かたするやうにしけるにぞ。やう〳〵かたやに<ruby>押<rt>をし</rt></ruby>つけ三",
+          "koji": "相手を拵（こしらへ）かたするやうにしけるにぞ。やう〳〵かたやに押（をし）つけ三",
+          "plain": "相手を拵こしらへかたするやうにしけるにぞ。やう〳〵かたやに押をしつけ三",
+          "stop_reason": "eos",
+          "token_count": 44,
+          "timings": {
+            "preprocess": 0.03303426399361342,
+            "encoder": 1.8527170659508556,
+            "prefill": 0.033378741005435586,
+            "decode": 0.2817693440010771
+          }
+        },
+        {
+          "reading_order": 15,
+          "x": 1529,
+          "y": 681,
+          "width": 167,
+          "height": 3199,
+          "detection_confidence": 1.0,
+          "raw": "<ruby>番<rt>ばん</rt></ruby>打を<ruby>仕<rt>し</rt></ruby>たりけり。いかめしくきそくし<ruby>胸<rt>むな</rt></ruby>いたをおしなで",
+          "koji": "番（ばん）打を仕（し）たりけり。いかめしくきそくし胸（むな）いたをおしなで",
+          "plain": "番ばん打を仕したりけり。いかめしくきそくし胸むないたをおしなで",
+          "stop_reason": "eos",
+          "token_count": 44,
+          "timings": {
+            "preprocess": 0.03532057499978691,
+            "encoder": 1.9373477100161836,
+            "prefill": 0.03032824897672981,
+            "decode": 0.5329709529178217
+          }
+        },
+        {
+          "reading_order": 16,
+          "x": 1317,
+          "y": 699,
+          "width": 172,
+          "height": 3164,
+          "detection_confidence": 1.0,
+          "raw": "<ruby>声作<rt>こはづくり</rt></ruby>してひかゆるに。行事御 <ruby>名乗<rt>なのり</rt></ruby>はと<ruby>問<rt>とひ</rt></ruby>けれどなのる用",
+          "koji": "声作（こはづくり）してひかゆるに。行事御 名乗（なのり）はと問（とひ）けれどなのる用",
+          "plain": "声作こはづくりしてひかゆるに。行事御 名乗なのりはと問とひけれどなのる用",
+          "stop_reason": "eos",
+          "token_count": 49,
+          "timings": {
+            "preprocess": 0.04175072396174073,
+            "encoder": 2.2626958119217306,
+            "prefill": 0.07817687292117625,
+            "decode": 0.4204531729919836
+          }
+        },
+        {
+          "reading_order": 17,
+          "x": 1097,
+          "y": 694,
+          "width": 170,
+          "height": 3189,
+          "detection_confidence": 1.0,
+          "raw": "<ruby>意<rt>ゐ</rt></ruby>もあらばこそ。つれの男三人めん〳〵心 <ruby>得<rt>え</rt></ruby>置たりとみえて",
+          "koji": "意（ゐ）もあらばこそ。つれの男三人めん〳〵心 得（え）置たりとみえて",
+          "plain": "意ゐもあらばこそ。つれの男三人めん〳〵心 得え置たりとみえて",
+          "stop_reason": "eos",
+          "token_count": 39,
+          "timings": {
+            "preprocess": 0.01673492498230189,
+            "encoder": 1.309754071990028,
+            "prefill": 0.02314780291635543,
+            "decode": 0.24665823695249856
+          }
+        },
+        {
+          "reading_order": 18,
+          "x": 891,
+          "y": 696,
+          "width": 167,
+          "height": 3178,
+          "detection_confidence": 1.0,
+          "raw": "一どにくち〳〵にぞいひける。ひとりの男はかしら<ruby>巻<rt>まき</rt></ruby>と申といへば",
+          "koji": "一どにくち〳〵にぞいひける。ひとりの男はかしら巻（まき）と申といへば",
+          "plain": "一どにくち〳〵にぞいひける。ひとりの男はかしら巻まきと申といへば",
+          "stop_reason": "eos",
+          "token_count": 37,
+          "timings": {
+            "preprocess": 0.022987401927821338,
+            "encoder": 1.5082745369290933,
+            "prefill": 0.02626832900568843,
+            "decode": 0.18696939991787076
+          }
+        },
+        {
+          "reading_order": 19,
+          "x": 679,
+          "y": 693,
+          "width": 173,
+          "height": 3178,
+          "detection_confidence": 1.0,
+          "raw": "ひとりは<ruby>虎蠣<rt>しまがに</rt></ruby>といふ。今一人は<ruby>闇<rt>やみ</rt></ruby>の夜と申すと事やかまし",
+          "koji": "ひとりは虎蠣（しまがに）といふ。今一人は闇（やみ）の夜と申すと事やかまし",
+          "plain": "ひとりは虎蠣しまがにといふ。今一人は闇やみの夜と申すと事やかまし",
+          "stop_reason": "eos",
+          "token_count": 41,
+          "timings": {
+            "preprocess": 0.031134678050875664,
+            "encoder": 2.071445352048613,
+            "prefill": 0.027958062011748552,
+            "decode": 0.24292749899905175
+          }
+        },
+        {
+          "reading_order": 20,
+          "x": 466,
+          "y": 685,
+          "width": 171,
+          "height": 3197,
+          "detection_confidence": 1.0,
+          "raw": "く。行事聞取ず。此内に筍斎 <ruby>拵<rt>こしらへ</rt></ruby>てよしの<ruby>漆<rt>うるし</rt></ruby>と<ruby>名乗<rt>なのり</rt></ruby>ぬ",
+          "koji": "く。行事聞取ず。此内に筍斎 拵（こしらへ）てよしの漆（うるし）と名乗（なのり）ぬ",
+          "plain": "く。行事聞取ず。此内に筍斎 拵こしらへてよしの漆うるしと名乗なのりぬ",
+          "stop_reason": "eos",
+          "token_count": 47,
+          "timings": {
+            "preprocess": 0.026489933021366596,
+            "encoder": 1.762709286995232,
+            "prefill": 0.022772591095417738,
+            "decode": 0.2610679370118305
+          }
+        }
+      ],
+      "reference": "爰に八月始の日。素の尾の神わざにて。鳥居のもとに相撲を\nとる事ありけり。昼よりすまふの場ならしに。十二四五六迄\nの小すまひを始れば。次第に大きになるすくれたるとり\nてには先。し石藤つな小船返。孫の大竹ひぐるま。岸四郎。女\n郎尤松風雷電竹の介仁王をそねむ大兵ども。どんすひざや\nの三重まはり。大なで上に。半かう剃。其外たんばつの国ぢみ\n大津の陽気者。所せき迄なみゐたり。社務の浅敷数十間段\nに見物ある。笏斎も度だちがたらひいひ合。皆それだかに着\n物をぬぎ。一僕にかづかせ。坊主いぶりに鉢巻して。とりてと\n同しくならびぬ。小ずまふ漸半になりて。行事笏斎\nされ。おとがひさすつて起なをる。又おしわけてとらすれば。そ\nりにいられてはねこかさる。乞にもこりず出てはまけ。取てはつ\nよくなげらるゝ事すきまもなし。行事餘に笑止がり。弱\n相手を拵かたするやうにしけるにぞ。やうかたやに押つけ三\n番打を仕たりけり。いかめしくきそくし胸いたをおしなで\n琴作してひかゆ得に行事御名乗はと問けれどなのる用\n意もあらばこそ。つれの男三人めん心得置たりとみえて\n一どにくちにぞいひける。ひとりの男はかしら巻と申といへば\nひとりは虎といふ。今一人は関の夜と申すと事やかまし\n行事聞えず。此内に笏并拵てよしの漆と名乗ぬ",
+      "character_errors": [
+        153
+      ]
+    },
+    {
+      "id": "iryotoyojo-DC7F12BC-030",
+      "source_sha256": "5f64c8f73ac505e8fea05ff37713776c5dd76c26ec38f45d355eedfb4172a2e1",
+      "frame": 0,
+      "boxes": [
+        {
+          "x": 4885,
+          "y": 690,
+          "width": 165,
+          "height": 3147,
+          "confidence": 1.0
+        },
+        {
+          "x": 4672,
+          "y": 683,
+          "width": 175,
+          "height": 3171,
+          "confidence": 1.0
+        },
+        {
+          "x": 4468,
+          "y": 684,
+          "width": 167,
+          "height": 3161,
+          "confidence": 1.0
+        },
+        {
+          "x": 4259,
+          "y": 694,
+          "width": 165,
+          "height": 3151,
+          "confidence": 1.0
+        },
+        {
+          "x": 4048,
+          "y": 684,
+          "width": 162,
+          "height": 3150,
+          "confidence": 1.0
+        },
+        {
+          "x": 3836,
+          "y": 689,
+          "width": 158,
+          "height": 3129,
+          "confidence": 1.0
+        },
+        {
+          "x": 3626,
+          "y": 689,
+          "width": 163,
+          "height": 3148,
+          "confidence": 1.0
+        },
+        {
+          "x": 3409,
+          "y": 696,
+          "width": 174,
+          "height": 3113,
+          "confidence": 1.0
+        },
+        {
+          "x": 3204,
+          "y": 688,
+          "width": 169,
+          "height": 3129,
+          "confidence": 1.0
+        },
+        {
+          "x": 2988,
+          "y": 697,
+          "width": 166,
+          "height": 3112,
+          "confidence": 1.0
+        },
+        {
+          "x": 2788,
+          "y": 692,
+          "width": 159,
+          "height": 3146,
+          "confidence": 1.0
+        },
+        {
+          "x": 2577,
+          "y": 708,
+          "width": 157,
+          "height": 3135,
+          "confidence": 1.0
+        },
+        {
+          "x": 2381,
+          "y": 703,
+          "width": 157,
+          "height": 3149,
+          "confidence": 1.0
+        },
+        {
+          "x": 2176,
+          "y": 711,
+          "width": 159,
+          "height": 3136,
+          "confidence": 1.0
+        },
+        {
+          "x": 1962,
+          "y": 692,
+          "width": 186,
+          "height": 3176,
+          "confidence": 1.0
+        },
+        {
+          "x": 1756,
+          "y": 693,
+          "width": 164,
+          "height": 3159,
+          "confidence": 1.0
+        },
+        {
+          "x": 1549,
+          "y": 697,
+          "width": 179,
+          "height": 3175,
+          "confidence": 1.0
+        },
+        {
+          "x": 1343,
+          "y": 709,
+          "width": 168,
+          "height": 3155,
+          "confidence": 1.0
+        },
+        {
+          "x": 923,
+          "y": 704,
+          "width": 181,
+          "height": 3160,
+          "confidence": 1.0
+        },
+        {
+          "x": 712,
+          "y": 693,
+          "width": 175,
+          "height": 3075,
+          "confidence": 1.0
+        },
+        {
+          "x": 491,
+          "y": 1184,
+          "width": 177,
+          "height": 1425,
+          "confidence": 1.0
+        }
+      ],
+      "median_seconds": 35.58124253398273,
+      "timings_seconds": [
+        {
+          "load": 0.8510139230638742,
+          "recognizer_setup": 9.520445019006729e-07,
+          "preprocess": 0.5819763800827786,
+          "encoder": 29.497211000532843,
+          "prefill": 0.5396946230903268,
+          "decode": 4.084873273852281,
+          "total": 35.58124253398273
+        }
+      ],
+      "predictions": [
+        "此後大 相撲ずまふになりて終ひつもするねぢ合とり合けるがとかくして\n入日。桂かつらの瀬にあらへば御 退参たいさんの声こゑかしかましく其日のす\nまふははてゝ思ひ〳〵に行わかるゝ。道〳〵筍斎友しゆんさいともどちに\nさきになのりの所にて口〳〵に申されし名乗なのりは何〳〵ぞ。\n是〳〵といふ。先そのほうの頭巻かしらまきとの給しは。我があたま\nに鉢はちまきしたるといふ心か。いかにもおもては左さのとをり。うら\nをかへしてきく時は。かな釘くぎのゐめうにて。出てはかならず\n打つけらるゝ心よとどつとわらふ。次つきにしまがにといはれし\nは。はさんでいたむる心かととふ。存そんじもよらず。横よこばいに這ははさる\nる心。目が上になるといふ事と又わらふ。三 番ばんにやみの夜\nとなのられたは。推をしはかるけに。むかしあまてる神のいはとに入せ\n給ふて。とこ闇やみの夜と成し心にて某それかしにかみがないといふ\n事なるへし。いかな〳〵其様奥ふかさ心なし。ちかき比の\nことぐさに、ねつけひやうたんのふたつのふくらおなしきをあと\nさきがしれぬとて。やみの夜よといひ侍り。お身がつふりと胴の\n大さ此物にひとしき故。かくは申つ其上。すまふに出るより\nこしにつけらるゝといふ事と又わらひぬ。さて又目身の吉\n野漆はいかに。さればよしのは花も実みもある心漆といふは。さ\nに。扨も付ついたり漆坊うるしぼんと腹はらをからへ背せなをより。各おのゑつほに\n入あひの。かねなる比に前れておのがさま〳〵に帰りにけり\n四 色狂いろくるひ錠ほだしにかゝる玉蔓たまかづら"
+      ],
+      "repeat_outputs_identical": true,
+      "cer": [
+        0.2354014598540146
+      ],
+      "lines": [
+        {
+          "reading_order": 1,
+          "x": 4885,
+          "y": 690,
+          "width": 165,
+          "height": 3147,
+          "detection_confidence": 1.0,
+          "raw": "此後大 <ruby>相撲<rt>ずまふ</rt></ruby>になりて<ruby>終<rt>ひつもす</rt></ruby>るねぢ合とり合けるがとかくして",
+          "koji": "此後大 相撲（ずまふ）になりて終（ひつもす）るねぢ合とり合けるがとかくして",
+          "plain": "此後大 相撲ずまふになりて終ひつもするねぢ合とり合けるがとかくして",
+          "stop_reason": "eos",
+          "token_count": 42,
+          "timings": {
+            "preprocess": 0.010660058935172856,
+            "encoder": 1.3158674709266052,
+            "prefill": 0.023753667017444968,
+            "decode": 0.2815983579494059
+          }
+        },
+        {
+          "reading_order": 2,
+          "x": 4672,
+          "y": 683,
+          "width": 175,
+          "height": 3171,
+          "detection_confidence": 1.0,
+          "raw": "入日。<ruby>桂<rt>かつら</rt></ruby>の瀬にあらへば御 <ruby>退参<rt>たいさん</rt></ruby>の<ruby>声<rt>こゑ</rt></ruby>かしかましく其日のす",
+          "koji": "入日。桂（かつら）の瀬にあらへば御 退参（たいさん）の声（こゑ）かしかましく其日のす",
+          "plain": "入日。桂かつらの瀬にあらへば御 退参たいさんの声こゑかしかましく其日のす",
+          "stop_reason": "eos",
+          "token_count": 49,
+          "timings": {
+            "preprocess": 0.026573501992970705,
+            "encoder": 1.7294270429993048,
+            "prefill": 0.02853735105600208,
+            "decode": 0.1645226259715855
+          }
+        },
+        {
+          "reading_order": 3,
+          "x": 4468,
+          "y": 684,
+          "width": 167,
+          "height": 3161,
+          "detection_confidence": 1.0,
+          "raw": "まふははてゝ思ひ〳〵に行わかるゝ。道〳〵<ruby>筍斎友<rt>しゆんさいとも</rt></ruby>どちに",
+          "koji": "まふははてゝ思ひ〳〵に行わかるゝ。道〳〵筍斎友（しゆんさいとも）どちに",
+          "plain": "まふははてゝ思ひ〳〵に行わかるゝ。道〳〵筍斎友しゆんさいともどちに",
+          "stop_reason": "eos",
+          "token_count": 38,
+          "timings": {
+            "preprocess": 0.024430287070572376,
+            "encoder": 1.2667496559442952,
+            "prefill": 0.03437857097014785,
+            "decode": 0.20761431998107582
+          }
+        },
+        {
+          "reading_order": 4,
+          "x": 4259,
+          "y": 694,
+          "width": 165,
+          "height": 3151,
+          "detection_confidence": 1.0,
+          "raw": "さきになのりの所にて口〳〵に申されし<ruby>名乗<rt>なのり</rt></ruby>は何〳〵ぞ。",
+          "koji": "さきになのりの所にて口〳〵に申されし名乗（なのり）は何〳〵ぞ。",
+          "plain": "さきになのりの所にて口〳〵に申されし名乗なのりは何〳〵ぞ。",
+          "stop_reason": "eos",
+          "token_count": 34,
+          "timings": {
+            "preprocess": 0.036175685934722424,
+            "encoder": 1.1849794440204278,
+            "prefill": 0.013097616960294545,
+            "decode": 0.18253270897548646
+          }
+        },
+        {
+          "reading_order": 5,
+          "x": 4048,
+          "y": 684,
+          "width": 162,
+          "height": 3150,
+          "detection_confidence": 1.0,
+          "raw": "是〳〵といふ。先そのほうの<ruby>頭巻<rt>かしらまき</rt></ruby>との給しは。我があたま",
+          "koji": "是〳〵といふ。先そのほうの頭巻（かしらまき）との給しは。我があたま",
+          "plain": "是〳〵といふ。先そのほうの頭巻かしらまきとの給しは。我があたま",
+          "stop_reason": "eos",
+          "token_count": 36,
+          "timings": {
+            "preprocess": 0.02919302205555141,
+            "encoder": 1.1863552199210972,
+            "prefill": 0.0253785930108279,
+            "decode": 0.27443959400989115
+          }
+        },
+        {
+          "reading_order": 6,
+          "x": 3836,
+          "y": 689,
+          "width": 158,
+          "height": 3129,
+          "detection_confidence": 1.0,
+          "raw": "に<ruby>鉢<rt>はち</rt></ruby>まきしたるといふ心か。いかにもおもては<ruby>左<rt>さ</rt></ruby>のとをり。うら",
+          "koji": "に鉢（はち）まきしたるといふ心か。いかにもおもては左（さ）のとをり。うら",
+          "plain": "に鉢はちまきしたるといふ心か。いかにもおもては左さのとをり。うら",
+          "stop_reason": "eos",
+          "token_count": 41,
+          "timings": {
+            "preprocess": 0.029429103946313262,
+            "encoder": 1.3190922029316425,
+            "prefill": 0.025663595995865762,
+            "decode": 0.19230399106163532
+          }
+        },
+        {
+          "reading_order": 7,
+          "x": 3626,
+          "y": 689,
+          "width": 163,
+          "height": 3148,
+          "detection_confidence": 1.0,
+          "raw": "をかへしてきく時は。かな<ruby>釘<rt>くぎ</rt></ruby>のゐめうにて。出てはかならず",
+          "koji": "をかへしてきく時は。かな釘（くぎ）のゐめうにて。出てはかならず",
+          "plain": "をかへしてきく時は。かな釘くぎのゐめうにて。出てはかならず",
+          "stop_reason": "eos",
+          "token_count": 34,
+          "timings": {
+            "preprocess": 0.026431764010339975,
+            "encoder": 1.2102591269649565,
+            "prefill": 0.012967220041900873,
+            "decode": 0.16959201404824853
+          }
+        },
+        {
+          "reading_order": 8,
+          "x": 3409,
+          "y": 696,
+          "width": 174,
+          "height": 3113,
+          "detection_confidence": 1.0,
+          "raw": "打つけらるゝ心よとどつとわらふ。<ruby>次<rt>つき</rt></ruby>にしまがにといはれし",
+          "koji": "打つけらるゝ心よとどつとわらふ。次（つき）にしまがにといはれし",
+          "plain": "打つけらるゝ心よとどつとわらふ。次つきにしまがにといはれし",
+          "stop_reason": "eos",
+          "token_count": 34,
+          "timings": {
+            "preprocess": 0.016883537988178432,
+            "encoder": 1.3506424539955333,
+            "prefill": 0.02282555401325226,
+            "decode": 0.2122878609225154
+          }
+        },
+        {
+          "reading_order": 9,
+          "x": 3204,
+          "y": 688,
+          "width": 169,
+          "height": 3129,
+          "detection_confidence": 1.0,
+          "raw": "は。はさんでいたむる心かととふ。<ruby>存<rt>そんじ</rt></ruby>もよらず。<ruby>横<rt>よこ</rt></ruby>ばいに<ruby>這<rt>はは</rt></ruby>さる",
+          "koji": "は。はさんでいたむる心かととふ。存（そんじ）もよらず。横（よこ）ばいに這（はは）さる",
+          "plain": "は。はさんでいたむる心かととふ。存そんじもよらず。横よこばいに這ははさる",
+          "stop_reason": "eos",
+          "token_count": 49,
+          "timings": {
+            "preprocess": 0.030887385946698487,
+            "encoder": 1.2298949899850413,
+            "prefill": 0.016369353979825974,
+            "decode": 0.2100749199744314
+          }
+        },
+        {
+          "reading_order": 10,
+          "x": 2988,
+          "y": 697,
+          "width": 166,
+          "height": 3112,
+          "detection_confidence": 1.0,
+          "raw": "る心。目が上になるといふ事と又わらふ。三 <ruby>番<rt>ばん</rt></ruby>にやみの夜",
+          "koji": "る心。目が上になるといふ事と又わらふ。三 番（ばん）にやみの夜",
+          "plain": "る心。目が上になるといふ事と又わらふ。三 番ばんにやみの夜",
+          "stop_reason": "eos",
+          "token_count": 34,
+          "timings": {
+            "preprocess": 0.024288994958624244,
+            "encoder": 1.11789807502646,
+            "prefill": 0.008729128050617874,
+            "decode": 0.20698816794902086
+          }
+        },
+        {
+          "reading_order": 11,
+          "x": 2788,
+          "y": 692,
+          "width": 159,
+          "height": 3146,
+          "detection_confidence": 1.0,
+          "raw": "となのられたは。<ruby>推<rt>をしはかる</rt></ruby>けに。むかしあまてる神のいはとに入せ",
+          "koji": "となのられたは。推（をしはかる）けに。むかしあまてる神のいはとに入せ",
+          "plain": "となのられたは。推をしはかるけに。むかしあまてる神のいはとに入せ",
+          "stop_reason": "eos",
+          "token_count": 37,
+          "timings": {
+            "preprocess": 0.030633507994934916,
+            "encoder": 1.2332446299260482,
+            "prefill": 0.02431645500473678,
+            "decode": 0.16804065310861915
+          }
+        },
+        {
+          "reading_order": 12,
+          "x": 2577,
+          "y": 708,
+          "width": 157,
+          "height": 3135,
+          "detection_confidence": 1.0,
+          "raw": "給ふて。とこ<ruby>闇<rt>やみ</rt></ruby>の夜と成し心にて<ruby>某<rt>それかし</rt></ruby>にかみがないといふ",
+          "koji": "給ふて。とこ闇（やみ）の夜と成し心にて某（それかし）にかみがないといふ",
+          "plain": "給ふて。とこ闇やみの夜と成し心にて某それかしにかみがないといふ",
+          "stop_reason": "eos",
+          "token_count": 40,
+          "timings": {
+            "preprocess": 0.027726031024940312,
+            "encoder": 1.111934604938142,
+            "prefill": 0.03723438107408583,
+            "decode": 0.16409139696042985
+          }
+        },
+        {
+          "reading_order": 13,
+          "x": 2381,
+          "y": 703,
+          "width": 157,
+          "height": 3149,
+          "detection_confidence": 1.0,
+          "raw": "事なるへし。いかな〳〵其様奥ふかさ心なし。ちかき比の",
+          "koji": "事なるへし。いかな〳〵其様奥ふかさ心なし。ちかき比の",
+          "plain": "事なるへし。いかな〳〵其様奥ふかさ心なし。ちかき比の",
+          "stop_reason": "eos",
+          "token_count": 27,
+          "timings": {
+            "preprocess": 0.027002552058547735,
+            "encoder": 1.077513296972029,
+            "prefill": 0.013561962987296283,
+            "decode": 0.14917310094460845
+          }
+        },
+        {
+          "reading_order": 14,
+          "x": 2176,
+          "y": 711,
+          "width": 159,
+          "height": 3136,
+          "detection_confidence": 1.0,
+          "raw": "ことぐさに、ねつけひやうたんのふたつのふくらおなしきをあと",
+          "koji": "ことぐさに、ねつけひやうたんのふたつのふくらおなしきをあと",
+          "plain": "ことぐさに、ねつけひやうたんのふたつのふくらおなしきをあと",
+          "stop_reason": "eos",
+          "token_count": 30,
+          "timings": {
+            "preprocess": 0.026755498023703694,
+            "encoder": 1.2887486349791288,
+            "prefill": 0.014253993984311819,
+            "decode": 0.18736157496459782
+          }
+        },
+        {
+          "reading_order": 15,
+          "x": 1962,
+          "y": 692,
+          "width": 186,
+          "height": 3176,
+          "detection_confidence": 1.0,
+          "raw": "さきがしれぬとて。やみの<ruby>夜<rt>よ</rt></ruby>といひ侍り。お身がつふりと胴の",
+          "koji": "さきがしれぬとて。やみの夜（よ）といひ侍り。お身がつふりと胴の",
+          "plain": "さきがしれぬとて。やみの夜よといひ侍り。お身がつふりと胴の",
+          "stop_reason": "eos",
+          "token_count": 34,
+          "timings": {
+            "preprocess": 0.02020378492306918,
+            "encoder": 1.7790979649871588,
+            "prefill": 0.07542284904047847,
+            "decode": 0.2626563170924783
+          }
+        },
+        {
+          "reading_order": 16,
+          "x": 1756,
+          "y": 693,
+          "width": 164,
+          "height": 3159,
+          "detection_confidence": 1.0,
+          "raw": "大さ此物にひとしき故。かくは申つ其上。すまふに出るより",
+          "koji": "大さ此物にひとしき故。かくは申つ其上。すまふに出るより",
+          "plain": "大さ此物にひとしき故。かくは申つ其上。すまふに出るより",
+          "stop_reason": "eos",
+          "token_count": 28,
+          "timings": {
+            "preprocess": 0.03311751608271152,
+            "encoder": 1.6865574549883604,
+            "prefill": 0.019351704977452755,
+            "decode": 0.11533438600599766
+          }
+        },
+        {
+          "reading_order": 17,
+          "x": 1549,
+          "y": 697,
+          "width": 179,
+          "height": 3175,
+          "detection_confidence": 1.0,
+          "raw": "こしにつけらるゝといふ事と又わらひぬ。さて又目身の吉",
+          "koji": "こしにつけらるゝといふ事と又わらひぬ。さて又目身の吉",
+          "plain": "こしにつけらるゝといふ事と又わらひぬ。さて又目身の吉",
+          "stop_reason": "eos",
+          "token_count": 27,
+          "timings": {
+            "preprocess": 0.03565779095515609,
+            "encoder": 1.5925266350386664,
+            "prefill": 0.013465204974636436,
+            "decode": 0.099484373931773
+          }
+        },
+        {
+          "reading_order": 18,
+          "x": 1343,
+          "y": 709,
+          "width": 168,
+          "height": 3155,
+          "detection_confidence": 1.0,
+          "raw": "野漆はいかに。さればよしのは花も<ruby>実<rt>み</rt></ruby>もある心漆といふは。さ",
+          "koji": "野漆はいかに。さればよしのは花も実（み）もある心漆といふは。さ",
+          "plain": "野漆はいかに。さればよしのは花も実みもある心漆といふは。さ",
+          "stop_reason": "eos",
+          "token_count": 34,
+          "timings": {
+            "preprocess": 0.016277976101264358,
+            "encoder": 2.107222403981723,
+            "prefill": 0.04949256603140384,
+            "decode": 0.15481590200215578
+          }
+        },
+        {
+          "reading_order": 19,
+          "x": 923,
+          "y": 704,
+          "width": 181,
+          "height": 3160,
+          "detection_confidence": 1.0,
+          "raw": "に。扨も<ruby>付<rt>つ</rt></ruby>いたり<ruby>漆坊<rt>うるしぼん</rt></ruby>と<ruby>腹<rt>はら</rt></ruby>をからへ<ruby>背<rt>せな</rt></ruby>をより。<ruby>各<rt>おの</rt></ruby>ゑつほに",
+          "koji": "に。扨も付（つ）いたり漆坊（うるしぼん）と腹（はら）をからへ背（せな）をより。各（おの）ゑつほに",
+          "plain": "に。扨も付ついたり漆坊うるしぼんと腹はらをからへ背せなをより。各おのゑつほに",
+          "stop_reason": "eos",
+          "token_count": 59,
+          "timings": {
+            "preprocess": 0.04858803900424391,
+            "encoder": 1.9105347220320255,
+            "prefill": 0.04753067798446864,
+            "decode": 0.219241410959512
+          }
+        },
+        {
+          "reading_order": 20,
+          "x": 712,
+          "y": 693,
+          "width": 175,
+          "height": 3075,
+          "detection_confidence": 1.0,
+          "raw": "入あひの。かねなる比に前れておのがさま〳〵に帰りにけり",
+          "koji": "入あひの。かねなる比に前れておのがさま〳〵に帰りにけり",
+          "plain": "入あひの。かねなる比に前れておのがさま〳〵に帰りにけり",
+          "stop_reason": "eos",
+          "token_count": 28,
+          "timings": {
+            "preprocess": 0.03135833004489541,
+            "encoder": 1.4200489949434996,
+            "prefill": 0.02373441099189222,
+            "decode": 0.3005026300670579
+          }
+        },
+        {
+          "reading_order": 21,
+          "x": 491,
+          "y": 1184,
+          "width": 177,
+          "height": 1425,
+          "detection_confidence": 1.0,
+          "raw": "四 <ruby>色狂<rt>いろくる</rt></ruby>ひ<ruby>錠<rt>ほだし</rt></ruby>にかゝる<ruby>玉蔓<rt>たまかづら</rt></ruby>",
+          "koji": "四 色狂（いろくる）ひ錠（ほだし）にかゝる玉蔓（たまかづら）",
+          "plain": "四 色狂いろくるひ錠ほだしにかゝる玉蔓たまかづら",
+          "stop_reason": "eos",
+          "token_count": 37,
+          "timings": {
+            "preprocess": 0.02970201103016734,
+            "encoder": 1.3786159750306979,
+            "prefill": 0.009629764943383634,
+            "decode": 0.16221696697175503
+          }
+        }
+      ],
+      "reference": "此後大相撲になりて終るねぢ合より合けるがとかくして\n入白毬の瀬にあらへば御迎参の声かしかましく其日のす\nまふははてゝ思ひに行わかるゝ。道笏斎友どちに\nさきになのりの所にて口に申されし名乗は何ぞ\n是といふ。先そのほうの頂巻との給しは。我があたま\nに鉢まきしたるといふ心か。いかにもおもては左のとをり。うら\nをかへしてきく時は。かな釘のゐめうにて。出てはかならず\n打つけらるゝ心よとどつとわらふ。次にしまがにといはれし\nは。よさんでいたむる心かととふ。後もからず。横ばいに遠ざる\n得心。目が上になるといふ事と又わらふ。三番にやみの夜\nとなのられたは。推量に。むかしあまてる神のいはとに入せ\n給ふて。とこ。闇の夜と成し心にて某にかみがないといふ\n事なるへし。いかな其様奥ふかさ心なし。ちかき比の\nとぐさにねつけひやうたんのふたつのふくらおなしきをあと\nさきがしれぬとて。やみの夜といひ侍り。お身がつふりと朋の\n大さ此物にひとしき故。は申つ其上。すまふに出るより\nこしにつけらるゝといふ事と又わらひぬ。さて又自身の吉\n野沫はいかに。さればよしのは花も実もある心深といふは。さ\nに。扨も付いたり添坊と腹をかゝへ背をより。各ゑつほに\n入あひの。かねなる比に別れておのがさまに帰りにけり\n四色狂ひ錠にかゝる玉蔓",
+      "character_errors": [
+        129
+      ]
+    }
+  ]
+}
