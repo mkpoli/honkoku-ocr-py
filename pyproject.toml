@@ -36,7 +36,7 @@ build-backend = "hatchling.build"
 packages = ["honkoku_ocr"]
 
 [dependency-groups]
-dev = ["pytest>=8", "ruff>=0.6", "pypdfium2>=4"]
+dev = ["pytest>=8", "ruff>=0.6", "pypdfium2>=4", "mypy>=1.10"]
 
 [tool.uv]
 conflicts = [[{ extra = "cpu" }, { extra = "gpu" }]]
@@ -50,3 +50,7 @@ target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E4", "E9", "F", "B", "UP", "I"]
+
+[tool.mypy]
+files = ["honkoku_ocr"]
+ignore_missing_imports = true

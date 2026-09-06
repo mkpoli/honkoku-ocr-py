@@ -8,8 +8,9 @@ from collections.abc import Callable, Iterable, Iterator
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import closing
 from dataclasses import asdict, dataclass, field, replace
+from pathlib import Path
 from time import perf_counter
-from typing import Protocol, runtime_checkable
+from typing import Any, Protocol, runtime_checkable
 
 from PIL import Image, ImageOps
 
@@ -192,9 +193,9 @@ class OCR:
         self.max_dimension, self.margin = max_dimension, margin
         self.conf_threshold, self.ios_threshold = conf_threshold, ios_threshold
         self._detector, self._recognizer = detector, recognizer
-        self._paths = {}
-        self._resolved_encoder = None
-        self._identity = {}
+        self._paths: dict[str, Path] = {}
+        self._resolved_encoder: Path | None = None
+        self._identity: dict[str, Any] = {}
 
     def paths(self, roles) -> dict:
         missing = [role for role in roles if role not in self._paths]
@@ -392,7 +393,7 @@ class OCR:
             index += 1
             job = source if isinstance(source, PageInput) else PageInput(source)
             try:
-                result = self.process(job.source, job.boxes, frame=job.frame,
+                result: PageResult | PageFailure = self.process(job.source, job.boxes, frame=job.frame,
                                       layout_only=layout_only, cancelled=cancelled)
             except ProcessingCancelled:
                 return
@@ -405,7 +406,7 @@ class OCR:
             yield result
 
     def layout(self, image) -> list[Box]:
-        return [Box(line.x, line.y, line.width, line.height, line.detection_confidence)
+        return [Box(int(line.x), int(line.y), int(line.width), int(line.height), line.detection_confidence)
                 for line in self.process(image, layout_only=True).lines]
 
     def run(self, image, boxes: list[Box] | None = None) -> list[LineResult]:

@@ -73,7 +73,7 @@ def _point_sampled_resize(image: Image.Image, width: int, height: int) -> Image.
     画素の完全一致は保証しない。
     """
     sx, sy = image.width / width, image.height / height
-    return image.transform((width, height), Image.AFFINE, (sx, 0, 0, 0, sy, 0), resample=Image.BILINEAR)
+    return image.transform((width, height), Image.Transform.AFFINE, (sx, 0, 0, 0, sy, 0), resample=Image.Resampling.BILINEAR)
 
 
 def _remove_nested(boxes: list[Box], ios_threshold: float) -> list[Box]:

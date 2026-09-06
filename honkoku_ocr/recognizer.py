@@ -54,12 +54,12 @@ def estimate_skew(crop: Image.Image) -> int:
     scale = min(1.0, SKEW_DOWNSCALE / max(crop.width, crop.height))
     sw, sh = max(8, js_round(crop.width * scale)), max(8, js_round(crop.height * scale))
     vertical = crop.height >= crop.width
-    small = crop.convert("RGB").resize((sw, sh), Image.BILINEAR)
+    small = crop.convert("RGB").resize((sw, sh), Image.Resampling.BILINEAR)
     thr = _luminance(small).mean() * 0.9
     diag = math.ceil(math.hypot(sw, sh)) + 2
     def score(deg: int) -> float:
         canvas = Image.new("RGB", (diag, diag), WHITE)
-        rot = small.rotate(-deg, resample=Image.BILINEAR, expand=True, fillcolor=WHITE)
+        rot = small.rotate(-deg, resample=Image.Resampling.BILINEAR, expand=True, fillcolor=WHITE)
         canvas.paste(rot, ((diag - rot.width) // 2, (diag - rot.height) // 2))
         acc = (_luminance(canvas) < thr).sum(axis=0 if vertical else 1).astype(np.float64)
         return float((acc * acc).sum())
@@ -80,13 +80,13 @@ def to_pixel(crop: Image.Image, img_h: int = 256, img_w: int = 2048) -> np.ndarr
     work = crop.convert("RGB")
     angle = estimate_skew(work)
     if abs(angle) >= SKEW_MIN_APPLY:
-        work = work.rotate(-angle, resample=Image.BICUBIC, expand=True, fillcolor=WHITE)
+        work = work.rotate(-angle, resample=Image.Resampling.BICUBIC, expand=True, fillcolor=WHITE)
     if work.height > work.width:
         work = work.rotate(-90, expand=True)
     w, h = work.size
     nw = max(1, min(img_w, js_round(w * img_h / h)))
     final = Image.new("RGB", (img_w, img_h), WHITE)
-    final.paste(work.resize((nw, img_h), Image.LANCZOS), (0, 0))
+    final.paste(work.resize((nw, img_h), Image.Resampling.LANCZOS), (0, 0))
     a = (np.asarray(final, np.float32) / 255.0 - MEAN) / STD
     return np.ascontiguousarray(a.transpose(2, 0, 1)[None])
 

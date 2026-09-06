@@ -10,6 +10,7 @@ import os
 import platform
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
+from typing import Any
 
 from . import models
 from .output import package_version, safe_error
@@ -22,8 +23,8 @@ def _version(name: str) -> str | None:
         return None
 
 
-def runtime_report() -> dict:
-    report = {"onnxruntime": None, "providers": [], "cuda": False, "cuda_error": None}
+def runtime_report() -> dict[str, Any]:
+    report: dict[str, Any] = {"onnxruntime": None, "providers": [], "cuda": False, "cuda_error": None}
     try:
         import onnxruntime as ort
     except ModuleNotFoundError:
