@@ -16,7 +16,7 @@ from . import models
 from . import output as output_io
 from .layout import Box
 from .output import _digest, package_version, safe_error
-from .pipeline import OCR, SCHEMA_VERSION
+from .pipeline import OCR, SCHEMA_VERSION, ModelSetupError
 
 EXTS = {".jpg", ".jpeg", ".png", ".tif", ".tiff", ".bmp", ".webp"}
 
@@ -182,6 +182,11 @@ def main(argv=None) -> int:
                                  preview_png=output_io.preview(path, frame, result.lines) if args.preview else None)
             completed += 1
             print(f"[{index}/{len(jobs)}] {label}: {len(result.lines)} lines, {result.timings['total']:.2f}s", file=sys.stderr)
+        except ModelSetupError as error:
+            failures += 1
+            print(f"[{index}/{len(jobs)}] {label}: model setup failed; batch stopped "
+                  f"({len(jobs) - index} not attempted): {safe_error(error)}", file=sys.stderr)
+            break
         except Exception as error:
             failures += 1
             print(f"[{index}/{len(jobs)}] {label}: {safe_error(error)}", file=sys.stderr)

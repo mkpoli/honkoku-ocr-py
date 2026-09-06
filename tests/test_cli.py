@@ -148,3 +148,17 @@ def test_later_inference_failure_does_not_stop_other_images(tmp_path, fake_model
     assert cli.main([str(tmp_path), '-o', str(output)]) == 1
     assert len(list(output.glob('*.json'))) == 2
     assert fake_models == [('a.png', 0), ('c.png', 0)]
+
+
+def test_model_setup_failure_stops_cli_batch(tmp_path, fake_models, monkeypatch, capsys):
+    from honkoku_ocr import ModelSetupError
+    for name in ('a.png', 'b.png'):
+        Image.new('RGB', (10, 10)).save(tmp_path / name)
+    attempts = []
+    def fail_setup(self, image, *args, **kwargs):
+        attempts.append(Path(image).name)
+        raise ModelSetupError('CUDA unavailable')
+    monkeypatch.setattr(cli.OCR, 'process', fail_setup)
+    assert cli.main([str(tmp_path), '-o', str(tmp_path / 'out')]) == 1
+    assert attempts == ['a.png']
+    assert 'batch stopped (1 not attempted)' in capsys.readouterr().err
