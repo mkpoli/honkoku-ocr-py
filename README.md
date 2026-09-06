@@ -29,7 +29,7 @@
 
 [みんなで翻刻OCR](https://yuta1984.github.io/honkoku-ocr-web/)（橋本雄太、CC BY 4.0）の推論パイプラインをPythonおよびonnxruntimeへ移植した実装である。ブラウザ版と同じモデルと前処理を用い、くずし字の古典籍画像からKoji記法（ふりがな・返り点・送り仮名・割書のタグを含む「みんなで翻刻」の記法）の翻刻テキストを出力する。幾何変換・正規化・復号の手順は原実装に準拠しているが、拡大縮小と回転の補間にPillowを用いているため、画素値は完全には一致しない。
 
-A Python port of the inference pipeline ofみんなで翻刻OCR (honkoku-ocr-web, by Yuta Hashimoto,
+A Python port of the inference pipeline of みんなで翻刻OCR (honkoku-ocr-web, by Yuta Hashimoto,
 CC BY 4.0). Same models, same geometry and normalisation, same output notation; no browser, no UI, and it runs
 on a GPU through onnxruntime's CUDA provider. Resampling is Pillow's, so tensors are equivalent rather than bit-identical.
 
