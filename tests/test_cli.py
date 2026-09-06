@@ -1,6 +1,8 @@
+import io
 import json
 from pathlib import Path
 
+import httpx
 import pytest
 from PIL import Image
 
@@ -171,3 +173,23 @@ def test_pdf_pages_become_numbered_outputs(tmp_path, fake_models):
     output = tmp_path / "out"
     assert cli.main([str(tmp_path / "scans.pdf"), "-o", str(output)]) == 0
     assert sorted(p.name[-11:] for p in output.glob("*.json")) == ["_p0001.json", "_p0002.json"]
+
+
+def test_iiif_manifest_pages_are_downloaded_and_processed(tmp_path, fake_models, monkeypatch):
+    import json
+
+    from honkoku_ocr import iiif
+    page = Image.new("RGB", (40, 60), (255, 255, 255))
+    buffer = io.BytesIO(); page.save(buffer, format="PNG")
+    manifest = tmp_path / "manifest.json"
+    manifest.write_text(json.dumps({"sequences": [{"canvases": [
+        {"label": str(i), "images": [{"resource": {"@id": f"https://example.org/{i}.png"}}]} for i in (1, 2, 3)]}]}))
+    fetched = []
+    def handler(request):
+        fetched.append(request.url.path); return httpx.Response(200, content=buffer.getvalue())
+    monkeypatch.setattr(iiif, "new_client", lambda: httpx.Client(transport=httpx.MockTransport(handler)))
+    output = tmp_path / "out"
+    assert cli.main(["--iiif", str(manifest), "--pages", "2-3", "-o", str(output)]) == 0
+    assert fetched == ["/2.png", "/3.png"]
+    assert sorted(p.name.split("__")[0] for p in output.glob("*.json")) == ["0002", "0003"]
+    assert sorted(p.name for p in (output / "iiif").glob("*/*.jpg")) == ["0002.jpg", "0003.jpg"]

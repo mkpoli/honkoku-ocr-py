@@ -10,7 +10,7 @@ from dataclasses import asdict
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 
-from . import models
+from . import iiif, models
 from . import output as output_io
 from .layout import Box
 from .output import _digest, package_version, safe_error
@@ -75,6 +75,10 @@ def main(argv=None) -> int:
     ap.add_argument("--boxes", type=Path, help="box list or page JSON for a single image frame")
     ap.add_argument("--preview", action="store_true", help="write a numbered bbox overlay PNG")
     ap.add_argument("--frame", type=int, help="zero-based frame; default processes every frame")
+    ap.add_argument("--iiif", action="append", default=[], metavar="MANIFEST",
+                    help="IIIF Presentation manifest (URL or file); its page images are downloaded and processed")
+    ap.add_argument("--pages", help="canvases to take from each manifest, 1-based, e.g. 3 or 2-5,9")
+    ap.add_argument("--iiif-dir", type=Path, help="where manifest images are kept (default <output>/iiif)")
     ap.add_argument("--max-dimension", type=int, default=3500)
     ap.add_argument("--margin", type=int, default=45)
     ap.add_argument("--confidence-threshold", type=float, default=0.3)
@@ -104,10 +108,25 @@ def main(argv=None) -> int:
         except Exception as error:
             print(safe_error(error), file=sys.stderr)
             return 1
-    if not args.inputs:
-        ap.error("specify an image or directory")
+    if not args.inputs and not args.iiif:
+        ap.error("specify an image, a directory or --iiif")
     failures = 0
     files = []
+    if args.iiif:
+        try:
+            args.output.mkdir(parents=True, exist_ok=True)
+            with iiif.new_client() as client:
+                for source in args.iiif:
+                    directory = iiif.manifest_directory(source, args.iiif_dir or args.output / "iiif")
+                    canvases = iiif.canvases(iiif.load_manifest(source, client))
+                    wanted = set(iiif.parse_pages(args.pages, len(canvases)))
+                    for canvas in canvases:
+                        if canvas.index in wanted:
+                            files.append(iiif.download(canvas, directory, client))
+                    print(f"{len(wanted)} of {len(canvases)} canvases from the manifest in {safe_error(directory)}", file=sys.stderr)
+        except Exception as error:
+            print(f"iiif: {safe_error(error)}", file=sys.stderr)
+            return 1
     for item in args.inputs:
         path = Path(item)
         try:

@@ -148,6 +148,7 @@ uv run honkoku-ocr page.jpg -o out --layout-only # 行検出だけ (行認識モ
 uv run honkoku-ocr page.jpg -o out --boxes 'out/page__<hash>.json'   # 行位置を与えて認識だけ
 uv run honkoku-ocr scans.tif -o out --frame 3    # 多ページ TIFF の 4 コマ目だけ (省略時は全コマ)
 uv run honkoku-ocr book.pdf -o out               # PDF は 1 ページ 1 コマ (長辺 3,500 px で描画)
+uv run honkoku-ocr --iiif https://dl.ndl.go.jp/api/iiif/2540583/manifest.json --pages 29-30 -o out   # IIIF マニフェストから取得して処理
 ```
 
 主なオプション。全体は`honkoku-ocr --help`。
@@ -159,6 +160,7 @@ uv run honkoku-ocr book.pdf -o out               # PDF は 1 ページ 1 コマ 
 | `--encoder-precision {auto,fp16,fp32}` | autoはCPUでfp32、CUDAでfp16 |
 | `--threads N` / `--decoder-threads N` | onnxruntimeのスレッド数。0で既定 |
 | `--overlap` | 行の前処理とencoderを別スレッドで先行させ、decodeと重ねる。既定はoff。1コマの測定では出力が同じまま所要時間が22%短かった（[benchmarks/README.md](benchmarks/README.md)） |
+| `--iiif MANIFEST` / `--pages 2-5,9` / `--iiif-dir DIR` | IIIF Presentation（v2/v3）のマニフェストからページ画像を取得して処理する。画像は`<出力>/iiif/<マニフェストのhash>/0001.jpg`のように置き、二度目からは取得しない。`--pages`はキャンバス番号（1始まり） |
 | `--offline` | キャッシュに無いモデルを取りに行かず失敗する |
 | `--verify-cache` | キャッシュ済みモデルのSHA-256を照合して終了 |
 | `--max-dimension` `--margin` `--confidence-threshold` `--ios-threshold` | 縮小の長辺（3500）、行cropの余白（45）、行検出のスコア閾値（0.3）、入れ子除去の閾値（0.8） |
@@ -296,7 +298,7 @@ txtは`koji`（`--plain`なら`plain`）を読み順に1行ずつ並べたもの
 
 ## ブラウザ版との違い
 
-- UI（画像ビューア、bboxの編集、縦書き表示、HEICの読み込み、IIIF、LLM連携）は含まない。多ページTIFFとPDF（`pdf` extra）は読める。
+- UI（画像ビューア、bboxの編集、縦書き表示、HEICの読み込み、LLM連携）は含まない。多ページTIFF、PDF（`pdf` extra）、IIIFマニフェストは読める。
 - encoderはfp16版を使う。ブラウザ版のWebAssembly経路が使うint8版のConvInteger演算はonnxruntimeのCPU/CUDAプロバイダに無い。
   CPUではfp16版をfp32に変換したファイルを使う。対応する版はfp16 encoderが配布されているv16fs / v17 / v18。
 - decoderは`--device cuda`でもCPUで動く。
