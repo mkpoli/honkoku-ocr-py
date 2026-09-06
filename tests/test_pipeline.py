@@ -200,3 +200,20 @@ def test_batch_model_setup_failure_aborts_without_retry(monkeypatch):
     with pytest.raises(ModelSetupError, match='offline cache'):
         list(OCR(offline=True).process_many(inputs()))
     assert calls == [1]
+
+
+def test_default_model_identity_does_not_load_unused_models(tmp_path, monkeypatch):
+    calls = []
+    path = tmp_path / 'layout.onnx'
+    path.write_bytes(b'layout model')
+    def ensure(version, **kwargs):
+        calls.append(kwargs['roles'])
+        assert kwargs['roles'] == ['layout']
+        return {'layout': path}
+    monkeypatch.setattr(pipeline.models, 'ensure', ensure)
+    monkeypatch.setattr(pipeline, 'LayoutDetector', lambda *a, **k: FakeDetector())
+    ocr = OCR()
+    assert ocr.model_identity() == {}
+    ocr.layout(Image.new('RGB', (100, 100)))
+    assert set(ocr.model_identity()) == {'layout'}
+    assert calls == [['layout']]

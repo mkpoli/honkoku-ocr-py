@@ -214,7 +214,10 @@ class OCR:
             paths["encoder"] = self._resolved_encoder
         return paths
 
-    def model_identity(self, roles) -> dict:
+    def model_identity(self, roles=None) -> dict:
+        """Fingerprint selected roles, or only models already loaded when omitted."""
+        if roles is None:
+            roles = tuple(self._paths)
         paths = self.resolved_paths(roles)
         for role, path in paths.items():
             if role in self._identity:

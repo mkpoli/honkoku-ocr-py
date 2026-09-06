@@ -102,10 +102,7 @@ def main(argv=None):
             total_errors += sum(errors)
             reference_characters += len(reference) * len(predictions)
         records.append(record)
-    roles = ["encoder", "prefill", "step"]
-    if any("boxes" not in sample for sample in manifest["samples"]):
-        roles.append("layout")
-    identity = ocr.model_identity(roles)
+    identity = ocr.model_identity()
     report = {"manifest_sha256": hashlib.sha256(args.manifest.read_bytes()).hexdigest(),
               "attribution": manifest["attribution"], "package_version": package_version(),
               "python": platform.python_version(), "platform": platform.system(),
