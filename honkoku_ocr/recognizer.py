@@ -119,6 +119,12 @@ class RecognitionResult:
     timings: dict[str, float]
 
 
+@dataclass
+class EncodedLine:
+    hidden: np.ndarray
+    timings: dict[str, float]
+
+
 class Recognizer:
     def __init__(self, paths: dict, version: str = models.DEFAULT_VERSION, device: str = "cpu",
                  *, threads: int = 0, decoder_threads: int = 0, encoder_precision: str = "auto", quiet: bool = False, resolved_encoder=None):
@@ -148,7 +154,8 @@ class Recognizer:
             if logits is None or (isinstance(logits.shape[-1], int) and logits.shape[-1] != len(self.vocab)):
                 raise RuntimeError("incompatible decoder graph: vocabulary size does not match logits")
 
-    def _generate(self, crop: Image.Image) -> tuple[list[int], str, dict[str, float]]:
+    def encode_crop(self, crop: Image.Image) -> EncodedLine:
+        """Preprocess and encode one crop; decoder state is untouched."""
         timings = {}
         start = perf_counter()
         pixels = to_pixel(crop, self.img_h, self.img_w)
@@ -156,6 +163,10 @@ class Recognizer:
         start = perf_counter()
         hidden = self.enc.run(None, {self.enc_in: pixels})[0]
         timings["encoder"] = perf_counter() - start
+        return EncodedLine(hidden, timings)
+
+    def _decode(self, encoded: EncodedLine) -> tuple[list[int], str, dict[str, float]]:
+        hidden, timings = encoded.hidden, encoded.timings.copy()
         start = perf_counter()
         out = dict(zip(self.pre_out, self.pre.run(None, {
             "input_ids": np.array([[CLS]], np.int64), "encoder_hidden_states": hidden,
@@ -187,6 +198,14 @@ class Recognizer:
                 break
         timings["decode"] = perf_counter() - start
         return gen, reason, timings
+
+    def _generate(self, crop: Image.Image) -> tuple[list[int], str, dict[str, float]]:
+        return self._decode(self.encode_crop(crop))
+
+    def decode_encoded(self, encoded: EncodedLine) -> RecognitionResult:
+        """Decode an encoded line with line-local KV state."""
+        ids, reason, timings = self._decode(encoded)
+        return RecognitionResult(decode_ids(ids, self.vocab), reason, len(ids), timings)
 
     def generate(self, crop: Image.Image) -> list[int]:
         return self._generate(crop)[0]

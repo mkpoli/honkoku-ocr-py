@@ -3,10 +3,13 @@ from __future__ import annotations
 
 import json
 import math
+from collections import deque
 from collections.abc import Callable, Iterable, Iterator
+from concurrent.futures import ThreadPoolExecutor
+from contextlib import closing
 from dataclasses import asdict, dataclass, field, replace
 from time import perf_counter
-from typing import Protocol
+from typing import Protocol, runtime_checkable
 
 from PIL import Image, ImageOps
 
@@ -15,7 +18,7 @@ from .koji import raw_to_koji, raw_to_plain
 from .layout import Box, LayoutDetector
 from .output import safe_error
 from .reading_order import order
-from .recognizer import RecognitionResult, Recognizer, crop_with_margin, js_round
+from .recognizer import EncodedLine, RecognitionResult, Recognizer, crop_with_margin, js_round
 
 MAX_IMAGE_DIM = 3500
 MARGIN = 45
@@ -29,6 +32,12 @@ class Detector(Protocol):
 
 class LineRecognizer(Protocol):
     def recognize_result(self, crop: Image.Image) -> RecognitionResult: ...
+
+
+@runtime_checkable
+class StagedRecognizer(Protocol):
+    def encode_crop(self, crop: Image.Image) -> EncodedLine: ...
+    def decode_encoded(self, encoded: EncodedLine) -> RecognitionResult: ...
 
 
 @dataclass
@@ -167,7 +176,7 @@ class OCR:
                  threads: int = 0, decoder_threads: int = 0,
                  encoder_precision: str = "auto", max_dimension: int = MAX_IMAGE_DIM,
                  margin: int = MARGIN, conf_threshold: float = 0.3,
-                 ios_threshold: float = 0.8):
+                 ios_threshold: float = 0.8, overlap: bool = False):
         models.specification(version)
         if device not in {"cpu", "cuda"}:
             raise ValueError("device must be cpu or cuda")
@@ -180,6 +189,7 @@ class OCR:
         self.version, self.device, self.quiet = version, device, quiet
         self.offline, self.threads, self.decoder_threads = offline, threads, decoder_threads
         self.encoder_precision = encoder_precision
+        self.overlap = overlap
         self.max_dimension, self.margin = max_dimension, margin
         self.conf_threshold, self.ios_threshold = conf_threshold, ios_threshold
         self._detector, self._recognizer = detector, recognizer
@@ -253,7 +263,7 @@ class OCR:
                 "decoder_threads": self.decoder_threads, "encoder_precision": self.encoder_precision,
                 "max_dimension": self.max_dimension, "margin": self.margin,
                 "conf_threshold": self.conf_threshold, "ios_threshold": self.ios_threshold,
-                "coordinate_space": "exif_oriented_original"}
+                "coordinate_space": "exif_oriented_original", "overlap": self.overlap}
 
     def prepare(self, image, *, frame: int = 0) -> PreparedPage:
         return PreparedPage.load(image, frame=frame, max_dimension=self.max_dimension)
@@ -287,21 +297,16 @@ class OCR:
                 start = perf_counter()
                 recognizer = self.recognizer
                 timings["recognizer_setup"] = perf_counter() - start
-            for rank, (scaled, original) in enumerate(work, 1):
-                _check_cancelled(cancelled)
-                result = RecognitionResult("", "not_run", 0, {})
-                if recognizer is not None:
-                    with crop_with_margin(page.image, scaled.x, scaled.y,
-                                          scaled.width, scaled.height, self.margin) as crop:
-                        result = recognizer.recognize_result(crop)
-                    if result.stop_reason != "eos":
+            with closing(self._line_results(page, work, recognizer, cancelled)) as results:
+                for rank, ((_, original), result) in enumerate(zip(work, results, strict=True), 1):
+                    if recognizer is not None and result.stop_reason != "eos":
                         warnings.append(f"line {rank}: generation stopped by {result.stop_reason}")
-                for stage, elapsed in result.timings.items():
-                    timings[stage] = timings.get(stage, 0.0) + elapsed
-                lines.append(LineResult(rank, original.x, original.y, original.width,
-                                        original.height, original.confidence, result.raw,
-                                        raw_to_koji(result.raw), raw_to_plain(result.raw),
-                                        result.stop_reason, result.token_count, result.timings))
+                    for stage, elapsed in result.timings.items():
+                        timings[stage] = timings.get(stage, 0.0) + elapsed
+                    lines.append(LineResult(rank, original.x, original.y, original.width,
+                                            original.height, original.confidence, result.raw,
+                                            raw_to_koji(result.raw), raw_to_plain(result.raw),
+                                            result.stop_reason, result.token_count, result.timings))
             _check_cancelled(cancelled)
             timings["total"] = perf_counter() - total
             return PageResult(SCHEMA_VERSION, page.original_width, page.original_height,
@@ -310,6 +315,47 @@ class OCR:
         finally:
             if not isinstance(image, PreparedPage):
                 page.image.close()
+
+    def _line_results(self, page, work, recognizer, cancelled):
+        if recognizer is None or not self.overlap:
+            for scaled, _ in work:
+                _check_cancelled(cancelled)
+                if recognizer is None:
+                    yield RecognitionResult("", "not_run", 0, {})
+                else:
+                    with closing(crop_with_margin(page.image, scaled.x, scaled.y,
+                                                  scaled.width, scaled.height, self.margin)) as crop:
+                        yield recognizer.recognize_result(crop)
+            return
+        if not isinstance(recognizer, StagedRecognizer):
+            raise TypeError("overlap requires a recognizer with encode_crop and decode_encoded")
+
+        def encode(box):
+            _check_cancelled(cancelled)
+            with closing(crop_with_margin(page.image, box.x, box.y, box.width, box.height, self.margin)) as crop:
+                return recognizer.encode_crop(crop)
+
+        boxes = iter(scaled for scaled, _ in work)
+        pending = deque()
+        # One encoder producer, one decoder consumer, at most two futures ahead.
+        # Joining on every exit protects page/crop ownership on error or cancellation.
+        with ThreadPoolExecutor(max_workers=1, thread_name_prefix="ocr-encoder") as executor:
+            try:
+                for box in boxes:
+                    pending.append(executor.submit(encode, box))
+                    if len(pending) == 2:
+                        break
+                while pending:
+                    _check_cancelled(cancelled)
+                    encoded = pending.popleft().result()
+                    _check_cancelled(cancelled)
+                    box = next(boxes, None)
+                    if box is not None:
+                        pending.append(executor.submit(encode, box))
+                    yield recognizer.decode_encoded(encoded)
+            finally:
+                for future in pending:
+                    future.cancel()
 
     def process_many(self, images: Iterable, *, layout_only: bool = False,
                      progress: Callable[[int, PageResult | PageFailure], None] | None = None,

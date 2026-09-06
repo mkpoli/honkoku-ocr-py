@@ -63,6 +63,7 @@ def main(argv=None) -> int:
     ap.add_argument("-o", "--output", type=Path, default=Path("ocr-out"))
     ap.add_argument("--device", default="cpu", choices=["cpu", "cuda"],
                     help="layout and encoder device; decoder uses CPU")
+    ap.add_argument("--overlap", action="store_true", help="overlap CPU decoding with preprocessing/encoding")
     ap.add_argument("--encoder-precision", choices=["auto", "fp16", "fp32"], default="auto")
     ap.add_argument("--threads", type=int, default=0, help="layout/encoder threads; 0 uses runtime defaults")
     ap.add_argument("--decoder-threads", type=int, default=0)
@@ -88,7 +89,7 @@ def main(argv=None) -> int:
         ocr = OCR(args.model, args.device, offline=args.offline, threads=args.threads,
                   decoder_threads=args.decoder_threads, encoder_precision=args.encoder_precision,
                   max_dimension=args.max_dimension, margin=args.margin,
-                  conf_threshold=args.confidence_threshold, ios_threshold=args.ios_threshold)
+                  conf_threshold=args.confidence_threshold, ios_threshold=args.ios_threshold, overlap=args.overlap)
     except ValueError as error:
         ap.error(str(error))
     roles = ([] if args.layout_only and args.boxes else

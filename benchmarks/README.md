@@ -98,3 +98,19 @@ versions, and per sample the individual run times, stage timings, predictions,
 and, when a reference exists, the edit distance and CER of every run. Predictions
 and references are copied into the output, so publish it only when the manifest's
 attribution allows the transcriptions to be redistributed.
+
+## Overlapping recognition stages
+
+Pass `--overlap` to the full-page benchmark to run preprocessing and encoding
+on one background thread while the calling thread decodes the preceding line.
+The queue holds at most two futures ahead of the decoder. Stage timings measure
+individual calls and can sum to more than the page elapsed time.
+
+[stage-overlap.json](stage-overlap.json) records five warm runs per mode on the
+same private spread, using CUDA fp16 with two encoder/layout threads and two
+decoder threads. The median fell from 1.525 s serial to 1.187 s with overlap
+(22% less elapsed time; 1.28 times the throughput). All ten outputs matched.
+Both modes used the earlier antialiased layout resampling and detected 21 lines;
+these results precede the canvas-resampling correction. Serial runs preceded
+overlap runs, with background CPU work present. This single-page result does not
+establish the gain on other documents or hardware. Overlap remains opt-in.

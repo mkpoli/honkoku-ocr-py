@@ -1,0 +1,207 @@
+{
+  "date": "2026-09-06",
+  "image": {
+    "sha256": "e2ed654248a0230d039580241dbbcf4a15ab590d51d6568925be607295cce8fa",
+    "width": 6496,
+    "height": 4613,
+    "long_side": 3500,
+    "public": false
+  },
+  "hardware": {
+    "cpu": "AMD Ryzen 7 9800X3D",
+    "gpu": "NVIDIA GeForce RTX 5070 Ti"
+  },
+  "platform": "WSL Linux",
+  "model": "v18",
+  "encoder_precision": "fp16",
+  "device": "cuda",
+  "threads": 2,
+  "decoder_threads": 2,
+  "warmups": 1,
+  "repeats": 5,
+  "layout_preprocessing": "Pillow antialiased bilinear letterbox; before canvas resampling correction",
+  "measurement": "Full page including image loading; serial suite followed by overlap suite. Background CPU work was present.",
+  "stage_timing_note": "Stage durations sum individual calls; with overlap they may exceed page elapsed time.",
+  "serial": {
+    "mode": "serial",
+    "runs": [
+      {
+        "timings": {
+          "load": 0.7221885189646855,
+          "detector_setup": 3.1960662454366684e-06,
+          "layout": 0.043410951970145106,
+          "reading_order": 0.001830567023716867,
+          "recognizer_setup": 3.035995177924633e-06,
+          "preprocess": 0.22552245028782636,
+          "encoder": 0.5057311038253829,
+          "prefill": 0.10384951310697943,
+          "decode": 0.31600591680034995,
+          "total": 1.9263889139983803
+        },
+        "lines": 21,
+        "text_sha256": "8957c57b0073f336d755ba75cae13951e1eab54f1d3866301d8dd9cf2d06cb01"
+      },
+      {
+        "timings": {
+          "load": 0.3531730299582705,
+          "detector_setup": 8.010538294911385e-07,
+          "layout": 0.04198592191096395,
+          "reading_order": 0.0016225599683821201,
+          "recognizer_setup": 7.010530680418015e-07,
+          "preprocess": 0.20293790858704597,
+          "encoder": 0.4843522228766233,
+          "prefill": 0.09399204887449741,
+          "decode": 0.2738487117458135,
+          "total": 1.4580270649166778
+        },
+        "lines": 21,
+        "text_sha256": "8957c57b0073f336d755ba75cae13951e1eab54f1d3866301d8dd9cf2d06cb01"
+      },
+      {
+        "timings": {
+          "load": 0.3481537059415132,
+          "detector_setup": 1.2220116332173347e-06,
+          "layout": 0.04309429705608636,
+          "reading_order": 0.001587290083989501,
+          "recognizer_setup": 1.1720694601535797e-06,
+          "preprocess": 0.22233206825330853,
+          "encoder": 0.4896653776522726,
+          "prefill": 0.1010967722395435,
+          "decode": 0.28795653476845473,
+          "total": 1.500402100966312
+        },
+        "lines": 21,
+        "text_sha256": "8957c57b0073f336d755ba75cae13951e1eab54f1d3866301d8dd9cf2d06cb01"
+      },
+      {
+        "timings": {
+          "load": 0.34832341608125716,
+          "detector_setup": 1.0119983926415443e-06,
+          "layout": 0.041570157976821065,
+          "reading_order": 0.001501311082392931,
+          "recognizer_setup": 6.610061973333359e-07,
+          "preprocess": 0.22546658595092595,
+          "encoder": 0.5358318708604202,
+          "prefill": 0.10306290094740689,
+          "decode": 0.3121348909335211,
+          "total": 1.5752046590205282
+        },
+        "lines": 21,
+        "text_sha256": "8957c57b0073f336d755ba75cae13951e1eab54f1d3866301d8dd9cf2d06cb01"
+      },
+      {
+        "timings": {
+          "load": 0.3897139340406284,
+          "detector_setup": 1.0420335456728935e-06,
+          "layout": 0.04525352700147778,
+          "reading_order": 0.0016024240758270025,
+          "recognizer_setup": 1.2119999155402184e-06,
+          "preprocess": 0.21496470307465643,
+          "encoder": 0.4897530912421644,
+          "prefill": 0.09880727413110435,
+          "decode": 0.27879054204095155,
+          "total": 1.5251636810135096
+        },
+        "lines": 21,
+        "text_sha256": "8957c57b0073f336d755ba75cae13951e1eab54f1d3866301d8dd9cf2d06cb01"
+      }
+    ],
+    "median_seconds": 1.5251636810135096
+  },
+  "overlap": {
+    "mode": "overlap",
+    "runs": [
+      {
+        "timings": {
+          "load": 0.6221478070365265,
+          "detector_setup": 2.956017851829529e-06,
+          "layout": 0.042185159982182086,
+          "reading_order": 0.0017968019237741828,
+          "recognizer_setup": 2.1640444174408913e-06,
+          "preprocess": 0.22662141465116292,
+          "encoder": 0.48763223935384303,
+          "prefill": 0.10540084808599204,
+          "decode": 0.3518018829636276,
+          "total": 1.4179241609526798
+        },
+        "lines": 21,
+        "text_sha256": "8957c57b0073f336d755ba75cae13951e1eab54f1d3866301d8dd9cf2d06cb01"
+      },
+      {
+        "timings": {
+          "load": 0.383324634982273,
+          "detector_setup": 1.001986674964428e-06,
+          "layout": 0.04318830603733659,
+          "reading_order": 0.0016434970311820507,
+          "recognizer_setup": 1.0220101103186607e-06,
+          "preprocess": 0.22877884714398533,
+          "encoder": 0.4882672530366108,
+          "prefill": 0.10256588086485863,
+          "decode": 0.3686106490204111,
+          "total": 1.1829470329685137
+        },
+        "lines": 21,
+        "text_sha256": "8957c57b0073f336d755ba75cae13951e1eab54f1d3866301d8dd9cf2d06cb01"
+      },
+      {
+        "timings": {
+          "load": 0.3535655919695273,
+          "detector_setup": 9.220093488693237e-07,
+          "layout": 0.042884812923148274,
+          "reading_order": 0.0015053189126774669,
+          "recognizer_setup": 8.220085874199867e-07,
+          "preprocess": 0.22530902223661542,
+          "encoder": 0.4868814789224416,
+          "prefill": 0.09846143564209342,
+          "decode": 0.3428629949921742,
+          "total": 1.1453496309695765
+        },
+        "lines": 21,
+        "text_sha256": "8957c57b0073f336d755ba75cae13951e1eab54f1d3866301d8dd9cf2d06cb01"
+      },
+      {
+        "timings": {
+          "load": 0.35885183908976614,
+          "detector_setup": 1.1130468919873238e-06,
+          "layout": 0.04245413304306567,
+          "reading_order": 0.0016226319130510092,
+          "recognizer_setup": 7.819617167115211e-07,
+          "preprocess": 0.2860626687761396,
+          "encoder": 0.50159670796711,
+          "prefill": 0.12072748213540763,
+          "decode": 0.48863291775342077,
+          "total": 1.2438924260204658
+        },
+        "lines": 21,
+        "text_sha256": "8957c57b0073f336d755ba75cae13951e1eab54f1d3866301d8dd9cf2d06cb01"
+      },
+      {
+        "timings": {
+          "load": 0.36103311693295836,
+          "detector_setup": 1.0119983926415443e-06,
+          "layout": 0.041784328990615904,
+          "reading_order": 0.0015732079045847058,
+          "recognizer_setup": 7.910421118140221e-07,
+          "preprocess": 0.24090120603796095,
+          "encoder": 0.49617154826410115,
+          "prefill": 0.10217752738390118,
+          "decode": 0.3680641367100179,
+          "total": 1.186868621967733
+        },
+        "lines": 21,
+        "text_sha256": "8957c57b0073f336d755ba75cae13951e1eab54f1d3866301d8dd9cf2d06cb01"
+      }
+    ],
+    "median_seconds": 1.186868621967733
+  },
+  "throughput_ratio": 1.2850315972503432,
+  "elapsed_reduction_fraction": 0.22180901843989043,
+  "all_outputs_identical": true,
+  "runtime_versions": {
+    "onnxruntime-gpu": "1.29.0",
+    "numpy": "2.5.2",
+    "pillow": "12.3.0",
+    "onnx": "1.22.0"
+  },
+  "python": "3.12.7"
+}

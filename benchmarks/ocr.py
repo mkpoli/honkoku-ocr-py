@@ -58,6 +58,7 @@ def main(argv=None):
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--model", choices=sorted(models.SPECS), default=models.DEFAULT_VERSION)
     parser.add_argument("--device", choices=["cpu", "cuda"], default="cuda")
+    parser.add_argument("--overlap", action="store_true")
     parser.add_argument("--encoder-precision", choices=["auto", "fp16", "fp32"], default="auto")
     parser.add_argument("--threads", type=int, default=0)
     parser.add_argument("--decoder-threads", type=int, default=0)
@@ -70,7 +71,7 @@ def main(argv=None):
         parser.error("warmups must be nonnegative and repeats positive")
     manifest = load_manifest(args.manifest)
     ocr = OCR(args.model, args.device, offline=args.offline, threads=args.threads,
-              decoder_threads=args.decoder_threads, encoder_precision=args.encoder_precision)
+              decoder_threads=args.decoder_threads, encoder_precision=args.encoder_precision, overlap=args.overlap)
     def run(sample):
         boxes = [Box(**box) for box in sample["boxes"]] if "boxes" in sample else None
         return ocr.process(args.manifest.parent / sample["image"], boxes, frame=sample.get("frame", 0))
