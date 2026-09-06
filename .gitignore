@@ -7,3 +7,5 @@ dist/
 .playwright-mcp/
 benchmarks/corpus/*.jpg
 benchmarks/corpus/*.part
+benchmarks/corpus-honkoku/*.jpg
+benchmarks/corpus-honkoku/*.part

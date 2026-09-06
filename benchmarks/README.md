@@ -210,3 +210,82 @@ faster than the runtime default, and two decoder threads reduced the decode time
 of the default cell differ by five seconds, so single-page medians of two runs
 are indicative only; the defaults stay at 0 and 0 until more pages and machines
 are measured.
+
+# Whole pages against みんなで翻刻 transcriptions
+
+`benchmarks/corpus-honkoku/manifest.json` lists twenty pages, one per book,
+from NDL-hosted books in eight projects, with the complete page transcription
+from honkoku-data v3 as reference and no line boxes (sources and licence in
+`benchmarks/corpus-honkoku/README.md`). `benchmarks/page_eval.py` runs the whole
+pipeline and compares the page text in Koji notation. Result file:
+`corpus-honkoku-page-eval.json`, CPU, fp32 encoder, `--threads 0
+--decoder-threads 0`, one pass.
+
+```sh
+uv run python -m benchmarks.fetch_corpus benchmarks/corpus-honkoku/manifest.json
+uv run python -m benchmarks.page_eval benchmarks/corpus-honkoku/manifest.json --output page-eval.json --device cpu
+uv run python -m benchmarks.page_eval benchmarks/corpus-honkoku/manifest.json --output page-eval.json --rescore page-eval.json   # recompute metrics only
+```
+
+Four views of the same output, because the transcriptions follow the project's
+conventions rather than the page's physical lines:
+
+| metric | what it charges | value over 20 pages |
+| --- | --- | ---: |
+| raw CER | every character, newline and space, in reading order (10,198 reference characters) | 0.260 |
+| squeezed CER | as above with 【】 notes and all whitespace removed (8,394 characters); still charges reading order | 0.162 |
+| bag of characters, missed / extra | reference characters with no predicted counterpart, and the reverse, regardless of order and line splits | 0.090 / 0.079 |
+| paired-line CER | each reference line against its best predicted line; charges split and merged lines, ignores order | 0.143 |
+
+498 lines were detected for 426 transcription lines; 425 of the transcription
+lines found a partner. Total processing time 544 s on the CPU.
+
+| page | lines pred./ref. | raw | squeezed | paired | missed | extra | in order |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| kamosha-E3172F3F-144 | 36/26 | 0.608 | 0.462 | 0.192 | 0.083 | 0.038 | 0.84 |
+| kamosha-C4906EB6-016 | 33/25 | 0.300 | 0.275 | 0.374 | 0.217 | 0.106 | 0.96 |
+| kamosha-D09E2A0F-081 | 41/19 | 0.508 | 0.451 | 0.391 | 0.174 | 0.209 | 1.00 |
+| kamosha-1DB6FDAA-022 | 24/24 | 0.301 | 0.176 | 0.176 | 0.161 | 0.069 | 0.96 |
+| zisin-1B4A9AF6-034 | 22/20 | 0.038 | 0.036 | 0.034 | 0.024 | 0.022 | 1.00 |
+| zisin-5128812C-001 | 17/16 | 0.179 | 0.150 | 0.086 | 0.033 | 0.116 | 1.00 |
+| zisin-A1E1992E-012 | 34/20 | 0.254 | 0.236 | 0.223 | 0.087 | 0.051 | 0.95 |
+| kusazoushi-63B24B9C-004 | 26/25 | 0.352 | 0.180 | 0.149 | 0.118 | 0.099 | 0.92 |
+| kusazoushi-B5A8C444-003 | 22/21 | 0.259 | 0.056 | 0.023 | 0.023 | 0.051 | 1.00 |
+| kusazoushi-5FB68B99-035 | 20/20 | 0.184 | 0.094 | 0.094 | 0.047 | 0.018 | 1.00 |
+| kirishitan-2B2C88BC-045 | 21/20 | 0.160 | 0.124 | 0.122 | 0.086 | 0.072 | 0.95 |
+| kirishitan-CC187A95-077 | 20/20 | 0.399 | 0.130 | 0.010 | 0.010 | 0.010 | 0.89 |
+| kirishitan-4A8E2CD2-005 | 20/20 | 0.169 | 0.178 | 0.178 | 0.178 | 0.178 | 1.00 |
+| iryotoyojo-57D59E79-020 | 14/14 | 0.073 | 0.017 | 0.017 | 0.017 | 0.013 | 1.00 |
+| iryotoyojo-8409705F-025 | 22/20 | 0.172 | 0.058 | 0.031 | 0.013 | 0.046 | 1.00 |
+| zukan-C7EC110D-079 | 11/8 | 0.504 | 0.441 | 0.449 | 0.377 | 0.275 | 1.00 |
+| zukan-4D490743-017 | 32/27 | 0.735 | 0.588 | 0.432 | 0.204 | 0.284 | 0.77 |
+| epidemic-F03F21CC-003 | 24/21 | 0.227 | 0.172 | 0.140 | 0.093 | 0.151 | 1.00 |
+| code4libjp-41AD19BB-017 | 33/34 | 0.079 | 0.024 | 0.024 | 0.024 | 0.012 | 1.00 |
+| code4libjp-E2D5D507-044 | 26/26 | 0.165 | 0.087 | 0.096 | 0.087 | 0.025 | 1.00 |
+
+What the gaps between the columns are made of, from reading the paired lines:
+
+- **Segmentation conventions.** In the 賀茂社記録 lists each item and its
+  quantity share one transcription line while the detector finds two boxes,
+  and 割書 and interlinear notes become separate boxes; page 081 has 41 boxes
+  for 19 transcription lines. This is charged by raw, squeezed and paired CER
+  and not by the bag of characters.
+- **Reading order.** The XY-Cut reads a marginal note at the top of page 144
+  first; the transcriber put it last. Squeezed CER 0.46 against bag missed 0.08
+  on that page is the size of that effect.
+- **Transcription conventions.** In the 切支丹 texts transcribers wrote the
+  okurigana in katakana (ニ, ノ, ヲ, ハ) where the model writes hiragana, and kept
+  the 字母 of 変体仮名 (多, 連, 里) where the model writes the modern kana; the
+  reference uses 顛, 祷, 畧 where the model has 顚, 禱, 略, and sometimes omits
+  返り点 that the model outputs. Page kirishitan-005 has every metric at 0.178
+  for this reason alone. Within paired lines 97 of 3,320 edit operations are
+  kana script changes and most of the rest are runs of unequal length, so the
+  share of pure notation differences is not separated further here.
+- **Illustrated pages.** The two 図譜 pages are drawings with scattered labels;
+  the transcription positions them with leading spaces and the detector finds
+  labels the transcription lacks.
+
+Pages of continuous prose (地震 034, 儒医東西評林, 小野湖山翁小伝, 竹斎狂歌物語)
+reach squeezed CER 0.02 to 0.06. The published figure for the model, plain CER
+0.075 on the authors' test set, was measured on line crops with their own
+normalisation and cannot be compared with any column here.

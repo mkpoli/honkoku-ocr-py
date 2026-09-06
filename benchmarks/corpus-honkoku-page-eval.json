@@ -1,0 +1,3396 @@
+{
+ "manifest": "benchmarks/corpus-honkoku/manifest.json",
+ "manifest_sha256": "b8f3f454f285c09b7c916c1485376bf9a7d98c75c1ba1cd8ec2316a5ddb4cedd",
+ "attribution": "Images: 国立国会図書館デジタルコレクション (dl.ndl.go.jp), public-domain works; each sample records its IIIF URL. Transcriptions: みんなで翻刻データ v3 (yuta1984/honkoku-data, commit 58ceb1fdc, 2025-11-23), CC BY-SA 4.0, pages with status \"completed\"; the published transcriptions are unreviewed by specialists and the project reports about 1.5 errors per 100 characters. The kuzushiji models were trained on みんなで翻刻 data, so these pages may overlap their training set.",
+ "settings": {
+  "device": "cpu",
+  "threads": 0,
+  "decoder_threads": 0,
+  "encoder_precision": "auto",
+  "max_dimension": 3500,
+  "margin": 45,
+  "conf_threshold": 0.3,
+  "ios_threshold": 0.8,
+  "coordinate_space": "exif_oriented_original",
+  "overlap": false
+ },
+ "models": {
+  "layout": {
+   "file": "rtmdet-s-1280x1280.onnx",
+   "sha256": "f46267754d406431f6e035f9e20b8552af8ff1ab5ca13bcac8f4b1abbd02090c"
+  },
+  "encoder_conversion": "34c45ef4e7db0c00c377097d68191eb0a585b3e754539d6b1536227eb89b895c",
+  "encoder": {
+   "file": "kuzushiji-v18-encoder-fp32.onnx",
+   "sha256": "3b3c359bd42609b2be21ab7fdbf28d9b86d5160577ea44598d4e590f7d4dfd1c"
+  },
+  "prefill": {
+   "file": "kuzushiji-v18-decoder-prefill-int8.onnx",
+   "sha256": "6f3f19011f8d08f9d5dc9cf9c2e672d9d68cb512438a90486e5b6d7267a129dc"
+  },
+  "step": {
+   "file": "kuzushiji-v18-decoder-step-int8.onnx",
+   "sha256": "bf0e72a807168393acb7b6c0cb1b85b7d6107f2d6f4d6bb8fbb6736be2ac4bae"
+  },
+  "vocabulary": "cf0621e68b0997ea8a9815b156f55c5481084b3c7a8d763fd8753178e0a56f25"
+ },
+ "machine": {
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "cpu_count": 16,
+  "python": "3.12.7",
+  "package_version": "0.2.0",
+  "runtime_versions": {
+   "numpy": "2.5.2",
+   "pillow": "12.3.0",
+   "onnxruntime": "1.29.0",
+   "onnx": "1.22.0"
+  }
+ },
+ "metric": "Character error rate = Levenshtein distance / reference length, Unicode code points, Koji notation on both sides.",
+ "totals": {
+  "pages": 20,
+  "reference_characters": 10198,
+  "raw_errors": 2652,
+  "squeezed_reference_characters": 8394,
+  "squeezed_errors": 1359,
+  "bag_missed": 753,
+  "bag_extra": 664,
+  "reference_lines": 426,
+  "predicted_lines": 498,
+  "paired": 425,
+  "paired_reference_characters": 8393,
+  "paired_errors": 1199,
+  "seconds": 544.0139034950407,
+  "raw_cer": 0.26005099039027263,
+  "squeezed_cer": 0.16190135811293782,
+  "paired_cer": 0.14285714285714285,
+  "bag_missed_share": 0.08970693352394568,
+  "bag_extra_share": 0.07910412199189898
+ },
+ "pages": [
+  {
+   "id": "kamosha-E3172F3F-144",
+   "frame": 0,
+   "image_sha256": "e44b06d6451e579f1222a7123c2d0ae8a28b89f4b4f4dbe0386ac3c600b047c4",
+   "seconds": 48.03870985098183,
+   "warnings": [],
+   "predicted": [
+    "私云",
+    "宮の字",
+    "不審未",
+    "聞宮号",
+    "之沙汰先",
+    "格可尋",
+    "奉送",
+    "五色綾",
+    "五色絹",
+    "絲",
+    "麻",
+    "貴布祢大明神宮一社奉幣々帛之事",
+    "六疋",
+    "六疋",
+    "一斤",
+    "一斤",
+    "木綿",
+    "一斤",
+    "調布　　　　　　　　　一段",
+    "右所奉送如件",
+    "正徳三年二月廿六日　左官掌紀氏親",
+    "内蔵寮",
+    "奉送",
+    "五色薄絶",
+    "各六尺",
+    "糸",
+    "壹約",
+    "安芸木綿",
+    "大弐斤",
+    "麻",
+    "大弐斤",
+    "商布　褁料",
+    "右今日貴布祢奉幣料",
+    "如例所奉送如件",
+    "正徳三年二月廿六日　従六位上大石朝臣盛連",
+    "弐丈三尺"
+   ],
+   "reference": "　貴布祢大明神宮一社奉幣々帛之事聞宴\n　　　奉送\n　　五色綾　　　　　　六疋\n　　五色絹　　　　　　六疋\n　　絲　　　　　　　　一斤\n　　麻　　　　　　　　一斤\n　　木綿　　　　　　　一斤\n　　調布　　　　　　　一段\n　　　右所奉送如件\n　　正徳三年二月廿六日　左官掌紀氏親\n\n　内蔵寮\n　　　奉送\n　　五色薄絁　　　　　各六尺\n　　絲　　　　　　　　壱絇\n　　安芸木綿　　　　　大弐斤\n　　麻　　　　　　　　大弐斤\n　　商布　《割書：裹料》　　　　弐丈三尺\n　　　右今日貴布祢奉幣料　\n　　　如例所奉送如件\n　　　　正徳三年二月廿六日　従六位上大石朝臣盛連\n\n【１行目から４行目上部文字】\n私云\n宮ノ字\n不審未\n聞宮号\n之沙汰先\n格可尋",
+   "reference_characters": 319,
+   "raw_errors": 194,
+   "raw_cer": 0.6081504702194357,
+   "squeezed_reference_characters": 156,
+   "squeezed_errors": 72,
+   "squeezed_cer": 0.46153846153846156,
+   "bag": {
+    "missed": 13,
+    "extra": 6,
+    "missed_share": 0.08333333333333333,
+    "extra_share": 0.038461538461538464
+   },
+   "lines": {
+    "reference_lines": 26,
+    "predicted_lines": 36,
+    "paired": 26,
+    "missed": 0,
+    "extra": 10,
+    "paired_cer": 0.19230769230769232,
+    "paired_reference_characters": 156,
+    "paired_errors": 30,
+    "in_order_share": 0.84,
+    "pairs": [
+     {
+      "reference": 0,
+      "predicted": 11,
+      "distance": 0.118
+     },
+     {
+      "reference": 1,
+      "predicted": 6,
+      "distance": 0.0
+     },
+     {
+      "reference": 2,
+      "predicted": 7,
+      "distance": 0.4
+     },
+     {
+      "reference": 3,
+      "predicted": 8,
+      "distance": 0.4
+     },
+     {
+      "reference": 4,
+      "predicted": 14,
+      "distance": 0.333
+     },
+     {
+      "reference": 5,
+      "predicted": 15,
+      "distance": 0.333
+     },
+     {
+      "reference": 6,
+      "predicted": 16,
+      "distance": 0.5
+     },
+     {
+      "reference": 7,
+      "predicted": 18,
+      "distance": 0.0
+     },
+     {
+      "reference": 8,
+      "predicted": 19,
+      "distance": 0.0
+     },
+     {
+      "reference": 9,
+      "predicted": 20,
+      "distance": 0.0
+     },
+     {
+      "reference": 10,
+      "predicted": 21,
+      "distance": 0.0
+     },
+     {
+      "reference": 11,
+      "predicted": 22,
+      "distance": 0.0
+     },
+     {
+      "reference": 12,
+      "predicted": 23,
+      "distance": 0.571
+     },
+     {
+      "reference": 13,
+      "predicted": 9,
+      "distance": 0.667
+     },
+     {
+      "reference": 14,
+      "predicted": 27,
+      "distance": 0.429
+     },
+     {
+      "reference": 15,
+      "predicted": 28,
+      "distance": 0.25
+     },
+     {
+      "reference": 16,
+      "predicted": 35,
+      "distance": 0.692
+     },
+     {
+      "reference": 17,
+      "predicted": 32,
+      "distance": 0.0
+     },
+     {
+      "reference": 18,
+      "predicted": 33,
+      "distance": 0.0
+     },
+     {
+      "reference": 19,
+      "predicted": 34,
+      "distance": 0.0
+     },
+     {
+      "reference": 20,
+      "predicted": 0,
+      "distance": 0.0
+     },
+     {
+      "reference": 21,
+      "predicted": 1,
+      "distance": 0.333
+     },
+     {
+      "reference": 22,
+      "predicted": 2,
+      "distance": 0.0
+     },
+     {
+      "reference": 23,
+      "predicted": 3,
+      "distance": 0.0
+     },
+     {
+      "reference": 24,
+      "predicted": 4,
+      "distance": 0.0
+     },
+     {
+      "reference": 25,
+      "predicted": 5,
+      "distance": 0.0
+     }
+    ]
+   }
+  },
+  {
+   "id": "kamosha-C4906EB6-016",
+   "frame": 0,
+   "image_sha256": "9beef0af034e23b0d8faae9d7208e8d21b448cf08011407433b97a644e368861",
+   "seconds": 37.6233204100281,
+   "warnings": [],
+   "predicted": [
+    "上る殿上人は三里の通り後の角頭",
+    "八寸計口伝袖のひだ右より取口伝有",
+    "一石帯撥革を左に付へし",
+    "袍の後社縫目のとをりにさす",
+    "へし",
+    "一衛府太刀幷平緒付やう口伝太刀は",
+    "必前へつほむ物也其得肝要",
+    "一冠幷纓ためやう臣下の纓は巾子",
+    "より上へあからぬやうにためてよし",
+    "口伝",
+    "紙ゑりのかけ紐にて纓のくしにかけ",
+    "つのゝ上へとり左を上にして打",
+    "ちかへおとかゐにて両わなに結ふ",
+    "一筍又時により檜扇にてもまた",
+    "五世称名院",
+    "末廣も不苦候由五十乗称名院　実條公",
+    "被仰し多分笏也但笏を持候",
+    "時は檜扇は懐中すへし",
+    "一或練の足袋にても",
+    "○衣冠着用之事",
+    "一袍",
+    "一差ゆ衣冠着用之事",
+    "前袖のろた束帯同前後は袋を",
+    "外へ出し上のひたはこひもにして",
+    "内懐にてしむる同ろたの下へ成やうに",
+    "て着《割書：但新袍は袖のちたを束帯の》",
+    "ことくなしひたをとりて又みだ",
+    "きてよし",
+    "一冠",
+    "一袍　名所之事",
+    "大袖とは　奥の袖也",
+    "鰭（ハタ）袖とは　端の半 幅（ハバ）也",
+    "外の方にてと"
+   ],
+   "reference": " 　上る殿上人ハ三里の通り後の角頭\n　八寸斗口伝袖のひだ右より取口伝有\n一石帯撥革を左に付へし\n　袍の後の縫目のとをりにさす\n　へし\n一衛府太刀并平緒付やう口伝太刀ハ\n　必前へつほむ物也其心得肝要\n一冠并纓ためやう臣下の纓ハ巾子\n　より上へあからぬやうにためてよし\n　口伝\n　紙ゑりのかけ緒ニて纓のくしにかけ\n　つのゝ上へとり左を上にして打\n　ちかへおとかゐニて両わなに結ふ\n\n一笏又時により桧扇ニてもまた\n　末広も不苦候由《振り仮名：三条西｜五世称名院》実條公\n　被仰し多分笏也但笏を持候\n　時は桧扇は懐中すへし\n一韈或練の足袋ニても\n　〇衣冠着用之事\n一差貫膝のこむらの方ニて二重まはし外の方ニてとけさる様ニ結也【朱】\n一袍《割書：前袖のひた束帯同然後は袋を｜外へ出し上のひたハこひもにして｜内懐ニてしむる同ひたの下へ成やうニ｜可着《割書：但新袍ハ袖のひたを束帯の｜ことくなしひたをとりて又ミだ｜きてよし》》\n一冠\n一袍　名前之事\n　　大袖とハ　奥の袖也\n　　《振り仮名：鰭｜ハタ》袖とハ　端の半《振り仮名：幅｜ハバ　フク》也\n【「〇」は朱】",
+   "reference_characters": 473,
+   "raw_errors": 142,
+   "raw_cer": 0.30021141649048627,
+   "squeezed_reference_characters": 414,
+   "squeezed_errors": 114,
+   "squeezed_cer": 0.2753623188405797,
+   "bag": {
+    "missed": 90,
+    "extra": 44,
+    "missed_share": 0.21739130434782608,
+    "extra_share": 0.10628019323671498
+   },
+   "lines": {
+    "reference_lines": 25,
+    "predicted_lines": 33,
+    "paired": 25,
+    "missed": 0,
+    "extra": 8,
+    "paired_cer": 0.3743961352657005,
+    "paired_reference_characters": 414,
+    "paired_errors": 155,
+    "in_order_share": 0.9583333333333334,
+    "pairs": [
+     {
+      "reference": 0,
+      "predicted": 0,
+      "distance": 0.067
+     },
+     {
+      "reference": 1,
+      "predicted": 1,
+      "distance": 0.062
+     },
+     {
+      "reference": 2,
+      "predicted": 2,
+      "distance": 0.0
+     },
+     {
+      "reference": 3,
+      "predicted": 3,
+      "distance": 0.077
+     },
+     {
+      "reference": 4,
+      "predicted": 4,
+      "distance": 0.0
+     },
+     {
+      "reference": 5,
+      "predicted": 5,
+      "distance": 0.125
+     },
+     {
+      "reference": 6,
+      "predicted": 6,
+      "distance": 0.077
+     },
+     {
+      "reference": 7,
+      "predicted": 7,
+      "distance": 0.133
+     },
+     {
+      "reference": 8,
+      "predicted": 8,
+      "distance": 0.0
+     },
+     {
+      "reference": 9,
+      "predicted": 9,
+      "distance": 0.0
+     },
+     {
+      "reference": 10,
+      "predicted": 10,
+      "distance": 0.125
+     },
+     {
+      "reference": 11,
+      "predicted": 11,
+      "distance": 0.0
+     },
+     {
+      "reference": 12,
+      "predicted": 12,
+      "distance": 0.067
+     },
+     {
+      "reference": 13,
+      "predicted": 13,
+      "distance": 0.214
+     },
+     {
+      "reference": 14,
+      "predicted": 15,
+      "distance": 0.538
+     },
+     {
+      "reference": 15,
+      "predicted": 16,
+      "distance": 0.0
+     },
+     {
+      "reference": 16,
+      "predicted": 17,
+      "distance": 0.1
+     },
+     {
+      "reference": 17,
+      "predicted": 18,
+      "distance": 0.2
+     },
+     {
+      "reference": 18,
+      "predicted": 19,
+      "distance": 0.143
+     },
+     {
+      "reference": 19,
+      "predicted": 32,
+      "distance": 0.833
+     },
+     {
+      "reference": 20,
+      "predicted": 25,
+      "distance": 0.819
+     },
+     {
+      "reference": 21,
+      "predicted": 28,
+      "distance": 0.0
+     },
+     {
+      "reference": 22,
+      "predicted": 29,
+      "distance": 0.167
+     },
+     {
+      "reference": 23,
+      "predicted": 30,
+      "distance": 0.125
+     },
+     {
+      "reference": 24,
+      "predicted": 31,
+      "distance": 0.613
+     }
+    ]
+   }
+  },
+  {
+   "id": "kamosha-D09E2A0F-081",
+   "frame": 0,
+   "image_sha256": "5a360cc7ff319cb79653fd177242775180c4ece7559d81aa0897832808036990",
+   "seconds": 46.80060834100004,
+   "warnings": [],
+   "predicted": [
+    "自惣神子通小豆粥事",
+    "乗馬退散之事",
+    "夕飯之事",
+    "役之",
+    "一于祝方御戸《割書：于時｜八字》了還祝詞等之儀同前事了各退于神子屋",
+    "但撤幣儀",
+    "于時五人之内一人参進于大床《割書：而｜》撤幣五捧退下《割書：但｜依便義一頭》",
+    "《割書：人清弼｜役之》右奉幣之儀壱人充勤仕雖本儀帰路両官等同道之儀",
+    "故略儀如此云々　但帰路両官同道雖＿二本義＿一任＿二近例相断各令＿二早出＿一也",
+    "一神前之儀了退＿二于神子屋于時自惣神子＿一両官頭人等江通小豆",
+    "粥了各昼飯休息之後参ー詣于奥社其儀如常了《割書：但今年頭｜人中奥社》",
+    "参詣之儀は先刻相済且申合弁当は氏端社之鳥居之後如初乗馬",
+    "参詣之儀は先刻相済且申合弁当は本端社之鳥居之後如初乗馬",
+    "帰宅但今年依風雨帰路不＿レ取＿レ傘未刻過尤退散之時は於白石",
+    "帰郷経千は如初大乗寺へ帰自余は辻へ被備也",
+    "梅宮梶取等之社＿一不＿レ及＿二下馬＿一放＿レ鐙一揖退散之事",
+    "一今日為待請参籠中肝煎之輩并親族等夕飯に相招事",
+    "但今年頭",
+    "一上下惣人数《割書：家内｜共》凡四拾五人斗尤時分觸遣之献立如左",
+    "夕飯",
+    "糸湯波",
+    "焼物《割書：塩鰤｜》　　　汁　糸湯",
+    "岩茸",
+    "薄塩たら",
+    "煮物　薄塩多し",
+    "うす雪こんふ",
+    "青あへ",
+    "猪口赤貝　　　飯",
+    "香もの",
+    "五種",
+    "御酒",
+    "硯蓋蛸",
+    "ほうほふ塩焼　水豆腐　　組替",
+    "蛸　こう茸",
+    "巻玉子",
+    "吸物",
+    "薄味噌",
+    "鴨鴨",
+    "鴨",
+    "午房",
+    "鉢肴　鯛"
+   ],
+   "reference": "于祝方御戸《割書：于時｜八時》了還祝詞等之儀同前事了各退于神子屋\n于時五人之内一人参進于大床而撤幣五棒一退下《割書：但徹幣儀｜依便義一頭》\n《割書：人清弼｜役之》右奉幣之儀壱人充勤仕雖本儀帰路両官等同道之儀\n故畧儀如此云々《割書：但帰路両官同道雖本義任近例相断各令早出也｜》\n【朱：自惣神子通小豆粥事】\n一神前之儀了退于神子屋于時自惣神子両官頭人等え通小豆\n粥了各昼飯休息之後参詣于奥社其儀如常了《割書：但今年頭｜人中奥社》\n《割書：参詣之儀者先刻相済且申合弁當ハ｜不持参之間祝小豆粥之後直ニ退下了》出端社之鳥居之後如初乗馬\n【朱：乗馬退散之事】\n帰宅《割書：但今年依風雨帰路不取傘未刻過｜帰郷経千ハ如初大乗寺ヘ帰自余ハ辻ヘ被帰也》尤退散之時はお白石\n梅宮梶取等之社不及下馬放鐙一揖退散之事\n【朱：夕飯之事】\n一今日為待請参籠中肝煎之輩并親族等夕飯ニ相招事\n上下惣人数《割書：家内｜共》凡四拾五人斗尤時分觸遣之献立如左\n夕飯\n焼物塩鰤　汁《割書：糸湯は｜岩茸》\n煮物《割書：薄塩たし｜椎茸｜うす雪こんふ》\n猪口《割書：青あへ｜赤貝｜うと》　飯\n香もの\n卸酒\n硯蓋《割書：五種｜ほうほふ塩焼｜蛸｜巻玉子》　《割書：氷豆腐｜こう茸》　組替\n吸物《割書：薄味噌｜鴨｜午房》　鉢肴《割書：鯛｜素麺》",
+   "reference_characters": 545,
+   "raw_errors": 277,
+   "raw_cer": 0.5082568807339449,
+   "squeezed_reference_characters": 488,
+   "squeezed_errors": 220,
+   "squeezed_cer": 0.45081967213114754,
+   "bag": {
+    "missed": 85,
+    "extra": 102,
+    "missed_share": 0.17418032786885246,
+    "extra_share": 0.20901639344262296
+   },
+   "lines": {
+    "reference_lines": 19,
+    "predicted_lines": 41,
+    "paired": 19,
+    "missed": 0,
+    "extra": 22,
+    "paired_cer": 0.39139344262295084,
+    "paired_reference_characters": 488,
+    "paired_errors": 191,
+    "in_order_share": 1.0,
+    "pairs": [
+     {
+      "reference": 0,
+      "predicted": 4,
+      "distance": 0.061
+     },
+     {
+      "reference": 1,
+      "predicted": 6,
+      "distance": 0.289
+     },
+     {
+      "reference": 2,
+      "predicted": 7,
+      "distance": 0.0
+     },
+     {
+      "reference": 3,
+      "predicted": 8,
+      "distance": 0.432
+     },
+     {
+      "reference": 4,
+      "predicted": 9,
+      "distance": 0.167
+     },
+     {
+      "reference": 5,
+      "predicted": 10,
+      "distance": 0.029
+     },
+     {
+      "reference": 6,
+      "predicted": 11,
+      "distance": 0.531
+     },
+     {
+      "reference": 7,
+      "predicted": 13,
+      "distance": 0.608
+     },
+     {
+      "reference": 8,
+      "predicted": 15,
+      "distance": 0.345
+     },
+     {
+      "reference": 9,
+      "predicted": 16,
+      "distance": 0.043
+     },
+     {
+      "reference": 10,
+      "predicted": 18,
+      "distance": 0.032
+     },
+     {
+      "reference": 11,
+      "predicted": 19,
+      "distance": 0.0
+     },
+     {
+      "reference": 12,
+      "predicted": 21,
+      "distance": 0.625
+     },
+     {
+      "reference": 13,
+      "predicted": 25,
+      "distance": 0.714
+     },
+     {
+      "reference": 14,
+      "predicted": 27,
+      "distance": 0.706
+     },
+     {
+      "reference": 15,
+      "predicted": 28,
+      "distance": 0.0
+     },
+     {
+      "reference": 16,
+      "predicted": 30,
+      "distance": 0.5
+     },
+     {
+      "reference": 17,
+      "predicted": 32,
+      "distance": 0.722
+     },
+     {
+      "reference": 18,
+      "predicted": 36,
+      "distance": 0.885
+     }
+    ]
+   }
+  },
+  {
+   "id": "kamosha-1DB6FDAA-022",
+   "frame": 0,
+   "image_sha256": "e31a6f0a9ed5136f5c8e206d375bfb8b7a8e5c0f4e37ea1e44b67b02759efccd",
+   "seconds": 25.45918527606409,
+   "warnings": [],
+   "predicted": [
+    "上る也するかのかみはかちなれ共落馬ニテ",
+    "可け也",
+    "保教",
+    "勝負朱書ニテ双方落馬早く乗馬勝事",
+    "一本云二人ナカラ勝負木の内ニテ落馬也佐",
+    "渡守早馬乗勝也",
+    "天（〽[朱]）正十八年",
+    "左　紀伊守氏長",
+    "七番",
+    "右　造酒正季匡",
+    "氏長逆馬場ニテアトヨリ猶走負事",
+    "七番競馬紀伊守馬さかはゝに下へ引也又",
+    "造酒正季匡則打也しはらくありて後に",
+    "紀伊守はひとりかくる也負なれ共左へ上て",
+    "ろくをからんとす出さへてろくをかけ",
+    "す其時馬よりおりて里へ帰る近年の初",
+    "也馬鞍廿疋共に一段のけつこう近年",
+    "かやうの事無之関白殿東国御陣之",
+    "御留主に西国武士京中御留主衆しこ",
+    "う衆の御馬鞍也",
+    "文禄（〽[朱]）二年",
+    "九番左初民部丞老母遠行に付て女房",
+    "五日の朝成有故に末歟此部",
+    "衆キヤウフクノ衆乗尻替也五番右内蔵頭"
+   ],
+   "reference": "　　上ル也するかのかみハかちなれ共落馬ニテ\n　　マケ也\n《割書：勝負木ノ内ニテ双方落馬早ク◦（保数）乗馬勝事｜》【朱書】\n　《割書：朱書｜》\n　　一本云二人ナカラ勝負木ノ内ニテ落馬也佐\n　　渡守早馬乗勝也\n　天（〽[朱]）正十八年\n　　　　　　左　紀伊守氏長　負【負は朱書】\n　　　　七番\n　　　　　　右　造酒正季匡\n《割書：氏長逆馬場ニテアトヨリ狼走負事｜》【朱書】\n　　七番競馬紀伊守馬さかはゝに下へ引也又\n　　造酒正季匡則打也しはらくありて後に\n\n　　紀伊守ハひとりかくる也負なれ共左へ上て\n　　ろくをからんとすおさへてろくをかけ\n　　す其時馬よりおりて里へ帰る近年ノ初\n　　也馬鞍廿疋共ニ一段のけつこう近年\n　　かやうの事無之関白殿東国御陣之\n　　御留主ニ西国武士京中御留之衆しこ\n　　う衆の御馬鞍也\n　文（〽[朱]）禄二年\n　　九番左初民部丞老母遠行ニ付テ女房\n《割書：五日ノ朝俄有故障乗尻替事｜》【朱書】\n　　衆キヤウフクノ衆乗尻替也五番右内蔵頭",
+   "reference_characters": 429,
+   "raw_errors": 129,
+   "raw_cer": 0.3006993006993007,
+   "squeezed_reference_characters": 335,
+   "squeezed_errors": 59,
+   "squeezed_cer": 0.1761194029850746,
+   "bag": {
+    "missed": 54,
+    "extra": 23,
+    "missed_share": 0.16119402985074627,
+    "extra_share": 0.06865671641791045
+   },
+   "lines": {
+    "reference_lines": 24,
+    "predicted_lines": 24,
+    "paired": 24,
+    "missed": 0,
+    "extra": 0,
+    "paired_cer": 0.1761194029850746,
+    "paired_reference_characters": 335,
+    "paired_errors": 59,
+    "in_order_share": 0.9565217391304348,
+    "pairs": [
+     {
+      "reference": 0,
+      "predicted": 0,
+      "distance": 0.105
+     },
+     {
+      "reference": 1,
+      "predicted": 1,
+      "distance": 0.667
+     },
+     {
+      "reference": 2,
+      "predicted": 3,
+      "distance": 0.536
+     },
+     {
+      "reference": 3,
+      "predicted": 2,
+      "distance": 1.0
+     },
+     {
+      "reference": 4,
+      "predicted": 4,
+      "distance": 0.053
+     },
+     {
+      "reference": 5,
+      "predicted": 5,
+      "distance": 0.0
+     },
+     {
+      "reference": 6,
+      "predicted": 6,
+      "distance": 0.0
+     },
+     {
+      "reference": 7,
+      "predicted": 7,
+      "distance": 0.143
+     },
+     {
+      "reference": 8,
+      "predicted": 8,
+      "distance": 0.0
+     },
+     {
+      "reference": 9,
+      "predicted": 9,
+      "distance": 0.0
+     },
+     {
+      "reference": 10,
+      "predicted": 10,
+      "distance": 0.333
+     },
+     {
+      "reference": 11,
+      "predicted": 11,
+      "distance": 0.0
+     },
+     {
+      "reference": 12,
+      "predicted": 12,
+      "distance": 0.0
+     },
+     {
+      "reference": 13,
+      "predicted": 13,
+      "distance": 0.053
+     },
+     {
+      "reference": 14,
+      "predicted": 14,
+      "distance": 0.059
+     },
+     {
+      "reference": 15,
+      "predicted": 15,
+      "distance": 0.059
+     },
+     {
+      "reference": 16,
+      "predicted": 16,
+      "distance": 0.062
+     },
+     {
+      "reference": 17,
+      "predicted": 17,
+      "distance": 0.0
+     },
+     {
+      "reference": 18,
+      "predicted": 18,
+      "distance": 0.125
+     },
+     {
+      "reference": 19,
+      "predicted": 19,
+      "distance": 0.0
+     },
+     {
+      "reference": 20,
+      "predicted": 20,
+      "distance": 0.2
+     },
+     {
+      "reference": 21,
+      "predicted": 21,
+      "distance": 0.125
+     },
+     {
+      "reference": 22,
+      "predicted": 22,
+      "distance": 0.722
+     },
+     {
+      "reference": 23,
+      "predicted": 23,
+      "distance": 0.0
+     }
+    ]
+   }
+  },
+  {
+   "id": "zisin-1B4A9AF6-034",
+   "frame": 0,
+   "image_sha256": "3214dbd8478eff94773434a3ff7974b3826556a649c3aa22ee76cd67e23d6c18",
+   "seconds": 20.788108424982056,
+   "warnings": [],
+   "predicted": [
+    "同し調子なるは此も悪所と覚ゆ愛宕には知れる坊あり",
+    "是に誘ひゆけといふいさとて又登り〳〵て其坊に着く",
+    "坊主出て何とてかく早〳〵と登山しけるよし申せしかは",
+    "しか〳〵の事有と答ふこゝはいかにと問こゝも猶あからす",
+    "少しにても高き所へ参りたしと云其所に護摩堂あり此に",
+    "行れとありしかは此堂に入て大によろこひ扨々安堵に住",
+    "せり調子初て直りしとて唯いつまても此に居たき由申",
+    "せしか頓て地震ゆり出し夥しき事いふはかりなし《割書：世間｜に云》",
+    "寅年大",
+    "依（本大）何とかしたりけむ彼護摩堂は架作（タナツクリ）にて頓て深谷へ",
+    "地震",
+    "崩れ落て破損し四方市も空しくなる六十余斗りにて",
+    "も有へきか此一生の終りをして人の吉凶さへ婦きほと",
+    "に知るものゝ己か終る所をしらすさるのみ非す死場にて",
+    "安堵しける事こそ不審なれ吉の極る所は凶凶の極る所",
+    "は吉なれは成へし毎度無禅か物語なりと仰らる愚按に",
+    "四方市の占考著き事賞するに余り有既に天地の変異",
+    "を知りて愛宕山にのかれしとうへなるかな此山に至りて",
+    "調子直りしに其変もあんなれ共是は陰極りて陽に変",
+    "し陽極りて陰を生す楽極りて哀生すといふに同しか",
+    "らむ其頃は京師一般の大変故震気充満して歩むに道",
+    "なく逃るに所なしと云時なれは四方市も身体茲に極る"
+   ],
+   "reference": "同し調子なるは此も悪所と覚ゆ愛宕には知れる坊あり\n是に誘ひゆけといふいさとて又登り〳〵て其坊に着く\n坊主出て何とてかく早〳〵とは登山しけるよし申せしかは\nしか〳〵の事有と答ふこゝはいかにと問こゝも猶安からす\n少しにても高き所へ参りたしと言其所に護摩堂あり此に\n行れとありしかは此堂に入て大によろこひ扨々安堵に住\nせり調子初て直りしとて唯いつまても此に居たき由申\nせしか頓て地震ゆり出し夥しき事いふはかりなし《割書：世間｜に云》\n《割書：寅年大｜地震》何とかしたりけむ彼護摩堂は架作（タナツクリ）にて頓て深谷へ\n崩れ落て破損し四方市も空しくなる六十余計りにて\nも有へきか此一生の終りをして人の吉凶さへ姦きほと\nに知るものゝ己か終る所をしらさるのみ非す死場にて\n安堵しける事こそ不審なれ吉の極る所は凶凶の極る所\nは吉なれは成へし毎度無禅か物語なりと仰らる愚按に\n四方市の占考著き事賞するに余り有既に天地の変異\nを知りて愛宕山にのかれしとうへなるかな此山に至りて\n調子直りしに其変もあんなれ共是は陰極りて陽に変\nし陽極りて陰を生す楽極りて哀生すといふに同しか\nらむ其頃は京師一般の大変故震気充満して歩むに道\nなく逃るに所なしと言時なれは四方市も身体茲に極る",
+   "reference_characters": 525,
+   "raw_errors": 20,
+   "raw_cer": 0.0380952380952381,
+   "squeezed_reference_characters": 506,
+   "squeezed_errors": 18,
+   "squeezed_cer": 0.03557312252964427,
+   "bag": {
+    "missed": 12,
+    "extra": 11,
+    "missed_share": 0.023715415019762844,
+    "extra_share": 0.021739130434782608
+   },
+   "lines": {
+    "reference_lines": 20,
+    "predicted_lines": 22,
+    "paired": 20,
+    "missed": 0,
+    "extra": 2,
+    "paired_cer": 0.03359683794466403,
+    "paired_reference_characters": 506,
+    "paired_errors": 17,
+    "in_order_share": 1.0,
+    "pairs": [
+     {
+      "reference": 0,
+      "predicted": 0,
+      "distance": 0.0
+     },
+     {
+      "reference": 1,
+      "predicted": 1,
+      "distance": 0.0
+     },
+     {
+      "reference": 2,
+      "predicted": 2,
+      "distance": 0.038
+     },
+     {
+      "reference": 3,
+      "predicted": 3,
+      "distance": 0.038
+     },
+     {
+      "reference": 4,
+      "predicted": 4,
+      "distance": 0.04
+     },
+     {
+      "reference": 5,
+      "predicted": 5,
+      "distance": 0.0
+     },
+     {
+      "reference": 6,
+      "predicted": 6,
+      "distance": 0.0
+     },
+     {
+      "reference": 7,
+      "predicted": 7,
+      "distance": 0.0
+     },
+     {
+      "reference": 8,
+      "predicted": 9,
+      "distance": 0.25
+     },
+     {
+      "reference": 9,
+      "predicted": 11,
+      "distance": 0.043
+     },
+     {
+      "reference": 10,
+      "predicted": 12,
+      "distance": 0.042
+     },
+     {
+      "reference": 11,
+      "predicted": 13,
+      "distance": 0.04
+     },
+     {
+      "reference": 12,
+      "predicted": 14,
+      "distance": 0.0
+     },
+     {
+      "reference": 13,
+      "predicted": 15,
+      "distance": 0.0
+     },
+     {
+      "reference": 14,
+      "predicted": 16,
+      "distance": 0.0
+     },
+     {
+      "reference": 15,
+      "predicted": 17,
+      "distance": 0.0
+     },
+     {
+      "reference": 16,
+      "predicted": 18,
+      "distance": 0.0
+     },
+     {
+      "reference": 17,
+      "predicted": 19,
+      "distance": 0.0
+     },
+     {
+      "reference": 18,
+      "predicted": 20,
+      "distance": 0.0
+     },
+     {
+      "reference": 19,
+      "predicted": 21,
+      "distance": 0.042
+     }
+    ]
+   }
+  },
+  {
+   "id": "zisin-5128812C-001",
+   "frame": 0,
+   "image_sha256": "36fe9e71ea78160ef0bb5815afc2a7f2b72d09ea6df9bfda2a64c786c018c976",
+   "seconds": 16.533067791024223,
+   "warnings": [],
+   "predicted": [
+    "地震（ぢしん）けん",
+    "「扨もこんどの大ぢしん家（いへ）はぐはら〳〵",
+    "大へんな人はあはてゝどつちの方へ",
+    "参（まい）りましよ《割書：合》土蔵（どぞう）と尾（かわら）でつぶされ",
+    "て親父（おやぢ）に子供（こども）がしかられてやつとはい",
+    "〳〵にけ出してこつちの方へサアきなせへ",
+    "「火事（くわじ）は所々（しよ〳〵）へもゑあがりにげる人こそ身",
+    "ひよこ〳〵またぐら〳〵どつちの方へ参（まい）り",
+    "ましよ《割書：合》やつたらむしやうとかけあるき",
+    "ぢ様（さま）がば様の手を引（ひい）てはいる内こそ",
+    "あらばこそお舟（ふね）へサアきなせへ",
+    "〽扨もふり出す大雨（おゝあめ）にらいはごろ",
+    "〳〵いなびかりみなびしよぬれ",
+    "野宿（のじゆく）はできません《割書：合》大へん〳〵",
+    "大さはぎ大工さんは手間（ま）を上（あげ）てしから",
+    "れたこれから段々世（だん〳〵よ）が直（なを）り金設（かねまふけ）てサアきなせへ",
+    "花園齋齋　附＿二ー時ー心ーの〇ー〇ー〇ー〇ー〇ー"
+   ],
+   "reference": "地震（ぢしん）けん\n「扨（さて）もこんどの大ぢしん家（いへ）はぐはら〳〵\n　大へんな人はあはてゝどつちの方へ\n　 参（まい）りましよ　合　 土蔵（どぞう）と瓦（かわら）でつぶされ\n　て親父（おやぢ）に子供（こども）がしかられてやつとはい\n　〳〵にけ出してこつちの方へサアきなせへ\n「火事（くわじ）は所々（しよ〳〵）へもゑあがりにげる人こそ身\n　ひよこ〳〵またぐら〳〵どつちの方へ参（まい）り\n　ましよ　合　やつたらむしやうとかけあるき\n　ぢ様（さま）がば様の手を引（ひい）てはいる内こそ\n　あらばこそお舟（ふね）へサアきなせへ\n「扨もふり出す大雨（おおあめ）にらいはごろ\n　〳〵いなびかりみなびしよぬれ\n　 野宿（のしゆく）はできません　合　大へん〳〵\n　大さはぎ大工さんは手間（ま）を上（あげ）てしから\n　れたこれから段々（だん〳〵）世（よ）が直（なを）り金（かね）設（まふけ）てサアきなせへ",
+   "reference_characters": 397,
+   "raw_errors": 71,
+   "raw_cer": 0.17884130982367757,
+   "squeezed_reference_characters": 361,
+   "squeezed_errors": 54,
+   "squeezed_cer": 0.14958448753462603,
+   "bag": {
+    "missed": 12,
+    "extra": 42,
+    "missed_share": 0.0332409972299169,
+    "extra_share": 0.11634349030470914
+   },
+   "lines": {
+    "reference_lines": 16,
+    "predicted_lines": 17,
+    "paired": 16,
+    "missed": 0,
+    "extra": 1,
+    "paired_cer": 0.08587257617728532,
+    "paired_reference_characters": 361,
+    "paired_errors": 31,
+    "in_order_share": 1.0,
+    "pairs": [
+     {
+      "reference": 0,
+      "predicted": 0,
+      "distance": 0.0
+     },
+     {
+      "reference": 1,
+      "predicted": 1,
+      "distance": 0.154
+     },
+     {
+      "reference": 2,
+      "predicted": 2,
+      "distance": 0.0
+     },
+     {
+      "reference": 3,
+      "predicted": 3,
+      "distance": 0.176
+     },
+     {
+      "reference": 4,
+      "predicted": 4,
+      "distance": 0.0
+     },
+     {
+      "reference": 5,
+      "predicted": 5,
+      "distance": 0.0
+     },
+     {
+      "reference": 6,
+      "predicted": 6,
+      "distance": 0.0
+     },
+     {
+      "reference": 7,
+      "predicted": 7,
+      "distance": 0.0
+     },
+     {
+      "reference": 8,
+      "predicted": 8,
+      "distance": 0.217
+     },
+     {
+      "reference": 9,
+      "predicted": 9,
+      "distance": 0.0
+     },
+     {
+      "reference": 10,
+      "predicted": 10,
+      "distance": 0.0
+     },
+     {
+      "reference": 11,
+      "predicted": 11,
+      "distance": 0.095
+     },
+     {
+      "reference": 12,
+      "predicted": 12,
+      "distance": 0.0
+     },
+     {
+      "reference": 13,
+      "predicted": 13,
+      "distance": 0.24
+     },
+     {
+      "reference": 14,
+      "predicted": 14,
+      "distance": 0.0
+     },
+     {
+      "reference": 15,
+      "predicted": 15,
+      "distance": 0.186
+     }
+    ]
+   }
+  },
+  {
+   "id": "zisin-A1E1992E-012",
+   "frame": 0,
+   "image_sha256": "6f797e514f85e9db6f74a94ece48749d06d4553bd4a9d3458a3dfb22f4a4f161",
+   "seconds": 33.80595816008281,
+   "warnings": [],
+   "predicted": [
+    "植木鉢を損ふ事あまたなりし",
+    "○駒込片町養昌寺其余二箇寺程潰たり",
+    "○根津権現の後より千駄木へ通ふ崖道の内団子坂へ近き所道幅",
+    "七分通り谷へ崩れ墜往来纔に四五尺計に成る同所花園紫泉亭《割書：宇》",
+    "《割書：平次》の庭中崖に造りし茶亭平家の方者谷へ頽れ落三階の家は",
+    "却て崩るゝ事なし",
+    "怪我人たし即死少",
+    "同所坂下町惣潰怪我人たし即死",
+    "妙林寺大破に及ふ",
+    "駒込光源寺大観音堂元より大破に及たりしゟ倒れす壁土落",
+    "たるのみなり",
+    "山の中に",
+    "一同寺の向側に太田摂津守殿下屋敷の内に《割書：小｜左》",
+    "在る由",
+    "在りし九尺",
+    "し合薬厥外飛散て一物もなし《割書：且｜》",
+    "に壱丈の硝硝蔵二戸いかにしてか破壊に及ひ梁桁柱礎石中に収",
+    "是は石と石すれあひて火を",
+    "生しやけたるかと云々",
+    "根津権",
+    "一現社無別条惣門町の中に在るもの瓦のみ落て恙なし",
+    "三崎法注寺",
+    "随院と",
+    "境内弁才天社のみ潰れたり",
+    "新幡",
+    "いふ",
+    "一本堂無事玄関庫裡等傾く表門番所潰れて五人死す",
+    "世俗",
+    "同所大円寺元瘡寺稲荷社拝殿のみ潰る同所大聖院聖天宮",
+    "拝殿のみ潰る吉祥院小破谷中の町屋古けれと大方小破なり",
+    "谷中天王寺の沙門堂無事五層の塔婆九輪計り折れて大地へ",
+    "落たり",
+    "○根津より下谷茅町の通り殊に震動甚く人家潰れたる事軒",
+    "毎に洩るものなし厥上七軒町より出火して松平備後守殿下屋"
+   ],
+   "reference": "　植木鉢を損ふ事あまたなりし\n〇駒込片町養昌寺其余二箇寺程潰たり\n〇根津権現の後より千駄木へ通ふ崖道の内団子坂へ近き所道幅\n　七分通り谷へ崩れ墜往来纔に四五尺計に成る同所花園紫泉亭《割書：宇｜》\n　《割書：｜平次》の庭中崖に造りし茶亭平家の方は谷へ頽れ落三階の家は\n　却て崩るゝ事なし\n　同所坂下町惣潰《割書：怪我人多し即死｜五人計といふ》妙林寺大破に及ふ\n　駒込光源寺大観音臺元より大破に及たりしか倒れす壁土落\n　たるのみなり\n　同寺の向側に太田摂津守殿下屋敷の内に《割書：山の中に｜在る由》在りし九尺\n\n　に壱丈の焔硝蔵二戸いかにしてか破壊に及ひ梁桁柱礎石中に収\n　し合薬家厥外飛散て一物もなし《割書：是ハ石と石すれあひて火を｜生しやけたるかと云云》根津権\n　現社無別条《割書：惣門町の中に在るもの瓦のみ落て恙なし｜境内弁才天社のみ潰れたり》三崎法住寺《割書：世俗｜新幡》\n《割書：随院と｜いふ》本堂無事玄関庫裏等傾く表門番所潰れて五人死す\n　同所大圓寺元瘡寺稲荷社拝殿のみ潰る同所大聖院聖天宮\n　拝殿のみ潰る吉祥院小破谷中の町家古けれと大方小破なり\n　谷中天王寺毘沙門堂無事五層の塔婆九輪計り折れて大地へ\n　落たり\n〇根津より下谷茅町の通り殊に震動甚く人家潰れたる事軒\n　毎に洩るものなし厥上七軒町より出火して松平備後守殿下屋",
+   "reference_characters": 566,
+   "raw_errors": 144,
+   "raw_cer": 0.254416961130742,
+   "squeezed_reference_characters": 530,
+   "squeezed_errors": 125,
+   "squeezed_cer": 0.2358490566037736,
+   "bag": {
+    "missed": 46,
+    "extra": 27,
+    "missed_share": 0.08679245283018867,
+    "extra_share": 0.0509433962264151
+   },
+   "lines": {
+    "reference_lines": 20,
+    "predicted_lines": 34,
+    "paired": 20,
+    "missed": 0,
+    "extra": 14,
+    "paired_cer": 0.22264150943396227,
+    "paired_reference_characters": 530,
+    "paired_errors": 118,
+    "in_order_share": 0.9473684210526315,
+    "pairs": [
+     {
+      "reference": 0,
+      "predicted": 0,
+      "distance": 0.0
+     },
+     {
+      "reference": 1,
+      "predicted": 1,
+      "distance": 0.059
+     },
+     {
+      "reference": 2,
+      "predicted": 2,
+      "distance": 0.036
+     },
+     {
+      "reference": 3,
+      "predicted": 3,
+      "distance": 0.029
+     },
+     {
+      "reference": 4,
+      "predicted": 4,
+      "distance": 0.061
+     },
+     {
+      "reference": 5,
+      "predicted": 5,
+      "distance": 0.0
+     },
+     {
+      "reference": 6,
+      "predicted": 7,
+      "distance": 0.618
+     },
+     {
+      "reference": 7,
+      "predicted": 9,
+      "distance": 0.077
+     },
+     {
+      "reference": 8,
+      "predicted": 10,
+      "distance": 0.0
+     },
+     {
+      "reference": 9,
+      "predicted": 12,
+      "distance": 0.361
+     },
+     {
+      "reference": 10,
+      "predicted": 16,
+      "distance": 0.036
+     },
+     {
+      "reference": 11,
+      "predicted": 15,
+      "distance": 0.578
+     },
+     {
+      "reference": 12,
+      "predicted": 20,
+      "distance": 0.607
+     },
+     {
+      "reference": 13,
+      "predicted": 26,
+      "distance": 0.364
+     },
+     {
+      "reference": 14,
+      "predicted": 28,
+      "distance": 0.04
+     },
+     {
+      "reference": 15,
+      "predicted": 29,
+      "distance": 0.038
+     },
+     {
+      "reference": 16,
+      "predicted": 30,
+      "distance": 0.038
+     },
+     {
+      "reference": 17,
+      "predicted": 31,
+      "distance": 0.0
+     },
+     {
+      "reference": 18,
+      "predicted": 32,
+      "distance": 0.038
+     },
+     {
+      "reference": 19,
+      "predicted": 33,
+      "distance": 0.0
+     }
+    ]
+   }
+  },
+  {
+   "id": "kusazoushi-63B24B9C-004",
+   "frame": 0,
+   "image_sha256": "3e812de6f0ab9ef5a7baa94f2574304371e80403a812e13b2fe0deb50b1303b1",
+   "seconds": 25.25123093894217,
+   "warnings": [],
+   "predicted": [
+    "さてももろこしの",
+    "大わうつうじんを",
+    "よびたきとのねがひ",
+    "にて大つうじん千",
+    "人はかりらいとう",
+    "するらうにやく",
+    "なんによのとう人",
+    "どもさじきをうけ",
+    "つら人をみにでる人",
+    "おびたゝしとふせいを",
+    "たかさまよしてせい",
+    "とうといふのぼりを",
+    "あれみなを",
+    "てびくちのよう",
+    "にいつしいる",
+    "する",
+    "",
+    "周廻い",
+    "世當",
+    "かとしに",
+    "なるがいう",
+    "しんははじ",
+    "あてじや",
+    "大つうじんぎやう",
+    "れつのしだい",
+    ""
+   ],
+   "reference": "さてももろこしの\n大わうつうじんを\nよびたきとのねがひ\nにて大つうじん千\n人はかりらいとう\nするらうにやく\nなんによのとう人\nどもさじきをかけ\nつう人をみにでる人\nおびたゝしとふせいを\nさかさまにしてせい\nとうといふのぼりを\nもつ\n\n【台詞、かすれている】\nあれ□な□□を【あれみなかみを】\n□び□□のよふ【とびくちのよふ】\nにいつてらつ【にいつてらつ】\nさる【さる】\n\n此としに\nなるがつう\nしんははじ\nめてじや\n\n大つうじんぎやう\nれつのしだい\n　　　　　〳〵\n\n【通人たちが持っている幟】\n世当",
+   "reference_characters": 250,
+   "raw_errors": 88,
+   "raw_cer": 0.352,
+   "squeezed_reference_characters": 161,
+   "squeezed_errors": 29,
+   "squeezed_cer": 0.18012422360248448,
+   "bag": {
+    "missed": 19,
+    "extra": 16,
+    "missed_share": 0.11801242236024845,
+    "extra_share": 0.09937888198757763
+   },
+   "lines": {
+    "reference_lines": 25,
+    "predicted_lines": 26,
+    "paired": 25,
+    "missed": 0,
+    "extra": 1,
+    "paired_cer": 0.14906832298136646,
+    "paired_reference_characters": 161,
+    "paired_errors": 24,
+    "in_order_share": 0.9166666666666666,
+    "pairs": [
+     {
+      "reference": 0,
+      "predicted": 0,
+      "distance": 0.0
+     },
+     {
+      "reference": 1,
+      "predicted": 1,
+      "distance": 0.0
+     },
+     {
+      "reference": 2,
+      "predicted": 2,
+      "distance": 0.0
+     },
+     {
+      "reference": 3,
+      "predicted": 3,
+      "distance": 0.0
+     },
+     {
+      "reference": 4,
+      "predicted": 4,
+      "distance": 0.0
+     },
+     {
+      "reference": 5,
+      "predicted": 5,
+      "distance": 0.0
+     },
+     {
+      "reference": 6,
+      "predicted": 6,
+      "distance": 0.0
+     },
+     {
+      "reference": 7,
+      "predicted": 7,
+      "distance": 0.125
+     },
+     {
+      "reference": 8,
+      "predicted": 8,
+      "distance": 0.111
+     },
+     {
+      "reference": 9,
+      "predicted": 9,
+      "distance": 0.0
+     },
+     {
+      "reference": 10,
+      "predicted": 10,
+      "distance": 0.222
+     },
+     {
+      "reference": 11,
+      "predicted": 11,
+      "distance": 0.0
+     },
+     {
+      "reference": 12,
+      "predicted": 16,
+      "distance": 1.0
+     },
+     {
+      "reference": 13,
+      "predicted": 12,
+      "distance": 0.429
+     },
+     {
+      "reference": 14,
+      "predicted": 13,
+      "distance": 0.571
+     },
+     {
+      "reference": 15,
+      "predicted": 14,
+      "distance": 0.5
+     },
+     {
+      "reference": 16,
+      "predicted": 15,
+      "distance": 0.5
+     },
+     {
+      "reference": 17,
+      "predicted": 19,
+      "distance": 0.25
+     },
+     {
+      "reference": 18,
+      "predicted": 20,
+      "distance": 0.2
+     },
+     {
+      "reference": 19,
+      "predicted": 21,
+      "distance": 0.0
+     },
+     {
+      "reference": 20,
+      "predicted": 22,
+      "distance": 0.25
+     },
+     {
+      "reference": 21,
+      "predicted": 23,
+      "distance": 0.0
+     },
+     {
+      "reference": 22,
+      "predicted": 24,
+      "distance": 0.0
+     },
+     {
+      "reference": 23,
+      "predicted": 17,
+      "distance": 1.0
+     },
+     {
+      "reference": 24,
+      "predicted": 18,
+      "distance": 0.5
+     }
+    ]
+   }
+  },
+  {
+   "id": "kusazoushi-B5A8C444-003",
+   "frame": 0,
+   "image_sha256": "2a03c535c400751a7d76933d2cbd0fa526d93998c9d55f0589b1ea379e1afe14",
+   "seconds": 20.683358405018225,
+   "warnings": [],
+   "predicted": [
+    "十二月十一日",
+    "比はもゝくり",
+    "三ねんかきの",
+    "八月の事なりとよ",
+    "さるはかきのたねを",
+    "ひろいけりこれは",
+    "ずいふんありそふな",
+    "ものなれどもかにが",
+    "ひろいしやきめしは",
+    "つまらぬものしかし",
+    "くしべんとうからでも",
+    "おとしたものかしらず",
+    "そのやきめしを",
+    "かきのたねととりかへ",
+    "ひろうくらいのこんじやうで",
+    "かきのたねととりくるも",
+    "おかししたゞし",
+    "やきめしがすへたかも",
+    "しらずあんずるに",
+    "さるがどうでも",
+    "はなつぽろと",
+    "見へけり"
+   ],
+   "reference": "比はもゝくり\n三ねんかきの\n八月の事なりとよ\nさるはかきのたねを\nひろいけりこれは\nずいぶんありそふな\nものなれどもかにが\nひろいしやきめしは\nつまらぬものしかし\nこしべんとうからでも\nおとしたものかしらず\nそのやきめしを\nかきのたねととりかへ\nひろうくらいのこんじやうで\n \nかきのたねととりかへるも\nおかししたゞし\nやきめしがすへたかも\nしらずあんずるに\nさるがどうでも\nはなつぽろと\n見へけり\n【二重丸印：ＩＭＰＥＲＩＡＬ ＬＩＢＲＡＲＹ／帝国図書館】\n【二重丸印：図／明治三七・五・三〇・購求】",
+   "reference_characters": 251,
+   "raw_errors": 65,
+   "raw_cer": 0.2589641434262948,
+   "squeezed_reference_characters": 177,
+   "squeezed_errors": 10,
+   "squeezed_cer": 0.05649717514124294,
+   "bag": {
+    "missed": 4,
+    "extra": 9,
+    "missed_share": 0.022598870056497175,
+    "extra_share": 0.05084745762711865
+   },
+   "lines": {
+    "reference_lines": 21,
+    "predicted_lines": 22,
+    "paired": 21,
+    "missed": 0,
+    "extra": 1,
+    "paired_cer": 0.022598870056497175,
+    "paired_reference_characters": 177,
+    "paired_errors": 4,
+    "in_order_share": 1.0,
+    "pairs": [
+     {
+      "reference": 0,
+      "predicted": 1,
+      "distance": 0.0
+     },
+     {
+      "reference": 1,
+      "predicted": 2,
+      "distance": 0.0
+     },
+     {
+      "reference": 2,
+      "predicted": 3,
+      "distance": 0.0
+     },
+     {
+      "reference": 3,
+      "predicted": 4,
+      "distance": 0.0
+     },
+     {
+      "reference": 4,
+      "predicted": 5,
+      "distance": 0.0
+     },
+     {
+      "reference": 5,
+      "predicted": 6,
+      "distance": 0.111
+     },
+     {
+      "reference": 6,
+      "predicted": 7,
+      "distance": 0.0
+     },
+     {
+      "reference": 7,
+      "predicted": 8,
+      "distance": 0.0
+     },
+     {
+      "reference": 8,
+      "predicted": 9,
+      "distance": 0.0
+     },
+     {
+      "reference": 9,
+      "predicted": 10,
+      "distance": 0.1
+     },
+     {
+      "reference": 10,
+      "predicted": 11,
+      "distance": 0.0
+     },
+     {
+      "reference": 11,
+      "predicted": 12,
+      "distance": 0.0
+     },
+     {
+      "reference": 12,
+      "predicted": 13,
+      "distance": 0.0
+     },
+     {
+      "reference": 13,
+      "predicted": 14,
+      "distance": 0.0
+     },
+     {
+      "reference": 14,
+      "predicted": 15,
+      "distance": 0.167
+     },
+     {
+      "reference": 15,
+      "predicted": 16,
+      "distance": 0.0
+     },
+     {
+      "reference": 16,
+      "predicted": 17,
+      "distance": 0.0
+     },
+     {
+      "reference": 17,
+      "predicted": 18,
+      "distance": 0.0
+     },
+     {
+      "reference": 18,
+      "predicted": 19,
+      "distance": 0.0
+     },
+     {
+      "reference": 19,
+      "predicted": 20,
+      "distance": 0.0
+     },
+     {
+      "reference": 20,
+      "predicted": 21,
+      "distance": 0.0
+     }
+    ]
+   }
+  },
+  {
+   "id": "kusazoushi-5FB68B99-035",
+   "frame": 0,
+   "image_sha256": "762a83a86a39ce4490e30b16d535bcd0adbdfbcc814c5475f867bd86c19abc28",
+   "seconds": 21.987329827970825,
+   "warnings": [],
+   "predicted": [
+    "年毎にこれを取納し大友家の老中より",
+    "年貢運送（ねんくうんさう）の船奉行を相そへ年毎に指登す",
+    "ある年吉岡宗観入道の良等に佐藤弾正左衛門",
+    "といふもの船奉行として十六たんのふねに",
+    "年貢をつみ海上を登（のぼ）りけるに舩中にて不思",
+    "儀（き）あり四国路につきけるに讃州塩分浦（さんしうしわくのうら）にて",
+    "塩浦七浦の海賊（かいどく）ども此船を奪ひ取らんと斗￣リ",
+    "賊舩多く相催（あいもほ）し佐藤が舩を取かこみ失を",
+    "射ること雨（めめ）のふるごとし佐藤は元来強",
+    "弓の達者なれは指つめ引つめさん〳〵に射",
+    "たつる船おもてにすゝみたるもの七八人 即時（そくじ）に",
+    "射倒（いたを）さるされ共 海賊（かいそく）とも多勢（たせい）なれはこととも",
+    "せす前後左右（せんごさゆう）に熊手（くまで）を打かけ〳〵既（すて）にあや",
+    "ふく見へけれは佐藤か手のもの果皆弓（あぐみはてみなゆみ）を",
+    "打／捨太刀（すてたち）かたなをもつて切払（きりはら）へとも多勢な",
+    "れはふせきかね既（すで）に乗（のり）取らるべくと見へける",
+    "処に今迄船中に有共覚ず大の法師顔魂（ほうしつゝたにし）",
+    "たゞものとも覚へずおそろしき姿（すがた）にて士卒（しそつ）",
+    "を押（おし）のけたゞ一人すゝみ出十六／端（たん）の帆柱（ほはしら）を",
+    "ひつさげ手早（てはや）く振（ふり）まはし海賊が持（もち）し熊"
+   ],
+   "reference": "年毎にこれを取納し大友家の老中より\n年貢（ねんく）運送（うんさう）の船奉行を相そへ年毎に指登す\nある年吉岡宗観入道の良等に佐藤弾正左衛門\nといふもの船奉行として十六たんのふねに\n年貢をつみ海上を登（のぼ）りけるに船中にて不 思（し）\n儀（き）あり四国路につきけるに讃州（さんしう）塩分浦（しわくのうら）にて\n塩浦七浦の海賊（かいぞく）ども此船を奪ひ取らんと斗￣リ\n賊船多く相催（あいもほ）し佐藤が船を取かこみ矢を\n射ること雨（あめ）のふるごとし佐藤は元来強\n弓の達者なれは指つめ引つめさん〳〵に射\n\nたつる船おもてにすゝみたるもの七八人 即時（そくじ）に\n射（い）倒（たを）さるされ共 海賊（かいそく）とも多勢（たせい）なれはこととも\nせす前後左右（せんごさゆう）に熊手（くまで）を打かけ〳〵既（すて）にあや\nふく見へけれは佐藤か手のもの僫果（あぐみはて）【注】皆（みな）弓（ゆみ）を\n打 捨（すて）太刀（たち）かたなをもつて切払（きりはら）へとも多勢な\nれはふせきかね既（すで）に乗（のり）取らるべくと見へける\n処に今迄船中に有共覚ず大の法師（ほうし）顔魂（つらたまし）【「い」が欠損？】\nたゞものとも覚へずおそろしき姿（すがた）にて士卒（しそつ）\nを押（おし）のけたゞ一人すゝみ出十六 端（たん）の帆柱（ほはしら）を\nひつさげ手早（てはや）く振（ふり）まはし海賊が持（もち）し熊\n\n【注：僫＝人偏＋悪。悪の異体字。倦（あぐむ）の当て字か書き間違いだと思い、人偏は残すことにしました】",
+   "reference_characters": 643,
+   "raw_errors": 118,
+   "raw_cer": 0.18351477449455678,
+   "squeezed_reference_characters": 554,
+   "squeezed_errors": 52,
+   "squeezed_cer": 0.09386281588447654,
+   "bag": {
+    "missed": 26,
+    "extra": 10,
+    "missed_share": 0.04693140794223827,
+    "extra_share": 0.018050541516245487
+   },
+   "lines": {
+    "reference_lines": 20,
+    "predicted_lines": 20,
+    "paired": 20,
+    "missed": 0,
+    "extra": 0,
+    "paired_cer": 0.09386281588447654,
+    "paired_reference_characters": 554,
+    "paired_errors": 52,
+    "in_order_share": 1.0,
+    "pairs": [
+     {
+      "reference": 0,
+      "predicted": 0,
+      "distance": 0.0
+     },
+     {
+      "reference": 1,
+      "predicted": 1,
+      "distance": 0.207
+     },
+     {
+      "reference": 2,
+      "predicted": 2,
+      "distance": 0.0
+     },
+     {
+      "reference": 3,
+      "predicted": 3,
+      "distance": 0.0
+     },
+     {
+      "reference": 4,
+      "predicted": 4,
+      "distance": 0.154
+     },
+     {
+      "reference": 5,
+      "predicted": 5,
+      "distance": 0.222
+     },
+     {
+      "reference": 6,
+      "predicted": 6,
+      "distance": 0.037
+     },
+     {
+      "reference": 7,
+      "predicted": 7,
+      "distance": 0.125
+     },
+     {
+      "reference": 8,
+      "predicted": 8,
+      "distance": 0.048
+     },
+     {
+      "reference": 9,
+      "predicted": 9,
+      "distance": 0.0
+     },
+     {
+      "reference": 10,
+      "predicted": 10,
+      "distance": 0.0
+     },
+     {
+      "reference": 11,
+      "predicted": 11,
+      "distance": 0.105
+     },
+     {
+      "reference": 12,
+      "predicted": 12,
+      "distance": 0.0
+     },
+     {
+      "reference": 13,
+      "predicted": 13,
+      "distance": 0.265
+     },
+     {
+      "reference": 14,
+      "predicted": 14,
+      "distance": 0.212
+     },
+     {
+      "reference": 15,
+      "predicted": 15,
+      "distance": 0.0
+     },
+     {
+      "reference": 16,
+      "predicted": 16,
+      "distance": 0.276
+     },
+     {
+      "reference": 17,
+      "predicted": 17,
+      "distance": 0.0
+     },
+     {
+      "reference": 18,
+      "predicted": 18,
+      "distance": 0.029
+     },
+     {
+      "reference": 19,
+      "predicted": 19,
+      "distance": 0.0
+     }
+    ]
+   }
+  },
+  {
+   "id": "kirishitan-2B2C88BC-045",
+   "frame": 0,
+   "image_sha256": "92c5ca801bb2ab635a180b4f52cb336f3a63fd37d3e4b8ca1f50d7a531099985",
+   "seconds": 20.451388960005715,
+   "warnings": [],
+   "predicted": [
+    "金作と云者なり",
+    "古老曰百年已来未聞之儀与云々",
+    "島原要聞記曰板倉内膳正重昌は二の丸塀際",
+    "迄行處に段々諸手歴々之武士幷先勢打",
+    "倒され内膳正其身も手負なから押登られ希",
+    "る一揆共大将を目に懸連は鉄炮雨之降る",
+    "如く来る然共内膳正其身所々に中り鉄炮",
+    "を事共せす塀際迄押登られけるか左之乳",
+    "之上に鉄砲中り打貫る痛手故免戦死也《割書：或｜云》",
+    "此内膳正を討たる一揆金作心に内膳正を小田地領主",
+    "松倉長門守と思ひ打たる也内膳正たりし事",
+    "を後日に聞て松倉と思ひ打たりしと後悔",
+    "したる也是長門守仕置よろしからさるを憤",
+    "りて之事也此城責之即松倉氏は黄糸之",
+    "鎧を着す内膳正者黄羅紗之陣羽織を",
+    "着せら連し故松倉与見誤り多類と也此時",
+    "内膳正死骸を肩に引掛陣屋に帰りしは内",
+    "膳正家来都筑杢左衛門与云者也後年",
+    "松平大和守直矩江奉公して足軽大将を勤",
+    "尤",
+    "近代諸士傳略曰正月元日板倉内膳正重昌諸"
+   ],
+   "reference": "　古老曰百年已来未聞之儀与云々\n島原要聞記曰板倉内膳正重昌は二之丸塀際\n　迄行處に段々諸手歴々之武士幷先勢打\n　倒され内膳正其身茂手負なから押登ら連希\n　る一揆共大将を目に懸連は鉄炮雨之降る\n　如く来る然共内膳正其身所々に中り鉄炮\n　を叓共せす塀際迄押登ら連けるか左之乳\n　之上に鉄炮中り打貫る痛手故忽戦死也《割書：或｜云》\n　《割書：此内膳正を討たる一揆｜金作与云者なり》金作心に内膳正を当地領主\n　松倉長門守与思ひ打多る也内膳正た里之事\n\n　を後日に聞て枩倉与思ひ打多里しと後悔\n　し堂類也是長門守仕置与語しからさるを憤\n　りて之事也此城責之即松倉氏は黄色之\n　鎧を着す内膳正者黄羅紗之陣羽織を\n　着せら連し故松倉与見誤り多類と也此時\n　内膳正死骸を肩に引掛陣屋に帰りしは内\n　膳正家来都築杢左衛門与云者也後年\n　松平大和守直矩江奉公して足軽大将を勤\n　む\n近代諸士伝略曰正月元日板倉内膳正重昌諸",
+   "reference_characters": 400,
+   "raw_errors": 64,
+   "raw_cer": 0.16,
+   "squeezed_reference_characters": 362,
+   "squeezed_errors": 45,
+   "squeezed_cer": 0.12430939226519337,
+   "bag": {
+    "missed": 31,
+    "extra": 26,
+    "missed_share": 0.0856353591160221,
+    "extra_share": 0.0718232044198895
+   },
+   "lines": {
+    "reference_lines": 20,
+    "predicted_lines": 21,
+    "paired": 20,
+    "missed": 0,
+    "extra": 1,
+    "paired_cer": 0.12154696132596685,
+    "paired_reference_characters": 362,
+    "paired_errors": 44,
+    "in_order_share": 0.9473684210526315,
+    "pairs": [
+     {
+      "reference": 0,
+      "predicted": 1,
+      "distance": 0.0
+     },
+     {
+      "reference": 1,
+      "predicted": 2,
+      "distance": 0.053
+     },
+     {
+      "reference": 2,
+      "predicted": 3,
+      "distance": 0.0
+     },
+     {
+      "reference": 3,
+      "predicted": 4,
+      "distance": 0.105
+     },
+     {
+      "reference": 4,
+      "predicted": 5,
+      "distance": 0.0
+     },
+     {
+      "reference": 5,
+      "predicted": 6,
+      "distance": 0.0
+     },
+     {
+      "reference": 6,
+      "predicted": 7,
+      "distance": 0.111
+     },
+     {
+      "reference": 7,
+      "predicted": 8,
+      "distance": 0.08
+     },
+     {
+      "reference": 8,
+      "predicted": 9,
+      "distance": 0.429
+     },
+     {
+      "reference": 9,
+      "predicted": 10,
+      "distance": 0.211
+     },
+     {
+      "reference": 10,
+      "predicted": 11,
+      "distance": 0.222
+     },
+     {
+      "reference": 11,
+      "predicted": 12,
+      "distance": 0.211
+     },
+     {
+      "reference": 12,
+      "predicted": 13,
+      "distance": 0.059
+     },
+     {
+      "reference": 13,
+      "predicted": 14,
+      "distance": 0.0
+     },
+     {
+      "reference": 14,
+      "predicted": 15,
+      "distance": 0.0
+     },
+     {
+      "reference": 15,
+      "predicted": 16,
+      "distance": 0.0
+     },
+     {
+      "reference": 16,
+      "predicted": 17,
+      "distance": 0.062
+     },
+     {
+      "reference": 17,
+      "predicted": 18,
+      "distance": 0.0
+     },
+     {
+      "reference": 18,
+      "predicted": 0,
+      "distance": 1.0
+     },
+     {
+      "reference": 19,
+      "predicted": 20,
+      "distance": 0.053
+     }
+    ]
+   }
+  },
+  {
+   "id": "kirishitan-CC187A95-077",
+   "frame": 0,
+   "image_sha256": "a7abd5287c596b306bc05da44fbfe8159b1ba98fde9c27482072965a42141df4",
+   "seconds": 18.959680467960425,
+   "warnings": [],
+   "predicted": [
+    "大村勘介家記載",
+    "負人数之事",
+    "由布孫左衛門",
+    "小田原又左衛門",
+    "疋田四郎右衛門",
+    "片嶺吉太夫",
+    "綾部藤兵衛",
+    "神品文右衛門",
+    "河津十左衛門",
+    "寅二月廿七日八日両日に長門守侍共打死手",
+    "永田三郎右衛門　村越四兵衛　奥山茂太夫",
+    "水野清左衛門　同　多平次　　富家九太夫",
+    "杉山五郎兵衛",
+    "〆七人打死",
+    "西尾三郎兵衛　三浦十右衛門　高橋伊右衛門",
+    "同　七右衛門　竹村勝左衛門　池田権助",
+    "安藤半助　　石井権兵衛　　熊部四郎左衛門",
+    "山渡吉左衛門　桂　十太輔",
+    "〆拾壱人手負",
+    "知行を取候侍中有馬城落去之後堅固に有之"
+   ],
+   "reference": "   　　　　　　　　　　　　　由布孫左衛門\n　　　　　　　　　　　　　小田原又左衛門\n　　　　　　　　　　　　　疋田四郎右衛門\n　　　　　　　　　　　　　片嶺吉太夫\n　　　　　　　　　　　　　綾部藤兵衛\n　　　　　　　　　　　　　神品又右衛門\n　　　　　　　　　　　　　河津十左衛門\n大村勘介家記載\n　寅二月廿七日八日両日に長門守侍共打死手\n　負人数之事\n\n　　永田三郎右衛門　村越四兵衛　奥山茂太夫\n　　水野清左衛門　同　多平次　冨家九太夫\n　　杉山五郎兵衛\n　　　〆七人打死\n　　西尾三郎兵衛　三浦十右衛門　高橋伊右衛門\n　　同七右衛門　竹村勝左衛門　池田　権助\n　　安藤　半助　石井権兵衛　熊部四郎左衛門\n　　山渡吉左衛門　桂十太輔\n　　　〆拾壱人手負\n　知行を取候侍中有馬城落去之後堅固に有之",
+   "reference_characters": 351,
+   "raw_errors": 140,
+   "raw_cer": 0.39886039886039887,
+   "squeezed_reference_characters": 200,
+   "squeezed_errors": 26,
+   "squeezed_cer": 0.13,
+   "bag": {
+    "missed": 2,
+    "extra": 2,
+    "missed_share": 0.01,
+    "extra_share": 0.01
+   },
+   "lines": {
+    "reference_lines": 20,
+    "predicted_lines": 20,
+    "paired": 20,
+    "missed": 0,
+    "extra": 0,
+    "paired_cer": 0.01,
+    "paired_reference_characters": 200,
+    "paired_errors": 2,
+    "in_order_share": 0.8947368421052632,
+    "pairs": [
+     {
+      "reference": 0,
+      "predicted": 2,
+      "distance": 0.0
+     },
+     {
+      "reference": 1,
+      "predicted": 3,
+      "distance": 0.0
+     },
+     {
+      "reference": 2,
+      "predicted": 4,
+      "distance": 0.0
+     },
+     {
+      "reference": 3,
+      "predicted": 5,
+      "distance": 0.0
+     },
+     {
+      "reference": 4,
+      "predicted": 6,
+      "distance": 0.0
+     },
+     {
+      "reference": 5,
+      "predicted": 7,
+      "distance": 0.167
+     },
+     {
+      "reference": 6,
+      "predicted": 8,
+      "distance": 0.0
+     },
+     {
+      "reference": 7,
+      "predicted": 0,
+      "distance": 0.0
+     },
+     {
+      "reference": 8,
+      "predicted": 9,
+      "distance": 0.0
+     },
+     {
+      "reference": 9,
+      "predicted": 1,
+      "distance": 0.0
+     },
+     {
+      "reference": 10,
+      "predicted": 10,
+      "distance": 0.0
+     },
+     {
+      "reference": 11,
+      "predicted": 11,
+      "distance": 0.067
+     },
+     {
+      "reference": 12,
+      "predicted": 12,
+      "distance": 0.0
+     },
+     {
+      "reference": 13,
+      "predicted": 13,
+      "distance": 0.0
+     },
+     {
+      "reference": 14,
+      "predicted": 14,
+      "distance": 0.0
+     },
+     {
+      "reference": 15,
+      "predicted": 15,
+      "distance": 0.0
+     },
+     {
+      "reference": 16,
+      "predicted": 16,
+      "distance": 0.0
+     },
+     {
+      "reference": 17,
+      "predicted": 17,
+      "distance": 0.0
+     },
+     {
+      "reference": 18,
+      "predicted": 18,
+      "distance": 0.0
+     },
+     {
+      "reference": 19,
+      "predicted": 19,
+      "distance": 0.0
+     }
+    ]
+   }
+  },
+  {
+   "id": "kirishitan-4A8E2CD2-005",
+   "frame": 0,
+   "image_sha256": "f35b9636ca7e949dc2f4a0d1b775792676e5d8ad6d618e2ae862bbdb6888eab7",
+   "seconds": 24.80980606400408,
+   "warnings": [],
+   "predicted": [
+    "に其品き八月二十四日摂州住吉の社鳴動シテ",
+    "松樹六十六本顚倒スル由神主摂津守三位国宗",
+    "奏聞す朝廷僉議アツテ松樹顚倒のヿハサシモ",
+    "ナラスト雖共其木数六十六本と限るヿ日本の",
+    "国数ニテ凶事トスベシトテ寺社に仰て祈禱有",
+    "クル斯る異人渡来シテ邪法を弘め人民の害を",
+    "成ベキ前表ナルベシ角て異国人江州安土の城",
+    "下に到著シケレハ妙法寺と云寺に入て三日休",
+    "息し九月三日城中へ召呼ひ信長謁見セラレケ",
+    "ルウルカン破天連身ニハアイト〱云物を著す",
+    "毛氈の様ナル類ナリ裾短く袖長し左リマヘニ",
+    "合せ其体相甚た賤く声は鳩の鳴く如く言舌分",
+    "ラス蝙蝠の羽を広ケタル如く最も見苦ルシ名",
+    "香を懐中シテ御殿に薫し渡ルウルカン信長に",
+    "対シテ礼スル法両臑指先を揃へ向フヘ差出し",
+    "両手を組て胸に当て頭を仰く誠に不思議の礼",
+    "式ナリ献スル所の物七種七十五里を一目に見",
+    "る遠眼鑑芥子を卵の如クニ見る近目鏡猛虎皮",
+    "五十枚毛氈五町四方見当ナキ鉄炮伽羅百斤八",
+    "畳釣リノ蚊帳一寸八分の香筥に入ルコンタツ"
+   ],
+   "reference": "ニ其前キ八月二十四日摂州住吉ノ社鳴動シテ\n松樹六十六本顛倒スル由神主摂津守三位国宗\n奏聞ス朝廷僉議アツテ松樹顛倒ノヿハサシモ\nナラスト雖共其木数六十六本ト限ルヿ日本ノ\n国数ニテ㐫事トスベシトテ寺社ニ仰テ祈祷有\nクル斯ル異人渡来シテ邪法ヲ弘メ人民ノ害ヲ\n成ベキ前表ナルベシ角テ異国人江州安土ノ城\n下ニ到著シケレハ妙法寺ト云寺ニ入テ三日休\n息シ九月三日城中ヘ召呼ヒ信長謁見セラレケ\nルウルカン破天連身ニハアイト〱云物ヲ著ス\n毛氈ノ様ナル類ナリ裾短ク袖長シ左リマヘニ\n合セ其体相甚タ賤ク声ハ鳩ノ鳴ク如ク言舌分\nラス蝙蝠ノ羽ヲ広ケタル如ク最モ見苦ルシ名\n香ヲ懐中シテ御殿ニ薫シ渡ルウルカン信長ニ\n対シテ礼スル法両臑指先ヲ揃ヘ向フヘ差出シ\n両手ヲ組テ胸ニ当テ頭ヲ仰ク誠ニ不思議ノ礼\n式ナリ献スル所ノ物七種七十五里ヲ一目ニ見\nル遠眼鑑芥子ヲ卵ノ如クニ見ル近目鏡猛虎皮\n五十枚毛氊五町四方見当ナキ鉄炮伽羅百斤八\n畳釣リノ蚊帳一寸八分ノ香筥ニ入ルコンタツ",
+   "reference_characters": 419,
+   "raw_errors": 71,
+   "raw_cer": 0.16945107398568018,
+   "squeezed_reference_characters": 400,
+   "squeezed_errors": 71,
+   "squeezed_cer": 0.1775,
+   "bag": {
+    "missed": 71,
+    "extra": 71,
+    "missed_share": 0.1775,
+    "extra_share": 0.1775
+   },
+   "lines": {
+    "reference_lines": 20,
+    "predicted_lines": 20,
+    "paired": 20,
+    "missed": 0,
+    "extra": 0,
+    "paired_cer": 0.1775,
+    "paired_reference_characters": 400,
+    "paired_errors": 71,
+    "in_order_share": 1.0,
+    "pairs": [
+     {
+      "reference": 0,
+      "predicted": 0,
+      "distance": 0.2
+     },
+     {
+      "reference": 1,
+      "predicted": 1,
+      "distance": 0.05
+     },
+     {
+      "reference": 2,
+      "predicted": 2,
+      "distance": 0.15
+     },
+     {
+      "reference": 3,
+      "predicted": 3,
+      "distance": 0.15
+     },
+     {
+      "reference": 4,
+      "predicted": 4,
+      "distance": 0.2
+     },
+     {
+      "reference": 5,
+      "predicted": 5,
+      "distance": 0.25
+     },
+     {
+      "reference": 6,
+      "predicted": 6,
+      "distance": 0.1
+     },
+     {
+      "reference": 7,
+      "predicted": 7,
+      "distance": 0.2
+     },
+     {
+      "reference": 8,
+      "predicted": 8,
+      "distance": 0.15
+     },
+     {
+      "reference": 9,
+      "predicted": 9,
+      "distance": 0.1
+     },
+     {
+      "reference": 10,
+      "predicted": 10,
+      "distance": 0.15
+     },
+     {
+      "reference": 11,
+      "predicted": 11,
+      "distance": 0.35
+     },
+     {
+      "reference": 12,
+      "predicted": 12,
+      "distance": 0.25
+     },
+     {
+      "reference": 13,
+      "predicted": 13,
+      "distance": 0.2
+     },
+     {
+      "reference": 14,
+      "predicted": 14,
+      "distance": 0.15
+     },
+     {
+      "reference": 15,
+      "predicted": 15,
+      "distance": 0.4
+     },
+     {
+      "reference": 16,
+      "predicted": 16,
+      "distance": 0.15
+     },
+     {
+      "reference": 17,
+      "predicted": 17,
+      "distance": 0.2
+     },
+     {
+      "reference": 18,
+      "predicted": 18,
+      "distance": 0.05
+     },
+     {
+      "reference": 19,
+      "predicted": 19,
+      "distance": 0.1
+     }
+    ]
+   }
+  },
+  {
+   "id": "iryotoyojo-57D59E79-020",
+   "frame": 0,
+   "image_sha256": "4f0db30b0ca8647a2347ee15fd2041dc6bb5d20975531a27c65458598cae2697",
+   "seconds": 19.445393285015598,
+   "warnings": [],
+   "predicted": [
+    "コレ広沢はこゝへ出る角力じやあ無ひ。",
+    "行司の目はどこへ附て居る。行司　何を",
+    "おふせられます。おまへがたの目が曲つたか",
+    "手跡ばかりではござらぬ。学才も有",
+    "算術もよし。生れてゟ人が別で",
+    "御ざる。今日の用に立大功が度〳〵。",
+    "手跡が秀たればみな様手跡斗で",
+    "御論し被成ますか。遠州より出られ",
+    "さま〳〵の険阻艱難（けんそかんなん）をなめられ。",
+    "よく人情に渡られました。今時の",
+    "書家とやらわざ〳〵ならい込んで。",
+    "先生に成られるとは違ひ。餘力に",
+    "学はれたる事にて。人がおして師",
+    "といたしたので。唐の先生と自"
+   ],
+   "reference": "【右頁】\nコレ広澤はこゝへ出る角力じやあ無ひ。\n行司の目はどこへ附て居る。【囲み字】行司　何を\nおふせられます。おまへがたの目が曲つたか\n手跡ばかりではござらぬ。学才も有\n算術もよし。生れてゟ人が別で\n御ざる。今日の用に立大功が度〳〵。\n手跡が秀たればみな様手跡斗で\n【左頁】\n御論じ被成ますか。遠州より出られ\nさま〳〵の険阻艱難（けんそかんなん）をなめられ。\nよく人情に渡られました。今時の\n書家とやらわざ〳〵ならい込んで。\n先生に成られるとは違ひ。余力に\n学はれたる事にて。人がおして師\nといたしたので。唐様の先生と自",
+   "reference_characters": 261,
+   "raw_errors": 19,
+   "raw_cer": 0.07279693486590039,
+   "squeezed_reference_characters": 232,
+   "squeezed_errors": 4,
+   "squeezed_cer": 0.017241379310344827,
+   "bag": {
+    "missed": 4,
+    "extra": 3,
+    "missed_share": 0.017241379310344827,
+    "extra_share": 0.01293103448275862
+   },
+   "lines": {
+    "reference_lines": 14,
+    "predicted_lines": 14,
+    "paired": 14,
+    "missed": 0,
+    "extra": 0,
+    "paired_cer": 0.017241379310344827,
+    "paired_reference_characters": 232,
+    "paired_errors": 4,
+    "in_order_share": 1.0,
+    "pairs": [
+     {
+      "reference": 0,
+      "predicted": 0,
+      "distance": 0.056
+     },
+     {
+      "reference": 1,
+      "predicted": 1,
+      "distance": 0.0
+     },
+     {
+      "reference": 2,
+      "predicted": 2,
+      "distance": 0.0
+     },
+     {
+      "reference": 3,
+      "predicted": 3,
+      "distance": 0.0
+     },
+     {
+      "reference": 4,
+      "predicted": 4,
+      "distance": 0.0
+     },
+     {
+      "reference": 5,
+      "predicted": 5,
+      "distance": 0.0
+     },
+     {
+      "reference": 6,
+      "predicted": 6,
+      "distance": 0.0
+     },
+     {
+      "reference": 7,
+      "predicted": 7,
+      "distance": 0.062
+     },
+     {
+      "reference": 8,
+      "predicted": 8,
+      "distance": 0.0
+     },
+     {
+      "reference": 9,
+      "predicted": 9,
+      "distance": 0.0
+     },
+     {
+      "reference": 10,
+      "predicted": 10,
+      "distance": 0.0
+     },
+     {
+      "reference": 11,
+      "predicted": 11,
+      "distance": 0.067
+     },
+     {
+      "reference": 12,
+      "predicted": 12,
+      "distance": 0.0
+     },
+     {
+      "reference": 13,
+      "predicted": 13,
+      "distance": 0.067
+     }
+    ]
+   }
+  },
+  {
+   "id": "iryotoyojo-8409705F-025",
+   "frame": 0,
+   "image_sha256": "89176267485ea4254f907746fac51160abb674a5350ed84de22025db5986e6c1",
+   "seconds": 25.11388996709138,
+   "warnings": [],
+   "predicted": [
+    "化哥中（けうかうちう）",
+    "にあかぬわかれせしか。はしめはあなたこなた",
+    "みやつかへせしとぞ。後（のち）にはさまをかへ竹斎",
+    "のゆくゑたつねんとてみやこのかたへ上（のほ）りし",
+    "か。竹斎世をはやうせしと聞（きゝ）て。さかのおくに",
+    "取（とり）こもりおこなひすまし往生（わうじやう）の素懐（そくわい）",
+    "をとけけるこそ。あはれにいとおしきわさに",
+    "や。竹 若（わか）も其 後家（のちいへ）とみさかへ。父母（ちゝはゝ）のゆくゑ",
+    "たつねに都（みやこ）に上り。此事ともを聞（きゝ）て父母（ちゝはゝ）の",
+    "菩提（ぼだい）のためとて。新黒（しんくろ）たにゝていかめしき。と",
+    "ふらひせるとこそ。誠（まこと）に恩愛（おんあい）の道（みち）ほとあは",
+    "れなるものはなきとて、聞（きゝ）へ袖をぬらさぬ",
+    "はなかりけり",
+    "第五十がかゝよく心（しん）をかまゆる事",
+    "竹斎は猶（なを）ひつはくせるうちにもかたぎ",
+    "ぬ夜（よ）きのせんたく、にんとも、たのみをかけし",
+    "思るものは。にらみの介に手をきらるゝ我（わか）",
+    "身（み）ひとつの。秋（あき）かせに。花（はな）にたいして。ねふるお",
+    "もひにふしてありけるよしを。此おもひものを",
+    "きもいりし。十がかゝといへる。伝（つた）へ聞（きゝ）。かの女（をんな）の",
+    "所（ところ）へゆき。いれじやうねせるこそ冷（ずさま）じけれ。のふい",
+    "竹斎中"
+   ],
+   "reference": "【左丁】\nにあかぬわかれせしか。はしめはあなたこなた\nみやつかへせしとぞ。後（のち）にはさまをかへ竹斎\nのゆくゑたつねんとてみやこのかたへ上（のほ）りし\nか。竹斎世をはやうせし【注①】と聞（きゝ）て。さかのおくに\n取（とり）こもりおこなひすまし往生（わうしやう）の素懐（そくわい）【注②】\nをとけけるこそ。あはれにいとおしきわさに\nや。竹 若（わか）も其 後（のち）家（いへ）とみさかへ。父母（ちゝはゝ）のゆくゑ\nたつねに都（みやこ）に上り。此事ともを聞（きゝ）て父母（ちゝはゝ）の\n菩提（ぼだい）のためとて。新黒（しんくろ）たにゝていかめしき。と\nふらひせるとこそ。誠（まこと）に恩愛（おんあい）の道（みち）ほとあは\n\n【左丁】\nれなるものはなきとて、聞（きく）人袖をぬらさぬ\nはなかりけり\n　　第五十がかゝよく心（しん）をかまゆる事\n竹斎は猶（なを）ひつはくせるうちにもかたぎ\nぬ夜（よ）きのせんたく、にんとも、たのみをかけし\n思ひものは。にらみの介に手をきらるゝ我（わか）\n身（み）ひとつの、秋かせに。花（はな）にたいしてねふるお\nもひにふしてありけるよしを。此おもひものを\nきもいりし。十がかゝといへる。伝（つた）へ聞（きく）。かの女（をんな）の\n所（ところ）へゆき。いれじやうね【注➂】せるこそ冷（すさま）じ【「す」の濁点は不要】けれ。のふい\n\n【注①　世を早うする＝若死にする。夭逝する。】\n【注②　日頃の望み。】\n【注➂　入性根＝入れ知恵】",
+   "reference_characters": 627,
+   "raw_errors": 108,
+   "raw_cer": 0.1722488038277512,
+   "squeezed_reference_characters": 519,
+   "squeezed_errors": 30,
+   "squeezed_cer": 0.057803468208092484,
+   "bag": {
+    "missed": 7,
+    "extra": 24,
+    "missed_share": 0.01348747591522158,
+    "extra_share": 0.046242774566473986
+   },
+   "lines": {
+    "reference_lines": 20,
+    "predicted_lines": 22,
+    "paired": 20,
+    "missed": 0,
+    "extra": 2,
+    "paired_cer": 0.030828516377649325,
+    "paired_reference_characters": 519,
+    "paired_errors": 16,
+    "in_order_share": 1.0,
+    "pairs": [
+     {
+      "reference": 0,
+      "predicted": 1,
+      "distance": 0.0
+     },
+     {
+      "reference": 1,
+      "predicted": 2,
+      "distance": 0.0
+     },
+     {
+      "reference": 2,
+      "predicted": 3,
+      "distance": 0.0
+     },
+     {
+      "reference": 3,
+      "predicted": 4,
+      "distance": 0.0
+     },
+     {
+      "reference": 4,
+      "predicted": 5,
+      "distance": 0.03
+     },
+     {
+      "reference": 5,
+      "predicted": 6,
+      "distance": 0.0
+     },
+     {
+      "reference": 6,
+      "predicted": 7,
+      "distance": 0.105
+     },
+     {
+      "reference": 7,
+      "predicted": 8,
+      "distance": 0.0
+     },
+     {
+      "reference": 8,
+      "predicted": 9,
+      "distance": 0.0
+     },
+     {
+      "reference": 9,
+      "predicted": 10,
+      "distance": 0.0
+     },
+     {
+      "reference": 10,
+      "predicted": 11,
+      "distance": 0.087
+     },
+     {
+      "reference": 11,
+      "predicted": 12,
+      "distance": 0.0
+     },
+     {
+      "reference": 12,
+      "predicted": 13,
+      "distance": 0.0
+     },
+     {
+      "reference": 13,
+      "predicted": 14,
+      "distance": 0.0
+     },
+     {
+      "reference": 14,
+      "predicted": 15,
+      "distance": 0.0
+     },
+     {
+      "reference": 15,
+      "predicted": 16,
+      "distance": 0.043
+     },
+     {
+      "reference": 16,
+      "predicted": 17,
+      "distance": 0.182
+     },
+     {
+      "reference": 17,
+      "predicted": 18,
+      "distance": 0.0
+     },
+     {
+      "reference": 18,
+      "predicted": 19,
+      "distance": 0.028
+     },
+     {
+      "reference": 19,
+      "predicted": 20,
+      "distance": 0.03
+     }
+    ]
+   }
+  },
+  {
+   "id": "zukan-C7EC110D-079",
+   "frame": 0,
+   "image_sha256": "e58b08ae591b45e4a24c88dc3461fe3906f692ab654f387cbd61546ac94aeefe",
+   "seconds": 10.127815649961121,
+   "warnings": [],
+   "predicted": [
+    "ハクヲン",
+    "コジヲン",
+    "白苑（ハクヲン）",
+    "ヒメジヲン",
+    "初め地に就て数ー葉叢を作す長ー葉長ー柄ニシテ牛ー耳ー菜サジヲモダカー葉",
+    "状に似タリ面深ー緑ー色背は則ち淡し六ー月に至ツテ薹（タウ）をスコロン",
+    "ず高さ尺ー余台ー上の葉は柄ナク差ー互シテ生ず形ち謝ー落ヲグルマー金ー",
+    "葉に類す秋ー月梢ー葉の間に小ー枝を生じ枝ー頂コトニ叉了（マタ）を分",
+    "て数ー十ー花攢ー族スソノ花大さ二ー三ー分 聚ー雪メドギー花の如し弁やヽ",
+    "細クシテ多シソノ色白く内に黄ー心アリ",
+    "秋芍薬"
+   ],
+   "reference": "【右丁】\n　白菀（ハクヲン）　　《割書：コジヲン｜ヒメジヲン》\n初メ地ニ就テ数-葉叢ヲ作ス長-葉長-柄ニシテ《振り仮名：牛-耳-菜｜サジヲモダカ》-葉\n状ニ似タリ面深-緑-色背ハ則チ淡シ六-月ニ至ツテ薹（タウ）ヲ攛ン\nズ高サ尺-余薹-上ノ葉ハ柄ナク差-互シテ生ズ形チ《振り仮名：謝-落-金｜ヲグルマ》-\n葉ニ類ス秋-月梢-葉ノ間ニ小-枝ヲ生ジ枝-頂コトニ叉丫（マタ）ヲ分\nテ数-十-花攢-蔟スソノ花大サ二-三-分《振り仮名：聚-雪｜メドギ》-花ノ如シ弁ヤヽ\n細クシテ多シソノ色白ク内ニ黄-心アリ\n\n【左丁】\n　　　　秋芍薬\n\n【「-」は全て右側に書かれている】",
+   "reference_characters": 280,
+   "raw_errors": 141,
+   "raw_cer": 0.5035714285714286,
+   "squeezed_reference_characters": 236,
+   "squeezed_errors": 104,
+   "squeezed_cer": 0.4406779661016949,
+   "bag": {
+    "missed": 89,
+    "extra": 65,
+    "missed_share": 0.3771186440677966,
+    "extra_share": 0.2754237288135593
+   },
+   "lines": {
+    "reference_lines": 8,
+    "predicted_lines": 11,
+    "paired": 8,
+    "missed": 0,
+    "extra": 3,
+    "paired_cer": 0.4491525423728814,
+    "paired_reference_characters": 236,
+    "paired_errors": 106,
+    "in_order_share": 1.0,
+    "pairs": [
+     {
+      "reference": 0,
+      "predicted": 2,
+      "distance": 0.696
+     },
+     {
+      "reference": 1,
+      "predicted": 4,
+      "distance": 0.442
+     },
+     {
+      "reference": 2,
+      "predicted": 5,
+      "distance": 0.353
+     },
+     {
+      "reference": 3,
+      "predicted": 6,
+      "distance": 0.548
+     },
+     {
+      "reference": 4,
+      "predicted": 7,
+      "distance": 0.364
+     },
+     {
+      "reference": 5,
+      "predicted": 8,
+      "distance": 0.5
+     },
+     {
+      "reference": 6,
+      "predicted": 9,
+      "distance": 0.167
+     },
+     {
+      "reference": 7,
+      "predicted": 10,
+      "distance": 0.0
+     }
+    ]
+   }
+  },
+  {
+   "id": "zukan-4D490743-017",
+   "frame": 0,
+   "image_sha256": "0e7fce3375abba15c95970a7d6f5b2ee44648ca49234d2a23f6655da20081633",
+   "seconds": 30.921576195047237,
+   "warnings": [],
+   "predicted": [
+    "本草和解に曰",
+    "辛鶏（シンイ）　　辛鶏（シンケイ）　侯桃（コウトウ）　房木（ボウボク）　木筆（モクシツ）",
+    "辛夷（シンイ）",
+    "迎春（ケイシユン）",
+    "和名　已部志（コブシ）",
+    "築木",
+    "壬午如月廿有一日真",
+    "写",
+    "大和本草",
+    "記木部に載す",
+    "和名類聚抄に曰",
+    "崔禹錫か食経に曰",
+    "辛労（ヤマアラヽき）",
+    "辛虎（ヤマアラヽき）",
+    "コフシハシカミ",
+    "辛夷和",
+    "和名夜未阿良々木",
+    "一に云　古不之波之加美",
+    "著聞集",
+    "クヒツカレ頭かヽヱテ出シカト",
+    "ノヒツカレ頭かヽヱテ出シカト",
+    "仲織僧都",
+    "奇品鏡",
+    "諸本草に曰",
+    "桜草",
+    "雄節花",
+    "花草",
+    "寿云",
+    "壬午如月終日写",
+    "辛夷有＿二数種＿一 玉蘭花白木蘭（をヽヤマレンチハクレンケ）",
+    "モクレン有ニシテユアシ　杜木皆辛夷（ハクレンケ）の",
+    "類也"
+   ],
+   "reference": "　　　　　　　　　　　辛夷（シンイ）　本草和解ニ曰\n　　　　　　　　　　　　　異名　辛雞（シンケイ）　侯棑（コウトウ）　房木（ボウボク）\n　　　　　　　　　　　　　迎春（ゲイシュン）\n　　　　　　　　　　　　　和名　巳部志（コブシ）\n\n　　　　　　　　　　　　　　　　壬午如月廿有一日真\n　　　　　　　　　　　　　　　　寫\n\n　　　　　　　　　　　　　　　　大和本草\n　　　　　　　　　　　　　　　　　　花木部ニ載ス\n\n　　　　　　　　　　　　　　　　和名類聚抄ニ曰\n　　　　　　　　　　　　　　　　　　辛夷（ヤマアラゝキ）\n　　　　　　　　　　　　　　　　　　《割書：コフシハシカミ｜》\n\n　　　　　　　　　　　　　　　　崔禹鍚カ食経ニ曰\n　　　　　　　　　　　　　　　　　　辛夷　和名夜未阿良々木\n　　　　　　　　　　　　　　　　　　　　　一ニ云古不之波之可美\n\n　　　　　　　　　　　　　　　著聞集\n　　　　　　　　　　　　　　　　クヒツカレ頭カゝエテ出シカト\n　　　　　　　　　　　　　　　　　コブシノ花ノ猶イタキ哉\n　　　　　　　　　　　　　　　　　　　　　　　　　　　仲胤僧都\n\n\n諸本草ニ曰\n　　櫻草\n奇品鏡\n　　旌節花\n\n　　　　　　　　　　　　壬午如月終日寫ス\n\n　　　　　　　　　　　　寿云\n　　　　　　　　　　　　　　辛夷有数種 玉蘭花（ヲゝヤマレンケ）　白木蘭（ハクレンケ）\n　　　　　　　　　　　　　　紫木蓮（モクレン）　石喬木（シテユフシ）　朴（ホオ）の木皆辛夷の\n　　　　　　　　　　　　　　類也",
+   "reference_characters": 663,
+   "raw_errors": 487,
+   "raw_cer": 0.7345399698340875,
+   "squeezed_reference_characters": 250,
+   "squeezed_errors": 147,
+   "squeezed_cer": 0.588,
+   "bag": {
+    "missed": 51,
+    "extra": 71,
+    "missed_share": 0.204,
+    "extra_share": 0.284
+   },
+   "lines": {
+    "reference_lines": 27,
+    "predicted_lines": 32,
+    "paired": 27,
+    "missed": 0,
+    "extra": 5,
+    "paired_cer": 0.432,
+    "paired_reference_characters": 250,
+    "paired_errors": 108,
+    "in_order_share": 0.7692307692307693,
+    "pairs": [
+     {
+      "reference": 0,
+      "predicted": 2,
+      "distance": 0.462
+     },
+     {
+      "reference": 1,
+      "predicted": 1,
+      "distance": 0.436
+     },
+     {
+      "reference": 2,
+      "predicted": 3,
+      "distance": 0.222
+     },
+     {
+      "reference": 3,
+      "predicted": 4,
+      "distance": 0.1
+     },
+     {
+      "reference": 4,
+      "predicted": 6,
+      "distance": 0.0
+     },
+     {
+      "reference": 5,
+      "predicted": 0,
+      "distance": 1.0
+     },
+     {
+      "reference": 6,
+      "predicted": 8,
+      "distance": 0.0
+     },
+     {
+      "reference": 7,
+      "predicted": 9,
+      "distance": 0.5
+     },
+     {
+      "reference": 8,
+      "predicted": 10,
+      "distance": 0.143
+     },
+     {
+      "reference": 9,
+      "predicted": 12,
+      "distance": 0.3
+     },
+     {
+      "reference": 10,
+      "predicted": 14,
+      "distance": 0.462
+     },
+     {
+      "reference": 11,
+      "predicted": 11,
+      "distance": 0.375
+     },
+     {
+      "reference": 12,
+      "predicted": 16,
+      "distance": 0.2
+     },
+     {
+      "reference": 13,
+      "predicted": 17,
+      "distance": 0.2
+     },
+     {
+      "reference": 14,
+      "predicted": 18,
+      "distance": 0.0
+     },
+     {
+      "reference": 15,
+      "predicted": 19,
+      "distance": 0.214
+     },
+     {
+      "reference": 16,
+      "predicted": 26,
+      "distance": 0.909
+     },
+     {
+      "reference": 17,
+      "predicted": 21,
+      "distance": 0.25
+     },
+     {
+      "reference": 18,
+      "predicted": 23,
+      "distance": 0.2
+     },
+     {
+      "reference": 19,
+      "predicted": 24,
+      "distance": 0.5
+     },
+     {
+      "reference": 20,
+      "predicted": 22,
+      "distance": 0.0
+     },
+     {
+      "reference": 21,
+      "predicted": 25,
+      "distance": 0.333
+     },
+     {
+      "reference": 22,
+      "predicted": 28,
+      "distance": 0.25
+     },
+     {
+      "reference": 23,
+      "predicted": 27,
+      "distance": 0.0
+     },
+     {
+      "reference": 24,
+      "predicted": 29,
+      "distance": 0.517
+     },
+     {
+      "reference": 25,
+      "predicted": 30,
+      "distance": 0.733
+     },
+     {
+      "reference": 26,
+      "predicted": 31,
+      "distance": 0.0
+     }
+    ]
+   }
+  },
+  {
+   "id": "epidemic-F03F21CC-003",
+   "frame": 0,
+   "image_sha256": "b59da88ace39b2491af87b24f1e760042c76cdcd21faac8ad2725b232620cfd1",
+   "seconds": 27.500599487917498,
+   "warnings": [],
+   "predicted": [
+    "大身の一生",
+    "く了解セザレバ縱令其千百回に及ブモ到底徒労に属セン",
+    "と頃日一小冊を編し名ケテ九死の一生と云ふ体問答とな",
+    "し一ら解し易キニ取り童幼婦女をして輙く會得セシメン",
+    "ヿを旨トス希クハ世人徧く此書を読み人々自ら豫防の道",
+    "を知り以て惡疫卽ち虎列刺病の災害を免るヽヿを得ば獨",
+    "り余の幸ノミニアラズ聊か上　朝旨を補賛し下公衆に対",
+    "スルノ務と謂ふ可き歟若し夫れ病原の如何と治方の得喪",
+    "ノゼトキハ姑く措て論ぜず蓋し普及の要は遠く議論の高",
+    "尚に非ずシテ近く實践の平易に在レバナリ",
+    "明治十三年七月初旬　　　　　　　　大河本聽松識",
+    "いつしやか",
+    "九死（きうし）の一生（いつしやう）",
+    "〇発端（ほつたん）",
+    "目次（もくじ）",
+    "虎列刺病（これらびやう）の残酷（ざんこく）なる事（こと）",
+    "虎列刺病（これらびやう）の救治（きうじ）し難（がた）き事（こと）",
+    "一般売薬（いつぱんばいやく）の妄信（ばうしん）すまじき事（こと）",
+    "虎列刺病（これらびやう）を免（のが）るべき手段（てだて）の事（こと）",
+    "〇虎列刺病（これらびやう）を豫防（よばう）する法（はう）",
+    "空気（くうき）の清汚（せいお）に注意（ちゆうい）する事（こと）",
+    "飲水（のみみづ）の善惡（ぜんあく）に注意（ちゆうい）する事（こと）",
+    "食物（しよくもつ）の良否（りやうひ）に用心（ようじん）する事（こと）",
+    "交通（まじはり）の利害（りがい）に用心（ようじん）する事（こと）"
+   ],
+   "reference": "【右】\nく了解せざれば縦令其千百回に及ぶも到底徒労に属せん\nと頃日一小冊を偏し名けて九死の一生と云ふ体問答とな\nし一ら解し易きに取り童幼婦女をして輙く會得せしめん\nことを旨とす希くは世人徧く此書を讀み人々自ら豫防の道\nを知り以て悪疫即ち虎列刺病の災害を免るゝことを得ば獨\nり余の幸のみにあらず聊か上　朝旨を補賛し下公衆に對\nするの努と謂ふ可き□若し夫れ病原の如何と治方の得喪\nのごときは姑く措て論ぜず蓋し普及の要は遠く議論の高\n尚に非ずして近く実践の平易に在ればなり\n\n　明治十三年七月初旬　　　大河本聴松　織\n\n【左】\n九死（きうし）の一生（いつしやう）\n　　　〇發端（ほつたん）\n　　　　　虎列刺病（これらびやう）の残酷（ざんこく）なる事（こと）\n　　　　　虎列刺病の救治（きうじ）し難（がた）き事（こと）\n　　　　　一般売薬（いつぱんばいやく）の妄信（ばうしん）すまじき事（こと）\n　　　　　虎列刺病を免（のが）るべき手段（てだて）の事（こと）\n　　　〇虎列刺病（これらびやう）を豫防（よばう）する法（はう）\n　　　　　空気（くうき）の清汚（せいお）に注意（ちゆうい）する事（こと）\n　　　　　飲水（のみみづ）の善悪（ぜんあく）に注意（ちゆうい）する事（こと）\n　　　　　食物（しよくもつ）の良否（りやうひ）に用心（ようじん）する事（こと）\n　　　　　交通（まじはり）の利害（りがい）に用心（ようじん）する事（こと）",
+   "reference_characters": 611,
+   "raw_errors": 139,
+   "raw_cer": 0.22749590834697217,
+   "squeezed_reference_characters": 529,
+   "squeezed_errors": 91,
+   "squeezed_cer": 0.1720226843100189,
+   "bag": {
+    "missed": 49,
+    "extra": 80,
+    "missed_share": 0.09262759924385633,
+    "extra_share": 0.15122873345935728
+   },
+   "lines": {
+    "reference_lines": 21,
+    "predicted_lines": 24,
+    "paired": 21,
+    "missed": 0,
+    "extra": 3,
+    "paired_cer": 0.13988657844990549,
+    "paired_reference_characters": 529,
+    "paired_errors": 74,
+    "in_order_share": 1.0,
+    "pairs": [
+     {
+      "reference": 0,
+      "predicted": 1,
+      "distance": 0.36
+     },
+     {
+      "reference": 1,
+      "predicted": 2,
+      "distance": 0.12
+     },
+     {
+      "reference": 2,
+      "predicted": 3,
+      "distance": 0.24
+     },
+     {
+      "reference": 3,
+      "predicted": 4,
+      "distance": 0.269
+     },
+     {
+      "reference": 4,
+      "predicted": 5,
+      "distance": 0.192
+     },
+     {
+      "reference": 5,
+      "predicted": 6,
+      "distance": 0.292
+     },
+     {
+      "reference": 6,
+      "predicted": 7,
+      "distance": 0.2
+     },
+     {
+      "reference": 7,
+      "predicted": 8,
+      "distance": 0.2
+     },
+     {
+      "reference": 8,
+      "predicted": 9,
+      "distance": 0.368
+     },
+     {
+      "reference": 9,
+      "predicted": 10,
+      "distance": 0.133
+     },
+     {
+      "reference": 10,
+      "predicted": 12,
+      "distance": 0.0
+     },
+     {
+      "reference": 11,
+      "predicted": 13,
+      "distance": 0.111
+     },
+     {
+      "reference": 12,
+      "predicted": 15,
+      "distance": 0.0
+     },
+     {
+      "reference": 13,
+      "predicted": 16,
+      "distance": 0.25
+     },
+     {
+      "reference": 14,
+      "predicted": 17,
+      "distance": 0.0
+     },
+     {
+      "reference": 15,
+      "predicted": 18,
+      "distance": 0.235
+     },
+     {
+      "reference": 16,
+      "predicted": 19,
+      "distance": 0.0
+     },
+     {
+      "reference": 17,
+      "predicted": 20,
+      "distance": 0.0
+     },
+     {
+      "reference": 18,
+      "predicted": 21,
+      "distance": 0.03
+     },
+     {
+      "reference": 19,
+      "predicted": 22,
+      "distance": 0.0
+     },
+     {
+      "reference": 20,
+      "predicted": 23,
+      "distance": 0.0
+     }
+    ]
+   }
+  },
+  {
+   "id": "code4libjp-41AD19BB-017",
+   "frame": 0,
+   "image_sha256": "e51bec546f405acac5002ea128e1962ac07790863c580b61e5f799c0f044c379",
+   "seconds": 42.49195180798415,
+   "warnings": [],
+   "predicted": [
+    "二",
+    "庄は、按察使大納言朝房の領する所なり。地頭は佐々木左衛門定綱なり」と見ゆ。翁の生地高畑に近き",
+    "小谷山は、永正中浅井亮正が築城し。久正を経て長政に至り、元亀年間織田信長のために亡ぼされた古",
+    "城趾がある。",
+    "翁の家系は参議小野篁より出で、石川縣金澤の藩老横山家(一萬石)と同族である。故に翁は元横山姓",
+    "を称し、名を仙助と云た。第十二世の祖横山 掃部頭（カモンノカミ）家盛が、京極高次に仕へ戦功あり。感状が家に伝へ",
+    "られてゐる。高次は近江の人、織田豊臣徳川の三氏に仕へ、大津城主と成た。其妻は淀君の妹なるを",
+    "以て、慶長の役に石田三成及び淀君より西軍に味方せんことを勧誘せられたが応ぜず。家康の東征中に",
+    "西軍に苦しめられ、一時高野山に遁避した事あり。横山家盛は高次臣下の驍将で高畑に舘し、城州に戦",
+    "死し。一弟が帰農して世々館趾の家を守り。今も二百餘年を経た建物が存し、曩年翁の息正弘之を改修",
+    "した。(写真参照)其祖小野篁の古墳は京都紫野にあり。翁後年金澤の同族横山多門政和(蘭洲と号し",
+    "詩文を能くす)と謀り墓碑を修め、碑面の五大字を書し、息正弘の撰文なるを石に刻して",
+    "建た。翁其時蘭洲の詩に和して三首あり。",
+    "頃者与加賀蘭洲謀、修参議小野公墓、",
+    "蘭洲有詩、余亦同作",
+    "半托村民半僧寺。擬防荊棘漫侵尋。敢揮凡筆題碑面。亦是区々念祖心。」",
+    "半は村民に托し半は猶寺。荊棘の漫に侵尋するを防がんとはかる。敢て凡筆を揮て碑面に題す。亦是区々祖をおもふ心。",
+    "翁学成るに及び、生地の関係より、江戸に於て吉田藩主松平伊豆守 信古（ノブヒサ）(後大河内刑部大輔)の聘に応",
+    "じ儒臣と成り。更に藩士(六十石)と成つた。安政五年戊午の大獄起るや、藩命に依り江戸より追放せ",
+    "られ、更に幕命で吉田に幽閉(国元永押込)せられ、小野胴之助と改め、晏齋とも号し、湖山の号は始",
+    "終用ゐた。生地高畑は梵菩湖の北、小谷山の麓に位し、四面山を負ひ、湖山の号はそれより取つたので",
+    "ある。江戸に出でゝ始て居住したるは神田お玉ゖ池(神田川の南今の元岩井町)で、玉池仙史と称し、",
+    "後ち狂々生、何翁等の別号あり。豊橋藩の儒臣より士族、更に東京府士族に改め、明治四十三年庚戌四",
+    "月十九日高齢九十七歳を以て病歿した。翁八十七歳の時大患に罹り、一時危篤の趣　宸聴に達するや。",
+    "特旨を以て従五位に叙せられ復た癒て、十年の寿を保つた。(恩賜叙位参照)",
+    "配元子は文政五年壬午七月三日を以て、長野県信濃国下伊那郡飯田藩(堀兵庫守一万七千石、後松本県)",
+    "士族加藤固右衛門の三女として生れ。翁三十六(元子二十八)の頃、翁の畏友安井息軒の媒する所にか",
+    "ゝり。元子は翁に先立つ七年、明治三十七年甲辰一月二日八十三歳で歿した。元子の兄を加藤一介と称",
+    "し(名は信敏、三樵と号す)。業を古賀祠庵の門に受け、齋藤拙堂、安井息軒、昌谷精溪等と交はり。",
+    "謙遜朴実最も旧交に厚かつた。翁に四子あり、長正弘(初名亥之助、(双松と号す)嘉永四年辛亥十月十二",
+    "日を以て江戸に生る(翁三十八、元子三十)　家督を嗣ぎ。明治五年仕官して左院掌記より正院に転じ、",
+    "内閣書記官、記録局次長に歴任し、致仕して一時商社に携はつたが間もなく退き。昭和三年三月二十九",
+    "日七十八歳で病歿した。翁の二三子共に夭逝し、末子源太郎横山姓を冒し、東京に現住す。正弘子なく"
+   ],
+   "reference": "　　　　　　　　　　　　　　　　　　　　　　　二\n庄は、按察使大納言朝房の領する所なり。地頭は佐々木左衛門定綱なり」と見ゆ。翁の生地高畑に近き\n小谷山は、永正中浅井亮正が築城し。久正を経て長政に至り、元亀年間織田信長のために亡ぼされた古\n城趾がある。\n翁の家系は参議小野篁より出で、石川県金沢の藩老横山家(一万石)と同族である。故に翁は元横山姓\nを称し、名を仙助と云た。第十二世の祖横山／掃部頭（カモンノカミ）家盛が、京極高次に仕へ戦功あり。感状が家に伝へ\nられてゐる。高次は近江の人、織田 豊臣 徳川の三氏に仕へ、大津城主と成た。其妻は淀君の妹なるを\n以て、慶長の役に石田三成及び淀君より西軍に味方せんことを勧誘せられたが応ぜず。家康の東征中に\n西軍に苦しめられ、一時高野山に遁避した事あり。横山家盛は高次臣下の驍将で高畑に館し、城州に戦\n死し。一弟が帰農して世々館趾の家をまもり。今も二百余年を経た建物が存し、曩年翁の息正弘之を改修\nした。(写真参照)其祖小野篁の古墳は京都紫野にあり。翁後年金沢の同族横山多門政和(蘭洲と号し\n詩文を能くす)と謀り墓碑を修め、碑面の五大字を書し、息正弘の撰文なる「古墳之記」を石に刻して\n建た。翁其時蘭洲の詩に和して三首あり。\n　　　　　　　　　　頃者与加賀蘭洲謀、修参議小野公墓、\n　　　　　　　　　　蘭洲有詩、余亦同作\n　　半托村民半僧寺。擬防荊棘漫侵尋。敢揮凡筆題碑面。亦是区々念祖心。」　\n《割書：　　　　　　　半は村民に托し半は僧寺。荊棘の漫に侵尋するを防がんとはかる。敢て凡筆を揮て碑面に題す。亦是区々祖をおもふ心。｜》\n翁学成るにと及び、生地の関係より、江戸に於て吉田藩主松平伊豆守／信古（ノブヒサ）(後大河内刑部大輔)の聘に応\nじ儒臣と成り。更に藩士(六十石)と成つた。安政五年戊午の大獄起るや、藩命に依り江戸より追放せ\nられ、更に幕命で吉田に幽閉(国元永押込)せられ、小野侗之助と改め、晏齋とも号し、湖山の号は始\n終用ゐた。生地高畑は琵琶湖の北、小谷山の麓に位し、四面山を負ひ、湖山の号はそれより取つたので\nある。江戸に出でゝ始て居住したるは神田お玉ケ池(神田川の南今の元岩井町)で、玉池仙史と称し、\n後ち狂々生、侗翁等の別号あり。豊橋藩の儒臣より士族、更に東京府士族に改め、明治四十三年庚戌四\n月十九日高齢九十七歳を以て病歿した。翁八十七歳の時大患に罹り、一時危篤の趣　宸聴に達するや。\n特旨を以て従五位に叙せられ復た癒て、十年の寿を保つた。(恩賜叙位参照)\n配元子は文政五年壬午七月三日を以て、長野県信濃国下伊那郡飯田藩(堀兵庫守一万七千石、後松本県)\n士族加藤固右衛門の三女として生れ。翁三十六(元子二十八)の頃、翁の畏友安井息軒の媒する所にか\nゝり。元子は翁に先立つ七年、明治三十七年甲辰一月二日八十三歳で歿した。元子の兄を加藤一介と称\nし(名は信敏、三樵と号す)。業を古賀侗庵の門に受け、齋藤拙堂、安井息軒、昌谷精渓等と交はり。\n謙遜朴実最も旧交に厚かつた。翁に四子あり、長正弘(初名亥之助、(双松と号す)嘉永四年辛亥十月十二\n日を以て江戸に生る(翁三十八、元子三十)家督を嗣ぎ。明治五年仕官して左院掌記より正院に転じ、\n内閣書記官、記録局次長に歴任し、致仕して一時啇社に携はつたが間もなく退き。昭和三年三月二十九\n日七十八歳で病歿した。翁の二三子共に夭逝し、末子源太郎横山姓を冒【冐】し、東京に現住す。正弘子なく\n　　　　　　　　　　　　　　　　　　　　　　　三",
+   "reference_characters": 1465,
+   "raw_errors": 116,
+   "raw_cer": 0.07918088737201365,
+   "squeezed_reference_characters": 1350,
+   "squeezed_errors": 33,
+   "squeezed_cer": 0.024444444444444446,
+   "bag": {
+    "missed": 33,
+    "extra": 16,
+    "missed_share": 0.024444444444444446,
+    "extra_share": 0.011851851851851851
+   },
+   "lines": {
+    "reference_lines": 34,
+    "predicted_lines": 33,
+    "paired": 33,
+    "missed": 1,
+    "extra": 0,
+    "paired_cer": 0.023721275018532245,
+    "paired_reference_characters": 1349,
+    "paired_errors": 32,
+    "in_order_share": 1.0,
+    "pairs": [
+     {
+      "reference": 0,
+      "predicted": 0,
+      "distance": 0.0
+     },
+     {
+      "reference": 1,
+      "predicted": 1,
+      "distance": 0.0
+     },
+     {
+      "reference": 2,
+      "predicted": 2,
+      "distance": 0.0
+     },
+     {
+      "reference": 3,
+      "predicted": 3,
+      "distance": 0.0
+     },
+     {
+      "reference": 4,
+      "predicted": 4,
+      "distance": 0.065
+     },
+     {
+      "reference": 5,
+      "predicted": 5,
+      "distance": 0.018
+     },
+     {
+      "reference": 6,
+      "predicted": 6,
+      "distance": 0.0
+     },
+     {
+      "reference": 7,
+      "predicted": 7,
+      "distance": 0.0
+     },
+     {
+      "reference": 8,
+      "predicted": 8,
+      "distance": 0.022
+     },
+     {
+      "reference": 9,
+      "predicted": 9,
+      "distance": 0.064
+     },
+     {
+      "reference": 10,
+      "predicted": 10,
+      "distance": 0.022
+     },
+     {
+      "reference": 11,
+      "predicted": 11,
+      "distance": 0.13
+     },
+     {
+      "reference": 12,
+      "predicted": 12,
+      "distance": 0.0
+     },
+     {
+      "reference": 13,
+      "predicted": 13,
+      "distance": 0.0
+     },
+     {
+      "reference": 14,
+      "predicted": 14,
+      "distance": 0.0
+     },
+     {
+      "reference": 15,
+      "predicted": 15,
+      "distance": 0.0
+     },
+     {
+      "reference": 16,
+      "predicted": 16,
+      "distance": 0.117
+     },
+     {
+      "reference": 17,
+      "predicted": 17,
+      "distance": 0.037
+     },
+     {
+      "reference": 18,
+      "predicted": 18,
+      "distance": 0.0
+     },
+     {
+      "reference": 19,
+      "predicted": 19,
+      "distance": 0.022
+     },
+     {
+      "reference": 20,
+      "predicted": 20,
+      "distance": 0.043
+     },
+     {
+      "reference": 21,
+      "predicted": 21,
+      "distance": 0.022
+     },
+     {
+      "reference": 22,
+      "predicted": 22,
+      "distance": 0.022
+     },
+     {
+      "reference": 23,
+      "predicted": 23,
+      "distance": 0.0
+     },
+     {
+      "reference": 24,
+      "predicted": 24,
+      "distance": 0.0
+     },
+     {
+      "reference": 25,
+      "predicted": 25,
+      "distance": 0.0
+     },
+     {
+      "reference": 26,
+      "predicted": 26,
+      "distance": 0.0
+     },
+     {
+      "reference": 27,
+      "predicted": 27,
+      "distance": 0.0
+     },
+     {
+      "reference": 28,
+      "predicted": 28,
+      "distance": 0.043
+     },
+     {
+      "reference": 29,
+      "predicted": 29,
+      "distance": 0.0
+     },
+     {
+      "reference": 30,
+      "predicted": 30,
+      "distance": 0.0
+     },
+     {
+      "reference": 31,
+      "predicted": 31,
+      "distance": 0.022
+     },
+     {
+      "reference": 32,
+      "predicted": 32,
+      "distance": 0.0
+     }
+    ]
+   }
+  },
+  {
+   "id": "code4libjp-E2D5D507-044",
+   "frame": 0,
+   "image_sha256": "47d8beec55f484eb03fdd7158215c49e8be8badd480ff0084b4f9cca86ad11f9",
+   "seconds": 27.22092418395914,
+   "warnings": [],
+   "predicted": [
+    "八四",
+    "内、応永か其少し後に出来たと思はれる開基の画像など実に立派な",
+    "ものです。前庭にある彌陀の濡佛は豊橋最大のもので、これは元文",
+    "五年に京都の大仏師西村左近が作つたもの、其由來は元文元年に百",
+    "萬遍講を結び、講員が毎月三文づゝを積立てこれを造つたのであり",
+    "まして、その講は現在まで続いて居ります。向ふの銀杏の根本にあ",
+    "る小さい墓、これはこの地方では相当人に知られた俳人、佐野逢宇",
+    "の墓で",
+    "",
+    "とあります。此前昭和五年石巻山上へ句碑の立派なのが建ちました",
+    "",
+    "といふのです。こちらの水盤には意亦浄とありませう、これは大國",
+    "隆正が書いたもので、この隆正は維新前復古神道の急先鋒として活",
+    "躍した頃当地の羽田野敬雄を訪ひ佐野逢宇へ身を寄せてゐた事があ",
+    "りますが、これは其時に書いたものでせうが、文句とまた彼が仏教",
+    "嫌ひであつた点から考へますと、寺のために書いたかどうか、これ",
+    "は疑問です。墓地は南と北の二ゖ所にありまして、其北の墓地には",
+    "國學者中山美石の墓があります。美石は本居大平の門人で、それに",
+    "一宮砥鹿神社の草鹿砥宣隆神主が撰文し、藩の家老和田元長が書い",
+    "て居り、何れも当代一流の人物である処に美石の人物が偲ばれます",
+    "南の墓にはこの美石の孫に当る中山繁樹の墓があり、又市内最古の",
+    "石碑、といつても漸く慶長五年ですが、それがこの墓地にあります",
+    "その墓地に続いた観音寺には、これは墓ではありませんが、法眼是",
+    "心軒一露の碑があります。",
+    "",
+    "大正7.3.31"
+   ],
+   "reference": "　　　　　　　　　　　　　　　　　　　　　　　　　八四\n\n内、応永か其少し後に出来たと思はれる開基の画像など実に立派な\nものです。前庭にある弥陀の濡仏は豊橋最大のもので、これは元文\n五年に京都の大仏師西村左近が作つたもの、其由来は元文元年に百\n万遍講を結び、講員が毎月三文づゝを積立てこれを造つたのであり\nまして、その講は現在まで続いて居ります。向ふの銀杏の根本にあ\nる小さい墓、これはこの地方では相当人に知られた俳人、佐野逢宇\nの墓で\n　　　「梅に残り柳にへりし寒さかな」\nとあります。此前昭和五年石巻山上へ句碑の立派なのが建ちました\n　　　「神山や水もぬるまず岩ばしる」\nといふのです。こちらの水盤には意亦浄とありませう、これは大国\n隆正が書いたもので、この隆正は維新前復古神道の急先鋒として活\n\n\n躍した頃当地の羽田野敬雄を訪ひ佐野逢宇へ身を寄せてゐた事があ\nりますが、これは其時に書いたものでせうが、文句とまた彼が仏教\n嫌ひであつた点から考へますと、寺のために書いたかどうか、これ\nは疑問です。墓地は南と北の二ヶ所にありまして、其北の墓地には\n国学者中山美石の墓があります。 美石は本居大平の門人で、それに\n一宮砥鹿神社の草鹿砥宣隆神主が撰文し、藩の家老和田元長が書い\nて居り、何れも当代一流の人物である処に美石の人物が偲ばれます\n南の墓にはこの美石の孫に当る中山繁樹の墓があり、又市内最古の\n石碑、といつても漸く慶長五年ですが、それがこの墓地にあります\nその墓地に続いた観音寺には、これは墓ではありませんが、法眼是\n心軒一露の碑があります。\n　　 「寒風も吹くな柳のみどりをば」\n\n　　　　　　　　　　　　　　　　　　　　　　　　　八五",
+   "reference_characters": 723,
+   "raw_errors": 119,
+   "raw_cer": 0.16459197786998617,
+   "squeezed_reference_characters": 634,
+   "squeezed_errors": 55,
+   "squeezed_cer": 0.08675078864353312,
+   "bag": {
+    "missed": 55,
+    "extra": 16,
+    "missed_share": 0.08675078864353312,
+    "extra_share": 0.025236593059936908
+   },
+   "lines": {
+    "reference_lines": 26,
+    "predicted_lines": 26,
+    "paired": 26,
+    "missed": 0,
+    "extra": 0,
+    "paired_cer": 0.09621451104100946,
+    "paired_reference_characters": 634,
+    "paired_errors": 61,
+    "in_order_share": 1.0,
+    "pairs": [
+     {
+      "reference": 0,
+      "predicted": 0,
+      "distance": 0.0
+     },
+     {
+      "reference": 1,
+      "predicted": 1,
+      "distance": 0.0
+     },
+     {
+      "reference": 2,
+      "predicted": 2,
+      "distance": 0.067
+     },
+     {
+      "reference": 3,
+      "predicted": 3,
+      "distance": 0.033
+     },
+     {
+      "reference": 4,
+      "predicted": 4,
+      "distance": 0.033
+     },
+     {
+      "reference": 5,
+      "predicted": 5,
+      "distance": 0.0
+     },
+     {
+      "reference": 6,
+      "predicted": 6,
+      "distance": 0.0
+     },
+     {
+      "reference": 7,
+      "predicted": 7,
+      "distance": 0.0
+     },
+     {
+      "reference": 8,
+      "predicted": 8,
+      "distance": 1.0
+     },
+     {
+      "reference": 9,
+      "predicted": 9,
+      "distance": 0.0
+     },
+     {
+      "reference": 10,
+      "predicted": 10,
+      "distance": 1.0
+     },
+     {
+      "reference": 11,
+      "predicted": 11,
+      "distance": 0.033
+     },
+     {
+      "reference": 12,
+      "predicted": 12,
+      "distance": 0.0
+     },
+     {
+      "reference": 13,
+      "predicted": 13,
+      "distance": 0.0
+     },
+     {
+      "reference": 14,
+      "predicted": 14,
+      "distance": 0.0
+     },
+     {
+      "reference": 15,
+      "predicted": 15,
+      "distance": 0.0
+     },
+     {
+      "reference": 16,
+      "predicted": 16,
+      "distance": 0.033
+     },
+     {
+      "reference": 17,
+      "predicted": 17,
+      "distance": 0.067
+     },
+     {
+      "reference": 18,
+      "predicted": 18,
+      "distance": 0.0
+     },
+     {
+      "reference": 19,
+      "predicted": 19,
+      "distance": 0.0
+     },
+     {
+      "reference": 20,
+      "predicted": 20,
+      "distance": 0.0
+     },
+     {
+      "reference": 21,
+      "predicted": 21,
+      "distance": 0.0
+     },
+     {
+      "reference": 22,
+      "predicted": 22,
+      "distance": 0.0
+     },
+     {
+      "reference": 23,
+      "predicted": 23,
+      "distance": 0.0
+     },
+     {
+      "reference": 24,
+      "predicted": 24,
+      "distance": 1.0
+     },
+     {
+      "reference": 25,
+      "predicted": 25,
+      "distance": 1.0
+     }
+    ]
+   }
+  }
+ ],
+ "rescored_from": "page-eval run of 2026-09-06 on the same manifest, CPU, fp32 encoder"
+}
