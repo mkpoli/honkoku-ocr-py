@@ -81,14 +81,16 @@ is the fp16 export rather than the browser's int8 one, so line texts can differ 
 
 ## 性能
 
-同じ見開き1コマ（6,496×4,613px、長辺3,500pxに縮小、検出21行）を、同じ機械（AMD Ryzen 7 9800X3D、16スレッド）で処理した所要時間。
-ブラウザ版は配信中の[honkoku-ocr-web](https://yuta1984.github.io/honkoku-ocr-web/)（2026-09-06、モデルv18）を
-ヘッドレスChromiumで動かした値で、WebGPUが使えない環境のためencoderはWebAssembly（int8）、認識ワーカーは8本。
+同じ見開き1コマ（6,496×4,613px、長辺3,500pxに縮小、Python版21行・ブラウザ版22行）を、同じ機械（AMD Ryzen 7 9800X3D、16スレッド）で処理した所要時間。
+ブラウザ版は配信中の[honkoku-ocr-web](https://yuta1984.github.io/honkoku-ocr-web/)（2026-09-06、モデルv18）を2通りの環境で動かした値。
+LinuxのヘッドレスChromiumではWebGPUアダプターを取得できず、encoderはWebAssembly（int8）、認識ワーカーは8本。
+WindowsのヘッドレスChromeでは同じRTX 5070 TiのWebGPUアダプターを確認し、fp16 encoder・認識ワーカー2本で別途測定した。
 モデルの取得とセッション作成は含まない。
 
 | 実装 | 行検出 | 行認識 | 合計 |
 |------|-------:|-------:|-----:|
 | ブラウザ版（WebAssembly、8ワーカー） | 2.9秒 | 37.5〜43.2秒（2回の実測） | 約40〜46秒 |
+| ブラウザ版（Windows WebGPU、fp16、2ワーカー） | 2.02〜2.03秒 | 3.05〜3.35秒 | 5.07〜5.37秒（warm、2回） |
 | honkoku-ocr-py CPU、encoder fp32（既定） | 0.2秒 | 19.5秒（encoder 18.2秒、decoder 0.9秒） | 20.6秒 |
 | honkoku-ocr-py CPU、encoder fp16（`--encoder-precision fp16`） | 0.2秒 | 約150秒 | 152秒 |
 | honkoku-ocr-py CUDA（RTX 5070 Ti、encoder fp16、`--threads 2 --decoder-threads 2`） | 0.04秒 | 1.1秒（encoder 0.48秒、decoder 0.36秒、前処理 0.21秒） | 1.46秒（warm、3回の中央値） |
@@ -98,6 +100,12 @@ is the fp16 export rather than the browser's int8 one, so line texts can differ 
 行末の全角空白の有無だけ違った。CPUでは初回に変換してキャッシュし（366MB、数秒）、CUDAではfp16のまま使う。
 
 CUDAの行は同じ見開きを1回の暖機のあと3回処理した中央値（1.508、1.444、1.464秒）で、3回とも同じ文字列を出した。モデルの遅延読み込みを含む最初の1コマは3.51秒、プロセスのピークRSSは約2.0GiB。decoderはCUDAでもCPUで動く。
+
+WebGPU版は初回の行認識が4.65秒、その後の認識のみの再実行が3.32秒と3.22秒。表は続けて行検出からやり直した2回の値。
+この1コマではPython CUDA版の合計時間はWebGPU版の約1/3.5〜1/3.7だった。
+ブラウザの行検出はWebGPU使用時もCPUのWASMで動く。行認識だけでは3.05〜3.35秒対約1.1秒で、Python版が約2.8〜3.0倍速い。
+ブラウザは2ワーカーで認識を並行処理し、Python版は逐次処理する。ブラウザはWindows、PythonはWSL上で動作し、OSによる影響は未測定。検出行数も異なる。ブラウザは画像の準備後からUIの完了までを100ms間隔で測り、Pythonの合計には画像読み込み約0.36秒も含む。
+測定条件と各回の値は[benchmarks/webgpu-comparison.json](benchmarks/webgpu-comparison.json)に記録した。
 
 ブラウザ版とこの移植では同じ見開きで検出行数（22行と21行）も行の読みも一部異なる。
 どちらが正しいかは正解翻刻との照合が要る。測定に使った見開きは公開許諾を確かめていない手元のスキャンで、

@@ -1,0 +1,76 @@
+{
+  "date": "2026-09-06",
+  "upstream_url": "https://yuta1984.github.io/honkoku-ocr-web/",
+  "image": {
+    "sha256": "e2ed654248a0230d039580241dbbcf4a15ab590d51d6568925be607295cce8fa",
+    "width": 6496,
+    "height": 4613,
+    "long_side": 3500,
+    "public": false
+  },
+  "hardware": {
+    "cpu": "AMD Ryzen 7 9800X3D",
+    "gpu": "NVIDIA GeForce RTX 5070 Ti"
+  },
+  "browser": {
+    "platform": "Windows",
+    "headless": true,
+    "adapter_vendor": "nvidia",
+    "adapter_architecture": "blackwell",
+    "is_fallback_adapter": false,
+    "shader_f16": true,
+    "encoder_provider": "webgpu",
+    "encoder_precision": "fp16",
+    "recognition_workers": 2,
+    "model": "v18",
+    "layout": "rtmdet",
+    "lines": 22,
+    "poll_interval_ms": 100,
+    "initial_layout_seconds": 2.0305999999046325,
+    "recognition_only_seconds": [
+      4.647,
+      3.3232000000476836,
+      3.2219000000953675
+    ],
+    "recognition_only_transcripts_identical": true,
+    "warm_full_page_runs": [
+      {
+        "layout_seconds": 2.028,
+        "ocr_seconds": 3.3457999999523165,
+        "total_seconds": 5.374200000047684
+      },
+      {
+        "layout_seconds": 2.0245,
+        "ocr_seconds": 3.0485,
+        "total_seconds": 5.073400000095368
+      }
+    ],
+    "version": "152.0.7977.75",
+    "layout_provider": "wasm",
+    "decoder_provider": "wasm"
+  },
+  "python": {
+    "platform": "WSL Linux",
+    "encoder_provider": "CUDAExecutionProvider",
+    "encoder_precision": "fp16",
+    "decoder_provider": "CPUExecutionProvider",
+    "threads": 2,
+    "decoder_threads": 2,
+    "lines": 21,
+    "warm_total_seconds": [
+      1.50812,
+      1.44396,
+      1.46373
+    ],
+    "execution": "serial",
+    "image_load_seconds_approx": 0.357,
+    "implementation_reference_commit": "606c7e25188c9c3a0c085ca26dc1d93cd02f64b1",
+    "measured_commit": null
+  },
+  "limitations": [
+    "One private page; no ground-truth accuracy evaluation.",
+    "Different operating systems, execution providers, worker counts and detected line counts.",
+    "Browser timings use UI completion; Python timings use pipeline completion. Model download and session setup excluded.",
+    "Browser page image preparation precedes layout timing; Python full-page timing includes image loading."
+  ]
+}
