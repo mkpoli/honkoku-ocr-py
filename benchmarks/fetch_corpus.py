@@ -9,9 +9,12 @@ import argparse
 import hashlib
 import json
 import sys
+from contextlib import nullcontext
 from pathlib import Path
 
 import httpx
+
+from honkoku_ocr.output import atomic_write
 
 
 def sha256(path: Path) -> str:
@@ -24,22 +27,21 @@ def sha256(path: Path) -> str:
 
 def fetch(manifest: Path, *, client: httpx.Client | None = None) -> list[Path]:
     data = json.loads(manifest.read_text(encoding="utf-8"))
-    client = client or httpx.Client(follow_redirects=True, timeout=120)
+    owned = client is None
     written = []
-    for sample in data["samples"]:
-        target = manifest.parent / sample["image"]
-        if target.exists() and sha256(target) == sample["image_sha256"]:
-            continue
-        response = client.get(sample["image_url"])
-        response.raise_for_status()
-        part = target.with_name(target.name + ".part")
-        part.write_bytes(response.content)
-        digest = sha256(part)
-        if digest != sample["image_sha256"]:
-            part.unlink()
-            raise RuntimeError(f"{sample['id']}: downloaded image digest {digest[:12]} differs from the manifest; the source image may have changed")
-        part.replace(target)
-        written.append(target)
+    with (httpx.Client(follow_redirects=True, timeout=120) if owned else nullcontext(client)) as http:
+        for sample in data["samples"]:
+            target = manifest.parent / sample["image"]
+            if target.exists() and sha256(target) == sample["image_sha256"]:
+                continue
+            response = http.get(sample["image_url"])
+            response.raise_for_status()
+            digest = hashlib.sha256(response.content).hexdigest()
+            if digest != sample["image_sha256"]:
+                raise RuntimeError(f"{sample['id']}: downloaded image digest {digest[:12]} differs from the manifest; the source image may have changed")
+            target.parent.mkdir(parents=True, exist_ok=True)
+            atomic_write(target, response.content)
+            written.append(target)
     return written
 
 
