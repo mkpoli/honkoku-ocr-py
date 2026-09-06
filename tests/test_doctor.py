@@ -34,3 +34,13 @@ def test_runtime_report_without_onnxruntime(monkeypatch):
     data = doctor.runtime_report()
     assert data["onnxruntime"] is None and data["cuda"] is False and "not installed" in data["cuda_error"]
     assert "missing" in doctor.render(doctor.report("v18"))
+
+
+def test_hint_appears_only_with_hyperthreading(monkeypatch):
+    data = doctor.report("v18", {"device": "cpu"})
+    data["package"]["physical_cores"], data["package"]["cpu_count"] = 8, 16
+    assert "--threads 8 --decoder-threads 2" in doctor.render(data)
+    data["package"]["physical_cores"] = 16
+    assert "hint:" not in doctor.render(data)
+    data["package"]["physical_cores"], data["settings"]["device"] = 8, "cuda"
+    assert "hint:" not in doctor.render(data)

@@ -23,6 +23,18 @@ def _version(name: str) -> str | None:
         return None
 
 
+def physical_cores() -> int | None:
+    """Linuxのsysfsから物理コア数を数える。分からなければNone。"""
+    try:
+        cores = set()
+        for path in Path("/sys/devices/system/cpu").glob("cpu[0-9]*/topology/core_id"):
+            package = path.parent / "physical_package_id"
+            cores.add((package.read_text().strip() if package.exists() else "0", path.read_text().strip()))
+        return len(cores) or None
+    except OSError:
+        return None
+
+
 def runtime_report() -> dict[str, Any]:
     report: dict[str, Any] = {"onnxruntime": None, "providers": [], "cuda": False, "cuda_error": None}
     try:
@@ -72,7 +84,7 @@ def cache_report(model_version: str) -> dict:
 def report(model_version: str = models.DEFAULT_VERSION, settings: dict | None = None) -> dict:
     return {
         "package": {"version": package_version(), "python": platform.python_version(), "platform": platform.platform(),
-                    "cpu_count": os.cpu_count(),
+                    "cpu_count": os.cpu_count(), "physical_cores": physical_cores(),
                     "libraries": {name: _version(name) for name in ("numpy", "pillow", "onnx", "onnxruntime", "onnxruntime-gpu", "pypdfium2", "httpx")}},
         "runtime": runtime_report(),
         "pdf": _version("pypdfium2") is not None,
@@ -106,6 +118,10 @@ def render(data: dict) -> str:
         lines.append(f"  fp32     {conv['file']}: not built yet (built on first CPU run)")
     if data["settings"]:
         lines.append("settings: " + ", ".join(f"{k}={v}" for k, v in data["settings"].items()))
+    cores = data["package"].get("physical_cores")
+    if cores and data["package"]["cpu_count"] and cores < data["package"]["cpu_count"] and data["settings"].get("device", "cpu") == "cpu":
+        lines.append(f"hint: {cores} physical cores and {data['package']['cpu_count']} logical CPUs; on such CPUs "
+                     f"--threads {cores} --decoder-threads 2 ran faster than the runtime default in the recorded sweeps")
     for name, value in data["environment"].items():
         lines.append(f"{name}={value}")
     return "\n".join(lines)
