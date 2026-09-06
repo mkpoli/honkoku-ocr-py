@@ -52,3 +52,11 @@ def test_download_retries_and_reuses_existing(tmp_path, monkeypatch):
 def test_manifest_directory_is_stable_and_redacted(tmp_path):
     a = iiif.manifest_directory("https://x/manifest.json", tmp_path)
     assert a == iiif.manifest_directory("https://x/manifest.json", tmp_path) and a.parent == tmp_path and len(a.name) == 16
+
+
+def test_load_manifest_from_url_and_file(tmp_path, monkeypatch):
+    monkeypatch.setattr(iiif, "new_client", lambda: httpx.Client(transport=httpx.MockTransport(lambda r: httpx.Response(200, json=V3))))
+    assert len(iiif.canvases(iiif.load_manifest("https://example.org/manifest.json"))) == 2
+    path = tmp_path / "m.json"
+    path.write_text(__import__("json").dumps(V2), encoding="utf-8")
+    assert len(iiif.canvases(iiif.load_manifest(str(path)))) == 2

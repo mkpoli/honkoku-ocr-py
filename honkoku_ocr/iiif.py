@@ -85,8 +85,12 @@ def new_client() -> httpx.Client:
 def load_manifest(source: str, client: httpx.Client | None = None) -> dict:
     """URLかローカルファイルからマニフェストを読む。"""
     if re.match(r"^https?://", source):
-        http = client or new_client()
-        response = http.get(source)
+        if client is None:
+            with new_client() as http:
+                response = http.get(source)
+                response.raise_for_status()
+                return response.json()
+        response = client.get(source)
         response.raise_for_status()
         return response.json()
     return json.loads(Path(source).read_text(encoding="utf-8"))
