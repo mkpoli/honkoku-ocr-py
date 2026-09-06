@@ -9,17 +9,22 @@ from .pipeline import OCR
 EXTS = {".jpg", ".jpeg", ".png", ".tif", ".tiff", ".bmp", ".webp"}
 
 def _unique_names(files: list[Path]) -> dict[Path, str]:
-    """出力名は stem。重複する場合は親ディレクトリ名と拡張子を足して区別する。"""
+    """Allocate unique stems, including collisions with generated names."""
+    files = list(dict.fromkeys(files))
+    reserved = {f.stem.casefold() for f in files}
+    used: set[str] = set()
     names: dict[Path, str] = {}
-    by_stem: dict[str, list[Path]] = {}
     for f in files:
-        by_stem.setdefault(f.stem, []).append(f)
-    for stem, group in by_stem.items():
-        if len(group) == 1:
-            names[group[0]] = stem
-            continue
-        for f in group:
-            names[f] = f"{f.parent.name}__{stem}{f.suffix.replace('.', '_')}" if f.parent.name else f"{stem}{f.suffix.replace('.', '_')}"
+        candidate = f.stem
+        if candidate.casefold() in used:
+            suffix = 2
+            while True:
+                candidate = f"{f.stem}__{suffix}"
+                suffix += 1
+                if candidate.casefold() not in used | reserved:
+                    break
+        used.add(candidate.casefold())
+        names[f] = candidate
     return names
 
 def main(argv=None) -> int:
@@ -38,19 +43,20 @@ def main(argv=None) -> int:
     files: list[Path] = []
     for s in a.inputs:
         p = Path(s)
-        files += sorted(q for q in p.iterdir() if q.suffix.lower() in EXTS) if p.is_dir() else [p]
+        files += sorted(q for q in p.iterdir() if q.is_file() and q.suffix.lower() in EXTS) if p.is_dir() else [p]
+    files = list(dict.fromkeys(p.resolve() for p in files))
     if not files:
         ap.error("画像を指定してください")
     a.output.mkdir(parents=True, exist_ok=True)
     names = _unique_names(files)
     ocr = OCR(a.version, a.device)
     for f in files:
-        t0 = time.time()
+        t0 = time.perf_counter()
         lines = ocr.run(f)
         stem = names[f]
         (a.output / f"{stem}.json").write_text(json.dumps({"image": f.name, "model": a.version, "lines": [asdict(l) for l in lines]}, ensure_ascii=False, indent=1), encoding="utf-8")
         (a.output / f"{stem}.txt").write_text("\n".join(l.plain if a.plain else l.koji for l in lines) + "\n", encoding="utf-8")
-        print(f"{f.name}: {len(lines)} 行 {time.time() - t0:.1f}s", file=sys.stderr)
+        print(f"{f.name}: {len(lines)} 行 {time.perf_counter() - t0:.1f}s", file=sys.stderr)
     return 0
 
 if __name__ == "__main__":

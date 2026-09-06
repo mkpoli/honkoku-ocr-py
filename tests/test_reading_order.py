@@ -13,3 +13,15 @@ def test_two_pages_side_by_side_each_top_to_bottom():
 def test_trivial_inputs():
     assert order([]) == []
     assert order([(0, 0, 10, 10)]) == [0]
+
+
+def test_histogram_accumulates_without_uint8_overflow():
+    import numpy as np
+    from honkoku_ocr.reading_order import _hist
+    xh, yh = _hist(np.ones((300, 400), dtype=np.uint8), 0, 0, 400, 300)
+    assert xh == [300] * 400
+    assert yh == [400] * 300
+
+
+def test_horizontal_rows_read_top_to_bottom():
+    assert order([(0, 120, 900, 30), (0, 0, 900, 30), (0, 60, 900, 30)]) == [2, 0, 1]

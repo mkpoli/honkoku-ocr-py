@@ -4,6 +4,7 @@ NDL古典籍OCR-Lite の block_xy_cut と honkoku-ocr-web の reading-order.ts �
 """
 from __future__ import annotations
 from dataclasses import dataclass, field
+import numpy as np
 
 GRID = 100
 
@@ -24,12 +25,9 @@ def order(boxes: list[tuple[float, float, float, float]]) -> list[int]:
         return [0]
     raw = [(x, y, x + w, y + h) for x, y, w, h in boxes]
     norm, w, h = _normalize(raw)
-    table = [[0] * w for _ in range(h)]
+    table = np.zeros((h, w), dtype=np.uint8)
     for x0, y0, x1, y1 in norm:
-        for yy in range(y0, min(y1, h)):
-            row = table[yy]
-            for xx in range(x0, min(x1, w)):
-                row[xx] = 1
+        table[y0:min(y1, h), x0:min(x1, w)] = 1
     root = _Node(0, 0, w, h)
     _cut(table, root)
     _assign(root, norm)
@@ -57,13 +55,8 @@ def _normalize(b):
     return out, w, h
 
 def _hist(table, x0, y0, x1, y1):
-    xh = [0] * (x1 - x0); yh = [0] * (y1 - y0)
-    for y in range(y0, y1):
-        row = table[y]
-        for x in range(x0, x1):
-            v = row[x]
-            xh[x - x0] += v; yh[y - y0] += v
-    return xh, yh
+    region = table[y0:y1, x0:x1]
+    return region.sum(axis=0).tolist(), region.sum(axis=1).tolist()
 
 def _min_span(hist):
     if len(hist) <= 1:

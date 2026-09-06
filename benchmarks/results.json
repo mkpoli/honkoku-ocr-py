@@ -1,0 +1,68 @@
+{
+  "scope": "Synthetic reading-order and Koji conversion components; excludes OCR inference, image preprocessing and startup",
+  "upstream_commit": "f0b0388a2744daaec4c92979e86516e4f8b3f8fd",
+  "upstream_source_sha256": {
+    "src/ocr/reading-order.ts": "0179b2288591cd0d0ef19170884a2565e9e2843caccddeb8e1e4a16c32d9f88e",
+    "src/lib/koji.ts": "d08bc4cf25e5cb5eb5323799a850d6464ec2472617feebf2cef61da0781b2640"
+  },
+  "python_source_sha256": {
+    "honkoku_ocr/reading_order.py": "58260abbe12da8e88273b65708a3933f94c81a6a823a38a6d6bd0caa75e1bc67",
+    "honkoku_ocr/koji.py": "904da66279466d336befb6a50e83497d7ce4403127711a34cb4788599b87fce6"
+  },
+  "python": "3.12.7",
+  "node": "v22.23.2",
+  "platform": "Linux x86_64",
+  "seed": 20260906,
+  "warmups": 3,
+  "repeats": 7,
+  "components": {
+    "order": {
+      "cases": 69,
+      "mismatch_indices": [],
+      "python_median_ms": 174.06331794336438,
+      "upstream_median_ms": 17.204407000000003,
+      "python_samples_ms": [
+        178.54852799791843,
+        158.74412399716675,
+        219.09727505408227,
+        174.06331794336438,
+        191.0521569661796,
+        164.2916789278388,
+        158.77551201265305
+      ],
+      "upstream_samples_ms": [
+        15.000501000000014,
+        36.283714,
+        23.192560999999984,
+        15.234785999999986,
+        17.204407000000003,
+        46.422934,
+        15.492084999999975
+      ]
+    },
+    "text": {
+      "cases": 213,
+      "mismatch_indices": [],
+      "python_median_ms": 0.9270609589293599,
+      "upstream_median_ms": 0.4985470000000305,
+      "python_samples_ms": [
+        0.931589980609715,
+        0.9162999922409654,
+        0.9838190162554383,
+        0.9311089524999261,
+        0.8835589978843927,
+        0.9270609589293599,
+        0.8803119417279959
+      ],
+      "upstream_samples_ms": [
+        0.5965330000000222,
+        0.712444000000005,
+        0.6311890000000062,
+        0.4448250000000371,
+        0.4383820000000469,
+        0.4985470000000305,
+        0.47438099999999395
+      ]
+    }
+  }
+}

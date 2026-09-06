@@ -21,3 +21,5 @@
 - encoder には fp16 版 ONNX を用いる（int8 版の ConvInteger 演算は onnxruntime の CPU/CUDA 実行プロバイダに実装がないため）。
   そのため fp16 encoder が配布されている v16fs / v17 / v18 のみに対応する。
 - モデルは初回実行時に原著作物と同じ配信元から取得し、ローカルにキャッシュする。
+- XY-Cut のメッシュ生成とヒストグラム集計を NumPy に置き換えた。
+  原実装との読み順・Koji 変換の比較手順と測定結果は benchmarks/ に記す。

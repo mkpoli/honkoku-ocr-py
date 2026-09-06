@@ -4,7 +4,7 @@
 $HONKOKU_OCR_MODELS （既定 ~/.cache/honkoku-ocr/models）に置く。
 """
 from __future__ import annotations
-import hashlib, json, os, sys
+import hashlib, json, os, sys, tempfile
 from pathlib import Path
 import httpx
 
@@ -62,20 +62,26 @@ def fetch(name: str, quiet: bool = False) -> Path:
         verify(dst, name, digest=False)
         return dst
     url = f"{MODEL_BASE_URL}/{name}"
-    tmp = dst.with_suffix(dst.suffix + ".part")
-    with httpx.stream("GET", url, follow_redirects=True, timeout=120) as r:
-        r.raise_for_status()
-        total = int(r.headers.get("content-length") or 0)
-        done = 0
-        with open(tmp, "wb") as f:
-            for chunk in r.iter_bytes(1 << 20):
-                f.write(chunk); done += len(chunk)
-                if not quiet and total:
-                    print(f"\r{name}: {done * 100 // total:3d}%", end="", file=sys.stderr)
-    if not quiet:
-        print(file=sys.stderr)
-    verify(tmp, name, digest=True)
-    tmp.replace(dst)
+    # Each caller owns its temporary file; only verified files enter the cache.
+    fd, tmp_name = tempfile.mkstemp(prefix=name + ".", suffix=".part", dir=dst.parent)
+    tmp = Path(tmp_name)
+    try:
+        with os.fdopen(fd, "wb") as f:
+            with httpx.stream("GET", url, follow_redirects=True, timeout=120) as r:
+                r.raise_for_status()
+                total = int(r.headers.get("content-length") or 0)
+                done = 0
+                for chunk in r.iter_bytes(1 << 20):
+                    f.write(chunk)
+                    done += len(chunk)
+                    if not quiet and total:
+                        print(f"\r{name}: {done * 100 // total:3d}%", end="", file=sys.stderr)
+        if not quiet:
+            print(file=sys.stderr)
+        verify(tmp, name, digest=True)
+        tmp.replace(dst)
+    finally:
+        tmp.unlink(missing_ok=True)
     return dst
 
 def vocab(version: str) -> list[str]:

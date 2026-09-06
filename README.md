@@ -61,6 +61,8 @@ JSON の各行は `reading_order`, `x`, `y`, `width`, `height`, `confidence`（�
 encoder は fp16 のため CPU では 1 行に数秒かかる（RTX 5070 Ti では `--device cuda` で 1 行 0.1 秒程度）。
 CPU で大量に処理する場合は GPU 版を使うか、行数の少ない画像に限るのが現実的。
 
+読み順・Koji 変換の原実装との比較と再現手順は [benchmarks/README.md](benchmarks/README.md) を参照。
+
 ## 環境変数
 
 - `HONKOKU_OCR_MODELS` … モデルの保存先（既定 `~/.cache/honkoku-ocr/models`）
@@ -69,7 +71,7 @@ CPU で大量に処理する場合は GPU 版を使うか、行数の少ない�
 ## テスト
 
 ```sh
-uv run --extra cpu pytest
+uv run --extra dev pytest
 ```
 
 ## ライセンスと帰属

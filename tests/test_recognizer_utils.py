@@ -23,3 +23,7 @@ def test_crop_with_margin_pads_with_white_outside_image():
 def test_decode_ids_strips_struct_and_rt2():
     vocab = ["<PAD>", "<UNK>", "<CLS>", "<SEP>", "<MASK>", "<rt2>", "</rt2>", "<OKURI>", "</OKURI>", "あ", "い"]
     assert decode_ids([2, 9, 5, 10, 6, 7, 9, 8, 3], vocab) == "あ<OKURI>ア</OKURI>"
+
+
+def test_decode_ids_ignores_out_of_range_ids():
+    assert decode_ids([-1, -99, 5, 6, 999], [''] * 5 + ['字']) == '字'

@@ -1,0 +1,69 @@
+{
+  "scope": "Synthetic reading-order and Koji conversion components; excludes OCR inference, image preprocessing and startup",
+  "upstream_commit": "f0b0388a2744daaec4c92979e86516e4f8b3f8fd",
+  "upstream_source_sha256": {
+    "src/ocr/reading-order.ts": "0179b2288591cd0d0ef19170884a2565e9e2843caccddeb8e1e4a16c32d9f88e",
+    "src/lib/koji.ts": "d08bc4cf25e5cb5eb5323799a850d6464ec2472617feebf2cef61da0781b2640"
+  },
+  "python": "3.12.7",
+  "node": "v22.23.2",
+  "platform": "Linux x86_64",
+  "seed": 20260906,
+  "warmups": 3,
+  "repeats": 7,
+  "components": {
+    "order": {
+      "cases": 69,
+      "mismatch_indices": [],
+      "python_median_ms": 210.78610001131892,
+      "upstream_median_ms": 15.259878,
+      "python_samples_ms": [
+        212.60069403797388,
+        210.6984439305961,
+        218.93204399384558,
+        210.78610001131892,
+        208.14747596159577,
+        209.16016795672476,
+        216.58313600346446
+      ],
+      "upstream_samples_ms": [
+        15.259878,
+        15.055675999999991,
+        15.665474000000017,
+        15.269847999999996,
+        19.014414999999985,
+        15.226495,
+        14.733469999999983
+      ]
+    },
+    "text": {
+      "cases": 213,
+      "mismatch_indices": [],
+      "python_median_ms": 0.9434010135009885,
+      "upstream_median_ms": 0.3967130000000054,
+      "python_samples_ms": [
+        0.9241859661415219,
+        0.9791390039026737,
+        0.9531809482723475,
+        0.9375410154461861,
+        0.9198670741170645,
+        0.9623880032449961,
+        0.9434010135009885
+      ],
+      "upstream_samples_ms": [
+        0.6989679999999794,
+        0.3967130000000054,
+        0.3837790000000041,
+        0.3786790000000053,
+        0.42034900000001585,
+        0.3931570000000022,
+        0.41972699999999463
+      ]
+    }
+  },
+  "python_source_sha256": {
+    "honkoku_ocr/reading_order.py": "2f290de397735433a69a1ee1b3494c5bf8e797a062c59af99f1923c4b7c59682",
+    "honkoku_ocr/koji.py": "904da66279466d336befb6a50e83497d7ce4403127711a34cb4788599b87fce6"
+  },
+  "python_revision": "8d47496"
+}

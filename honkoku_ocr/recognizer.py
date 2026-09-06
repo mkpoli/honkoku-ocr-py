@@ -98,7 +98,7 @@ def degenerate_period(seq: list[int]) -> int:
 _HIRA = lambda s: "".join(chr(ord(c) + 0x60) if "ぁ" <= c <= "ゖ" else c for c in s)
 
 def decode_ids(ids: list[int], vocab: list[str]) -> str:
-    out = "".join(vocab[i] if i < len(vocab) else "" for i in ids if i not in STRUCT)
+    out = "".join(vocab[i] if 0 <= i < len(vocab) else "" for i in ids if i not in STRUCT)
     out = re.sub(r"<rt2>.*?</rt2>", "", out)
     out = re.sub(r"</?rt2>", "", out)
     out = re.sub(r"<OKURI>(.*?)</OKURI>", lambda m: f"<OKURI>{_HIRA(m.group(1))}</OKURI>", out)
