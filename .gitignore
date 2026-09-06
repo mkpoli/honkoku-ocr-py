@@ -5,3 +5,5 @@ __pycache__/
 ocr-out/
 dist/
 .playwright-mcp/
+benchmarks/corpus/*.jpg
+benchmarks/corpus/*.part

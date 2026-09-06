@@ -13,11 +13,12 @@ endpoint listed in `manifest.json` and checks their SHA-256.
 - Line boxes and transcriptions: NDL古典籍OCR学習用データセット（みんなで翻刻加工データ）v2,
   2024-02-07, https://github.com/ndl-lab/ndl-minhon-ocrdataset ,
   archive https://lab.ndl.go.jp/dataset/ndlkotensekiocr/ndl-minhon-ocrdataset_20240207.zip ,
-  licence CC BY-SA 4.0. It is derived from みんなで翻刻 data,
+  licence CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). It is derived from みんなで翻刻 data,
   https://github.com/yuta1984/honkoku-data , CC BY-SA 4.0. Each sample names the
   dataset JSON it was taken from.
 
-The manifest and this directory are therefore under CC BY-SA 4.0, unlike the
+The manifest and this directory are therefore under CC BY-SA 4.0
+(https://creativecommons.org/licenses/by-sa/4.0/), unlike the
 code in this repository (MIT). Attribution when reusing them: 国立国会図書館 for
 the images and the dataset, みんなで翻刻 for the transcriptions.
 
