@@ -10,6 +10,7 @@ import json
 import os
 import sys
 import tempfile
+import time
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -95,23 +96,43 @@ def fetch(name: str, quiet: bool = False, *, offline: bool = False, digest: bool
     fd, tmp_name = tempfile.mkstemp(prefix=name + ".", suffix=".part", dir=dst.parent)
     tmp = Path(tmp_name)
     try:
-        with os.fdopen(fd, "wb") as f:
-            with httpx.stream("GET", url, follow_redirects=True, timeout=120) as r:
-                r.raise_for_status()
-                total = int(r.headers.get("content-length") or 0)
-                done = 0
-                for chunk in r.iter_bytes(1 << 20):
-                    f.write(chunk)
-                    done += len(chunk)
-                    if not quiet and total:
-                        print(f"\r{name}: {done * 100 // total:3d}%", end="", file=sys.stderr)
-        if not quiet:
-            print(file=sys.stderr)
+        for attempt in range(len(RETRY_DELAYS) + 1):
+            try:
+                with open(fd if attempt == 0 else tmp, "wb") as f:
+                    _download(url, name, f, quiet)
+                break
+            except (httpx.TransportError, httpx.HTTPStatusError) as error:
+                status = error.response.status_code if isinstance(error, httpx.HTTPStatusError) else None
+                transient = status is None or status == 429 or status >= 500
+                if not transient or attempt == len(RETRY_DELAYS):
+                    raise
+                if not quiet:
+                    print(f"{name}: {type(error).__name__}, retrying in {RETRY_DELAYS[attempt]:.0f}s", file=sys.stderr)
+                _sleep(RETRY_DELAYS[attempt])
         verify(tmp, name, digest=True)
         tmp.replace(dst)
     finally:
         tmp.unlink(missing_ok=True)
     return dst
+
+
+# 一時的な失敗（接続断、5xx、429）は間を置いて取り直す。4xxや照合の不一致は取り直さない。
+RETRY_DELAYS = (1.0, 3.0)
+_sleep = time.sleep
+
+
+def _download(url: str, name: str, f, quiet: bool) -> None:
+    with httpx.stream("GET", url, follow_redirects=True, timeout=120) as r:
+        r.raise_for_status()
+        total = int(r.headers.get("content-length") or 0)
+        done = 0
+        for chunk in r.iter_bytes(1 << 20):
+            f.write(chunk)
+            done += len(chunk)
+            if not quiet and total:
+                print(f"\r{name}: {done * 100 // total:3d}%", end="", file=sys.stderr)
+    if not quiet:
+        print(file=sys.stderr)
 
 ENCODER_PRECISIONS = ("auto", "fp16", "fp32")
 # fp16 → fp32 変換の版。変換手順を変えたらこの値を上げる（古い変換キャッシュが作り直される）。

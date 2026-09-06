@@ -13,6 +13,7 @@ from honkoku_ocr import models
 def cache(tmp_path, monkeypatch):
     monkeypatch.setenv('HONKOKU_OCR_MODELS', str(tmp_path))
     monkeypatch.setitem(models.EXPECTED, 'test.onnx', (4, hashlib.sha256(b'good').hexdigest()))
+    monkeypatch.setattr(models, '_sleep', lambda seconds: None)
     return tmp_path
 
 
@@ -75,3 +76,35 @@ def test_role_validation_happens_before_download(monkeypatch):
     with pytest.raises(ValueError, match='unknown model roles'):
         models.ensure(roles=['bad'])
     assert models.ensure(roles=[]) == {}
+
+
+def test_transient_failures_are_retried_and_permanent_ones_are_not(cache, monkeypatch):
+    outcomes = [httpx.ConnectError('down'), httpx.Response(503, content=b'', request=httpx.Request('GET', 'https://example.com')), 'ok']
+    calls = []
+    @contextmanager
+    def stream(*args, **kwargs):
+        outcome = outcomes[len(calls)]
+        calls.append(outcome)
+        if isinstance(outcome, Exception):
+            raise outcome
+        yield outcome if outcome != 'ok' else httpx.Response(200, content=b'good', request=httpx.Request('GET', 'https://example.com'))
+    monkeypatch.setattr(models.httpx, 'stream', stream)
+    assert models.fetch('test.onnx', quiet=True).read_bytes() == b'good'
+    assert len(calls) == 3 and list(cache.glob('*.part')) == []
+    install_stream(monkeypatch, b'', 404)
+    calls.clear()
+    with pytest.raises(httpx.HTTPStatusError):
+        models.fetch('test2.onnx', quiet=True)
+    assert list(cache.glob('*.part')) == []
+
+
+def test_retries_give_up_after_the_last_delay(cache, monkeypatch):
+    attempts = []
+    @contextmanager
+    def stream(*args, **kwargs):
+        attempts.append(1)
+        raise httpx.ReadTimeout('slow')
+    monkeypatch.setattr(models.httpx, 'stream', stream)
+    with pytest.raises(httpx.ReadTimeout):
+        models.fetch('test.onnx', quiet=True)
+    assert len(attempts) == len(models.RETRY_DELAYS) + 1 and list(cache.iterdir()) == []
