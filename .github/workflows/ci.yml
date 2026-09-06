@@ -1,0 +1,28 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: uv sync --extra cpu
+      - run: uv run ruff check .
+      - run: uv run pytest -q
+      - name: installed wheel exposes the vocabulary files
+        run: |
+          uv build
+          WHEEL="$(readlink -f dist/*.whl)"
+          cd "$(mktemp -d)"
+          uv run --isolated --no-project --with "$WHEEL" python -c "import honkoku_ocr, sys; from honkoku_ocr import models; assert 'site-packages' in honkoku_ocr.__file__, honkoku_ocr.__file__; assert len(models.vocab('v18')) == 7710"
