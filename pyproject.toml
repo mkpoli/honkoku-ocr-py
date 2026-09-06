@@ -1,6 +1,6 @@
 [project]
 name = "honkoku-ocr-py"
-version = "0.2.0"
+version = "0.3.0"
 description = "みんなで翻刻OCR の行認識・レイアウト認識を Python (onnxruntime) で動かす移植版"
 readme = "README.md"
 requires-python = ">=3.10"

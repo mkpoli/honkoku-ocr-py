@@ -119,8 +119,9 @@ JSON manifestを受け取り、ページ単位の所要時間と、正解があ�
 
 ## 使い方
 
-PyPIの0.2.0は2026-09-06の版で、`--resume`と`--boxes`までを含む。`--overlap`、`process_many`、参照コーパスは
-このリポジトリのmainにあり、次の版で公開する。ここに書く使い方はmainのもの。
+PyPIの0.2.0は2026-09-06の版で、`--resume`と`--boxes`までを含む。`--overlap`、`process_many`、PDFとIIIFの入力、
+PAGE XML、`--doctor`、参照コーパスはこのリポジトリのmain（0.3.0、未公開）にある。ここに書く使い方はmainのもの。
+変更点は[CHANGELOG.md](CHANGELOG.md)を参照。
 
 PyPIから:
 
