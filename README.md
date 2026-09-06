@@ -32,6 +32,28 @@ CC BY 4.0). Same weights, same geometry, normalisation and decoding, same output
 Line detection and the encoder can run on CUDA, the decoder runs on the CPU. Resampling is Pillow's and the encoder
 is the fp16 export rather than the browser's int8 one, so line texts can differ from the browser version.
 
+## Quick start (English)
+
+```sh
+pip install "honkoku-ocr-py[cpu]"        # or [gpu] for CUDA 12, add [pdf] for PDF input
+honkoku-ocr --download                    # fetch and verify the models (289 MB)
+honkoku-ocr pages/ -o out                 # Koji-notation .txt and .json per page; --resume to continue a batch
+honkoku-ocr --iiif https://dl.ndl.go.jp/api/iiif/2540583/manifest.json --pages 29-30 -o out
+honkoku-ocr page.jpg -o out --page-xml --preview --device cuda
+honkoku-ocr --doctor                      # what this installation can run
+```
+
+```python
+from honkoku_ocr import OCR
+ocr = OCR("v18", device="cpu")            # models load on first use; reuse one instance
+page = ocr.process("page.jpg")            # PageResult: lines in reading order, timings, warnings
+print("\n".join(line.koji for line in page.lines))
+```
+
+Coordinates are those of the EXIF-oriented original image. Accuracy figures and the comparison
+with the browser version are in [benchmarks/README.md](benchmarks/README.md); a summary is in
+[性能](#性能) below.
+
 ## 構成
 
 | 段階 | 実装 | 由来 |

@@ -21,3 +21,16 @@ def test_report_describes_cache_without_touching_it(tmp_path, monkeypatch, capsy
     assert cli.main(["--doctor"]) == 0
     assert "onnxruntime" in capsys.readouterr().out
     assert sorted(p.name for p in tmp_path.iterdir()) == sorted([spec["layout"], spec["encoder"], fp32.name, fp32.name + ".json"])
+
+
+def test_runtime_report_without_onnxruntime(monkeypatch):
+    import builtins
+    real_import = builtins.__import__
+    def fake_import(name, *args, **kwargs):
+        if name == "onnxruntime":
+            raise ModuleNotFoundError(name="onnxruntime")
+        return real_import(name, *args, **kwargs)
+    monkeypatch.setattr(builtins, "__import__", fake_import)
+    data = doctor.runtime_report()
+    assert data["onnxruntime"] is None and data["cuda"] is False and "not installed" in data["cuda_error"]
+    assert "missing" in doctor.render(doctor.report("v18"))
