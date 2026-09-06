@@ -154,6 +154,7 @@ uv run honkoku-ocr scans.tif -o out --frame 3    # 多ページ TIFF の 4 コ�
 | `--device {cpu,cuda}` | 行検出とencoderのデバイス。decoderは常にCPU |
 | `--encoder-precision {auto,fp16,fp32}` | autoはCPUでfp32、CUDAでfp16 |
 | `--threads N` / `--decoder-threads N` | onnxruntimeのスレッド数。0で既定 |
+| `--overlap` | 行の前処理とencoderを別スレッドで先行させ、decodeと重ねる。既定はoff。1コマの測定では出力が同じまま所要時間が22%短かった（[benchmarks/README.md](benchmarks/README.md)） |
 | `--offline` | キャッシュに無いモデルを取りに行かず失敗する |
 | `--verify-cache` | キャッシュ済みモデルのSHA-256を照合して終了 |
 | `--max-dimension` `--margin` `--confidence-threshold` `--ios-threshold` | 縮小の長辺（3500）、行cropの余白（45）、行検出のスコア閾値（0.3）、入れ子除去の閾値（0.8） |
@@ -192,6 +193,27 @@ for path in sorted(Path("pages").glob("*.jpg")):
 ```
 
 1つの`OCR`を使い回す。`ocr_image(path)`は1回ごとにモデルを読み直す簡易関数なので、複数ページには向かない。
+
+複数ページは`process_many`が順に返す。失敗したページは`PageFailure`になり、残りは続く。
+モデルの取得やセッション作成の失敗は`ModelSetupError`で止まる。
+
+```python
+from pathlib import Path
+from threading import Event
+
+from honkoku_ocr import OCR, PageFailure
+
+stop = Event()                            # 別スレッドから stop.set() で中断できる
+ocr = OCR("v18", device="cuda", overlap=True)
+for outcome in ocr.process_many(sorted(Path("pages").glob("*.jpg")), cancelled=stop.is_set,
+                                progress=lambda i, o: print(i, type(o).__name__)):
+    if isinstance(outcome, PageFailure):
+        print("failed:", outcome.index, outcome.error_type, outcome.message)
+        continue
+    print("\n".join(line.koji for line in outcome.lines))
+```
+
+`process_many`の入力にはパスのほか`PageInput(source, boxes=..., frame=...)`も渡せる。
 
 - `ocr.process(image, boxes=None, *, frame=0, layout_only=False)`は`PageResult`を返す。`image`はパス、
   `PIL.Image`、または`ocr.prepare(path)`が返す`PreparedPage`。
