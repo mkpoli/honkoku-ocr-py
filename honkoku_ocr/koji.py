@@ -27,10 +27,13 @@ def raw_to_koji(raw: str) -> str:
         base, rt, rt2 = m.group(1), m.group(2), m.group(3)
         return f"{slash}{base}（{rt}｜{rt2}）" if rt2 else f"{slash}{base}（{rt}）"
     s = _RUBY.sub(ruby, raw)
-    s = _WARI.sub(lambda m: f"《割書：{m.group(1)}｜{m.group(2)}》" if m.group(2) is not None else f"《割書：{m.group(1)}》", s)
+    # 返り点・送り仮名・縦点を先に記号へ直してから割書を変換する。割書の中にこれらのタグが
+    # 残っていると割書の正規表現が合わず、《割書：》の印が落ちる。みんなで翻刻の翻刻文では
+    # 割書の約6%が返り点か送り仮名を含む。
     s = _KAERI.sub(r"＿\1", s)
     s = _OKURI.sub(r"￣\1", s)
     s = s.replace("<TATE>", "ー").replace("<BLOCK>", "")
+    s = _WARI.sub(lambda m: f"《割書：{m.group(1)}｜{m.group(2)}》" if m.group(2) is not None else f"《割書：{m.group(1)}》", s)
     return _TAG.sub("", s)
 
 def raw_to_plain(raw: str) -> str:

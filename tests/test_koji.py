@@ -17,3 +17,9 @@ def test_unknown_tags_removed_and_plain():
     assert raw_to_koji("x<foo>y</foo>") == "xy"
     assert raw_to_plain("本<ruby>漢字<rt>かんじ</rt></ruby>") == "本漢字かんじ"
     assert raw_to_koji("") == ""
+
+
+def test_warigaki_keeps_its_marks_when_it_contains_kaeriten_or_okurigana():
+    assert raw_to_koji("<WARI>或<OKURI>ハ</OKURI>従<WARI_SEP>四品</WARI>") == "《割書：或￣ハ従｜四品》"
+    assert raw_to_koji("<WARI>読<OKURI>テ</OKURI><KAERI>二</KAERI>座敷<TATE>ト<KAERI>一</KAERI></WARI>") == "《割書：読￣テ＿二座敷ート＿一》"
+    assert raw_to_koji("<WARI>右<WARI_SEP>左</WARI>") == "《割書：右｜左》"
