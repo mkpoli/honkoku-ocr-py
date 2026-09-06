@@ -1,15 +1,16 @@
 """Deterministic component parity/latency comparison; no models or images needed."""
 from __future__ import annotations
+
 import argparse
 import hashlib
 import json
-from pathlib import Path
 import platform
 import random
 import statistics
 import subprocess
 import sys
 import time
+from pathlib import Path
 
 from honkoku_ocr.koji import raw_to_koji, raw_to_plain
 from honkoku_ocr.reading_order import order
@@ -79,7 +80,7 @@ def main():
     }
     failed = False
     for name, count in (("order", len(cases)), ("text", len(texts))):
-        mismatches = [i for i, (a, b) in enumerate(zip(py[name]["output"], js[name]["output"])) if a != b]
+        mismatches = [i for i, (a, b) in enumerate(zip(py[name]["output"], js[name]["output"], strict=True)) if a != b]
         if len(py[name]["output"]) != len(js[name]["output"]):
             raise RuntimeError("upstream returned an unexpected output count")
         failed |= bool(mismatches)

@@ -50,3 +50,51 @@ or transcription accuracy. Pillow and browser canvas can produce different
 pixels. A full OCR comparison needs identical page images, model versions,
 explicit execution providers, warmup rules, and ground-truth transcriptions
 for character error rate; matching upstream text alone does not measure accuracy.
+
+# Full-page OCR benchmark
+
+`benchmarks/ocr.py` runs the complete pipeline (load, detection, reading order,
+recognition) on the pages listed in a JSON manifest and records per-page timing.
+When a page carries a reference transcription it also reports the character
+error rate. There is no curated reference corpus in this repository; the manifest
+points at the caller's own images, and `cer` is null for pages without a
+`reference`.
+
+```sh
+uv run python -m benchmarks.ocr pages/manifest.json --output /tmp/ocr-benchmark.json
+uv run python -m benchmarks.ocr pages/manifest.json --output /tmp/ocr-benchmark.json --device cpu --encoder-precision fp16
+```
+
+Manifest, resolved relative to its own directory:
+
+```json
+{
+  "attribution": "Where the images come from, who transcribed them, and under what licence",
+  "samples": [
+    {"id": "p001", "image": "p001.jpg"},
+    {"id": "p002", "image": "scans.tif", "frame": 3, "reference": "正解の翻刻テキスト"},
+    {"id": "p003", "image": "p003.jpg",
+     "boxes": [{"x": 4239, "y": 1221, "width": 334, "height": 422, "confidence": 1.0}]}
+  ]
+}
+```
+
+`attribution` and a nonempty `samples` list are required; `id` values must be
+unique strings. `frame` selects a page of a multipage image, `boxes` replaces
+line detection with the given boxes in EXIF-oriented source coordinates, and
+`reference` is the transcription the prediction is compared with. The comparison
+uses the format selected by `--format` (`plain`, the default, or `koji`), so the
+reference must be written in the same format.
+
+Options: `--output` (required), `--model`, `--device` (default `cuda`),
+`--encoder-precision`, `--threads`, `--decoder-threads`, `--warmups` (default 1),
+`--repeats` (default 3), `--format`, `--offline`. The first sample is processed
+once before the warmups so that model loading and the fp32 encoder conversion
+stay out of the measurement; every sample is then processed `warmups` + `repeats`
+times and the median of the repeats is reported as `median_seconds`.
+
+The output JSON records the settings, the model files with their SHA-256, runtime
+versions, and per sample the individual run times, stage timings, predictions,
+and, when a reference exists, the edit distance and CER of every run. Predictions
+and references are copied into the output, so publish it only when the manifest's
+attribution allows the transcriptions to be redistributed.
