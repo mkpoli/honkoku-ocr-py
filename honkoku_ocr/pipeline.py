@@ -273,6 +273,12 @@ class OCR:
 
     def process(self, image, boxes: list[Box] | None = None, *, frame: int = 0,
                 layout_only: bool = False, cancelled: Callable[[], bool] | None = None) -> PageResult:
+        """Process one page, raising ProcessingCancelled without a partial result.
+
+        With overlap enabled, cancelled is also called on the encoder worker.
+        Use a thread-safe predicate such as threading.Event.is_set. Cancellation
+        waits for any running preprocessing/model call and worker cleanup.
+        """
         _check_cancelled(cancelled)
         total = perf_counter()
         page = image if isinstance(image, PreparedPage) else self.prepare(image, frame=frame)
@@ -370,7 +376,9 @@ class OCR:
         each yield, including failures; callback, input-iterator and model-setup errors propagate.
         Cancellation is checked before consuming an input and between lines. It
         ends the iterator without yielding an unfinished page. An in-flight model
-        call completes before cancellation takes effect. Caller-owned images and
+        call completes before cancellation takes effect. With overlap enabled the
+        cancellation predicate also runs on the encoder worker; use a thread-safe
+        predicate such as threading.Event.is_set. Caller-owned images and
         PreparedPage objects remain open. One OCR instance is not reentrant.
         """
         sources = iter(images)
