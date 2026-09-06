@@ -1,0 +1,36 @@
+# みんなで翻刻 page corpus, second set
+
+Sixty pages with their full transcriptions from みんなで翻刻, for measuring the
+whole pipeline: line detection, reading order and recognition together, with no
+line boxes given. Images are not stored here; `python -m benchmarks.fetch_corpus
+benchmarks/corpus-honkoku-60/manifest.json` downloads them from the NDL IIIF
+endpoints listed in the manifest and checks their SHA-256.
+
+## Selection
+
+One page per book, drawn with seed 20260907 from NDL-hosted books in eleven
+projects (賀茂社記録 ×10, 地震関係 ×9, 草双紙 ×9, 切支丹 ×6, 医療と養生 ×6, 図譜 ×4,
+疫病 ×4, Code4Lib JAPAN ×5, 産業 ×3, べらぼう ×2, 鎮守府 ×2), restricted to pages whose status in honkoku-data is
+`completed` and whose transcription has 8 to 40 lines. Books already used in
+`benchmarks/corpus/` and `benchmarks/corpus-honkoku/` were excluded. Manuscripts and printed books are both
+present.
+
+## Sources and licences
+
+- Page images: 国立国会図書館デジタルコレクション, https://dl.ndl.go.jp/ ,
+  public-domain works; each sample records its IIIF URL and the book's pid.
+- Transcriptions: みんなで翻刻データ v3, https://github.com/yuta1984/honkoku-data
+  (commit 58ceb1fdc, 2025-11-23), CC BY-SA 4.0
+  (https://creativecommons.org/licenses/by-sa/4.0/). Each sample names the file
+  under `v3/` it was copied from. The manifest and this directory are under
+  CC BY-SA 4.0, unlike the code in this repository (MIT).
+
+## Caveats
+
+The transcriptions are by volunteers and unreviewed; the project reports about
+1.5 errors per 100 characters. They follow みんなで翻刻's conventions rather than
+the page's physical lines: items and quantities of a list may share one
+transcription line, marginal notes are placed where the transcriber chose, and
+editorial remarks appear in 【】. The kuzushiji models were trained on みんなで翻刻
+data and may have seen these pages. Read the results as agreement with those
+transcriptions under this port's segmentation and reading order.

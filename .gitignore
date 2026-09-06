@@ -9,3 +9,5 @@ benchmarks/corpus/*.jpg
 benchmarks/corpus/*.part
 benchmarks/corpus-honkoku/*.jpg
 benchmarks/corpus-honkoku/*.part
+benchmarks/corpus-honkoku-60/*.jpg
+benchmarks/corpus-honkoku-60/*.part

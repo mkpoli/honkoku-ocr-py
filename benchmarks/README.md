@@ -323,6 +323,29 @@ pages, but a plain column sort is not a safe replacement; the shipped order stay
 XY-Cut, the same as the browser version, and a block-then-column hybrid would
 need a larger set of pages before it could be judged.
 
+A second, disjoint set of sixty pages (`benchmarks/corpus-honkoku-60/`, eleven
+projects, seed 20260907) was then run the same way (`corpus-honkoku-60-page-eval.json`,
+`corpus-honkoku-60-order.json`; 26,233 reference characters, 1,476 detected for
+1,240 transcription lines, 1,730 s on the CPU):
+
+| metric, 60 pages | value |
+| --- | ---: |
+| raw CER | 0.257 |
+| squeezed CER | 0.175 |
+| normalised CER | 0.160 |
+| normalised bag missed / extra | 0.062 / 0.069 |
+| paired-line CER | 0.148 |
+| normalised CER, column sort 0.5 | 0.147 |
+| normalised CER, column sort 0.75 | 0.163 |
+| normalised CER, column sort 1.0 | 0.248 |
+
+The column sort at 0.5 is better on 13 pages, worse on 11 and equal on 36; its
+worst regressions are on 草双紙 pages with illustrations and separate text blocks
+(one page goes from 0.36 to 1.03), its best gains on pages with marginal notes
+and two-tier layouts. An order that wins on average and fails badly on a
+recognisable class of pages is not a replacement for the shipped one; XY-Cut
+stays, with the eighty pages as the record of why.
+
 Merging boxes that share a column with a vertical gap under one box width was
 also tried: it merged 6 of 498 boxes and changed no metric beyond noise. The
 list gaps that split item and quantity in the 賀茂社記録 pages are several box
