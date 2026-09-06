@@ -177,3 +177,36 @@ pass per setting, so there is no estimate of run-to-run variation. Per page the
 fp16 encoder took 2.8 to 6.5 times as long, 4.2 times over the four pages. The
 two 新竹斎 pages are printed text with dense kana and score worse than the
 賀茂社 manuscript pages; four pages are too few to say why.
+
+# Thread settings on one page
+
+`benchmarks/thread_matrix.py` times one manifest page under a matrix of
+`--threads` (layout and encoder sessions) and `--decoder-threads` (prefill and
+step sessions). `thread-matrix.json` records this run:
+
+```sh
+uv run python -m benchmarks.thread_matrix benchmarks/corpus/manifest.json --sample kamosha-799137F6-030 \
+  --output thread-matrix.json --device cpu --threads 0 2 4 --decoder-threads 0 2 --warmups 0 --repeats 2
+```
+
+CPU only, fp32 encoder, 20 lines with the reference boxes supplied, one setup
+pass then two timed passes per cell, medians below. Thread count 0 leaves the
+choice to onnxruntime, whose documentation describes the default as one thread
+per physical core; this machine exposes 8 physical cores and 16 logical CPUs.
+
+| threads | decoder threads | encoder s | decode s | total s (two runs) |
+| ---: | ---: | ---: | ---: | --- |
+| 0 | 0 | 22.35 | 1.42 | 24.92 (27.53, 22.32) |
+| 0 | 2 | 21.56 | 0.80 | 23.39 (24.64, 22.13) |
+| 2 | 0 | 30.43 | 1.14 | 32.70 (32.60, 32.80) |
+| 2 | 2 | 30.17 | 0.42 | 31.53 (32.54, 30.52) |
+| 4 | 0 | 18.86 | 1.39 | 21.41 (21.36, 21.47) |
+| 4 | 2 | 19.08 | 0.47 | 20.39 (20.09, 20.70) |
+
+Within each cell the two repeats produced the same text; texts were not compared
+across cells. On this page and machine four encoder threads ran the fp32 encoder
+faster than the runtime default, and two decoder threads reduced the decode time
+(by 44%, 63% and 66% against the matching 0-decoder-thread cells). The two runs
+of the default cell differ by five seconds, so single-page medians of two runs
+are indicative only; the defaults stay at 0 and 0 until more pages and machines
+are measured.

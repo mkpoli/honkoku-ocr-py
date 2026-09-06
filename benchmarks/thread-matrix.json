@@ -1,0 +1,268 @@
+{
+ "arguments": {
+  "manifest": "benchmarks/corpus/manifest.json",
+  "sample": "kamosha-799137F6-030",
+  "model": "v18",
+  "device": "cpu",
+  "encoder_precision": "auto",
+  "threads": [
+   0,
+   2,
+   4
+  ],
+  "decoder_threads": [
+   0,
+   2
+  ],
+  "overlap": false,
+  "warmups": 0,
+  "repeats": 2
+ },
+ "image": "kamosha-799137F6-030.jpg",
+ "image_sha256": "bfae35340e90eace060a412be571861622783ef31233f90136f5aa73fb13f065",
+ "boxes_supplied": true,
+ "machine": {
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "processor": "x86_64",
+  "cpu_count": 16,
+  "python": "3.12.7",
+  "package_version": "0.2.0",
+  "runtime_versions": {
+   "numpy": "2.5.2",
+   "pillow": "12.3.0",
+   "onnxruntime": "1.29.0",
+   "onnx": "1.22.0"
+  }
+ },
+ "note": "One page on one machine; medians of the repeats after warmup. Not a basis for universal defaults.",
+ "cells": [
+  {
+   "threads": 0,
+   "decoder_threads": 0,
+   "overlap": false,
+   "lines": 20,
+   "first_page_seconds": 21.33064022101462,
+   "total_seconds": [
+    27.52714800601825,
+    22.32056308898609
+   ],
+   "median_seconds": 24.92385554750217,
+   "median_stage_seconds": {
+    "load": 0.5084509419975802,
+    "layout": 0.0,
+    "preprocess": 0.3833439334994182,
+    "encoder": 22.34515966946492,
+    "prefill": 0.248699692892842,
+    "decode": 1.4205973165808246,
+    "total": 24.92385554750217
+   },
+   "identical_text_across_runs": true,
+   "model_identity": {
+    "encoder_conversion": "34c45ef4e7db0c00c377097d68191eb0a585b3e754539d6b1536227eb89b895c",
+    "encoder": {
+     "file": "kuzushiji-v18-encoder-fp32.onnx",
+     "sha256": "3b3c359bd42609b2be21ab7fdbf28d9b86d5160577ea44598d4e590f7d4dfd1c"
+    },
+    "prefill": {
+     "file": "kuzushiji-v18-decoder-prefill-int8.onnx",
+     "sha256": "6f3f19011f8d08f9d5dc9cf9c2e672d9d68cb512438a90486e5b6d7267a129dc"
+    },
+    "step": {
+     "file": "kuzushiji-v18-decoder-step-int8.onnx",
+     "sha256": "bf0e72a807168393acb7b6c0cb1b85b7d6107f2d6f4d6bb8fbb6736be2ac4bae"
+    },
+    "vocabulary": "cf0621e68b0997ea8a9815b156f55c5481084b3c7a8d763fd8753178e0a56f25"
+   }
+  },
+  {
+   "threads": 0,
+   "decoder_threads": 2,
+   "overlap": false,
+   "lines": 20,
+   "first_page_seconds": 19.604951558052562,
+   "total_seconds": [
+    24.641356072039343,
+    22.13079278706573
+   ],
+   "median_seconds": 23.386074429552536,
+   "median_stage_seconds": {
+    "load": 0.5221613025059924,
+    "layout": 0.0,
+    "preprocess": 0.2485842746682465,
+    "encoder": 21.558562992780935,
+    "prefill": 0.24549435201333836,
+    "decode": 0.799574818869587,
+    "total": 23.386074429552536
+   },
+   "identical_text_across_runs": true,
+   "model_identity": {
+    "encoder_conversion": "34c45ef4e7db0c00c377097d68191eb0a585b3e754539d6b1536227eb89b895c",
+    "encoder": {
+     "file": "kuzushiji-v18-encoder-fp32.onnx",
+     "sha256": "3b3c359bd42609b2be21ab7fdbf28d9b86d5160577ea44598d4e590f7d4dfd1c"
+    },
+    "prefill": {
+     "file": "kuzushiji-v18-decoder-prefill-int8.onnx",
+     "sha256": "6f3f19011f8d08f9d5dc9cf9c2e672d9d68cb512438a90486e5b6d7267a129dc"
+    },
+    "step": {
+     "file": "kuzushiji-v18-decoder-step-int8.onnx",
+     "sha256": "bf0e72a807168393acb7b6c0cb1b85b7d6107f2d6f4d6bb8fbb6736be2ac4bae"
+    },
+    "vocabulary": "cf0621e68b0997ea8a9815b156f55c5481084b3c7a8d763fd8753178e0a56f25"
+   }
+  },
+  {
+   "threads": 2,
+   "decoder_threads": 0,
+   "overlap": false,
+   "lines": 20,
+   "first_page_seconds": 34.68881860002875,
+   "total_seconds": [
+    32.595645757974125,
+    32.80409445601981
+   ],
+   "median_seconds": 32.69987010699697,
+   "median_stage_seconds": {
+    "load": 0.5297211030265316,
+    "layout": 0.0,
+    "preprocess": 0.42154375347308815,
+    "encoder": 30.425768576329574,
+    "prefill": 0.17326991551090032,
+    "decode": 1.137501455086749,
+    "total": 32.69987010699697
+   },
+   "identical_text_across_runs": true,
+   "model_identity": {
+    "encoder_conversion": "34c45ef4e7db0c00c377097d68191eb0a585b3e754539d6b1536227eb89b895c",
+    "encoder": {
+     "file": "kuzushiji-v18-encoder-fp32.onnx",
+     "sha256": "3b3c359bd42609b2be21ab7fdbf28d9b86d5160577ea44598d4e590f7d4dfd1c"
+    },
+    "prefill": {
+     "file": "kuzushiji-v18-decoder-prefill-int8.onnx",
+     "sha256": "6f3f19011f8d08f9d5dc9cf9c2e672d9d68cb512438a90486e5b6d7267a129dc"
+    },
+    "step": {
+     "file": "kuzushiji-v18-decoder-step-int8.onnx",
+     "sha256": "bf0e72a807168393acb7b6c0cb1b85b7d6107f2d6f4d6bb8fbb6736be2ac4bae"
+    },
+    "vocabulary": "cf0621e68b0997ea8a9815b156f55c5481084b3c7a8d763fd8753178e0a56f25"
+   }
+  },
+  {
+   "threads": 2,
+   "decoder_threads": 2,
+   "overlap": false,
+   "lines": 20,
+   "first_page_seconds": 34.011264350032434,
+   "total_seconds": [
+    32.53627223696094,
+    30.520018471986987
+   ],
+   "median_seconds": 31.528145354473963,
+   "median_stage_seconds": {
+    "load": 0.5968199714552611,
+    "layout": 0.0,
+    "preprocess": 0.23028712981613353,
+    "encoder": 30.17290356650483,
+    "prefill": 0.09795715106884018,
+    "decode": 0.42080153460847214,
+    "total": 31.528145354473963
+   },
+   "identical_text_across_runs": true,
+   "model_identity": {
+    "encoder_conversion": "34c45ef4e7db0c00c377097d68191eb0a585b3e754539d6b1536227eb89b895c",
+    "encoder": {
+     "file": "kuzushiji-v18-encoder-fp32.onnx",
+     "sha256": "3b3c359bd42609b2be21ab7fdbf28d9b86d5160577ea44598d4e590f7d4dfd1c"
+    },
+    "prefill": {
+     "file": "kuzushiji-v18-decoder-prefill-int8.onnx",
+     "sha256": "6f3f19011f8d08f9d5dc9cf9c2e672d9d68cb512438a90486e5b6d7267a129dc"
+    },
+    "step": {
+     "file": "kuzushiji-v18-decoder-step-int8.onnx",
+     "sha256": "bf0e72a807168393acb7b6c0cb1b85b7d6107f2d6f4d6bb8fbb6736be2ac4bae"
+    },
+    "vocabulary": "cf0621e68b0997ea8a9815b156f55c5481084b3c7a8d763fd8753178e0a56f25"
+   }
+  },
+  {
+   "threads": 4,
+   "decoder_threads": 0,
+   "overlap": false,
+   "lines": 20,
+   "first_page_seconds": 22.30224744102452,
+   "total_seconds": [
+    21.362497115973383,
+    21.466064615990035
+   ],
+   "median_seconds": 21.41428086598171,
+   "median_stage_seconds": {
+    "load": 0.518183721054811,
+    "layout": 0.0,
+    "preprocess": 0.46800573472864926,
+    "encoder": 18.857500313490164,
+    "prefill": 0.16311385005246848,
+    "decode": 1.3904772413079627,
+    "total": 21.41428086598171
+   },
+   "identical_text_across_runs": true,
+   "model_identity": {
+    "encoder_conversion": "34c45ef4e7db0c00c377097d68191eb0a585b3e754539d6b1536227eb89b895c",
+    "encoder": {
+     "file": "kuzushiji-v18-encoder-fp32.onnx",
+     "sha256": "3b3c359bd42609b2be21ab7fdbf28d9b86d5160577ea44598d4e590f7d4dfd1c"
+    },
+    "prefill": {
+     "file": "kuzushiji-v18-decoder-prefill-int8.onnx",
+     "sha256": "6f3f19011f8d08f9d5dc9cf9c2e672d9d68cb512438a90486e5b6d7267a129dc"
+    },
+    "step": {
+     "file": "kuzushiji-v18-decoder-step-int8.onnx",
+     "sha256": "bf0e72a807168393acb7b6c0cb1b85b7d6107f2d6f4d6bb8fbb6736be2ac4bae"
+    },
+    "vocabulary": "cf0621e68b0997ea8a9815b156f55c5481084b3c7a8d763fd8753178e0a56f25"
+   }
+  },
+  {
+   "threads": 4,
+   "decoder_threads": 2,
+   "overlap": false,
+   "lines": 20,
+   "first_page_seconds": 20.85499694000464,
+   "total_seconds": [
+    20.091863534064032,
+    20.696403207955882
+   ],
+   "median_seconds": 20.394133371009957,
+   "median_stage_seconds": {
+    "load": 0.5096664135344326,
+    "layout": 0.0,
+    "preprocess": 0.2302308677462861,
+    "encoder": 19.07546197506599,
+    "prefill": 0.10251139762112871,
+    "decode": 0.4672069837106392,
+    "total": 20.394133371009957
+   },
+   "identical_text_across_runs": true,
+   "model_identity": {
+    "encoder_conversion": "34c45ef4e7db0c00c377097d68191eb0a585b3e754539d6b1536227eb89b895c",
+    "encoder": {
+     "file": "kuzushiji-v18-encoder-fp32.onnx",
+     "sha256": "3b3c359bd42609b2be21ab7fdbf28d9b86d5160577ea44598d4e590f7d4dfd1c"
+    },
+    "prefill": {
+     "file": "kuzushiji-v18-decoder-prefill-int8.onnx",
+     "sha256": "6f3f19011f8d08f9d5dc9cf9c2e672d9d68cb512438a90486e5b6d7267a129dc"
+    },
+    "step": {
+     "file": "kuzushiji-v18-decoder-step-int8.onnx",
+     "sha256": "bf0e72a807168393acb7b6c0cb1b85b7d6107f2d6f4d6bb8fbb6736be2ac4bae"
+    },
+    "vocabulary": "cf0621e68b0997ea8a9815b156f55c5481084b3c7a8d763fd8753178e0a56f25"
+   }
+  }
+ ]
+}

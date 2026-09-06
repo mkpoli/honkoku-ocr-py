@@ -14,7 +14,7 @@ from pathlib import Path
 
 import httpx
 
-from honkoku_ocr.output import atomic_write
+from honkoku_ocr.output import atomic_write, safe_error
 
 
 def sha256(path: Path) -> str:
@@ -55,4 +55,8 @@ def main(argv=None) -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except Exception as error:
+        print(safe_error(error), file=sys.stderr)
+        sys.exit(1)
