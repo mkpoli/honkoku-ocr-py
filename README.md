@@ -1,4 +1,31 @@
-# honkoku-ocr-py
+<div align="center">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./docs/logo-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="./docs/logo-light.svg">
+  <img src="./docs/logo-light.svg" alt="みんなで翻刻くずし字OCR ローカル版 — honkoku-ocr-py" width="520">
+</picture>
+
+**ブラウザで動く「みんなで翻刻OCR」を Python に移植。くずし字の画像から「みんなで翻刻」記法の翻刻をコマンドラインで一括生成する。**
+
+[![MIT](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
+[![models CC BY 4.0](https://img.shields.io/badge/models-CC_BY_4.0-orange)](./NOTICE.md)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white)](./pyproject.toml)
+[![onnxruntime](https://img.shields.io/badge/runs%20on-onnxruntime-5C3EE8)](https://onnxruntime.ai/)
+[![CUDA optional](https://img.shields.io/badge/GPU-CUDA_optional-76B900?logo=nvidia&logoColor=white)](#性能)
+[![model v18](https://img.shields.io/badge/model-kuzushiji_v18-0b7285)](https://yuta1984.github.io/honkoku-ocr-web/tech.html)
+[![tests](https://img.shields.io/badge/tests-25_passing-success?logo=pytest&logoColor=white)](./tests)
+[![upstream](https://img.shields.io/badge/upstream-honkoku--ocr--web-8a2f1f)](https://github.com/yuta1984/honkoku-ocr-web)
+
+</div>
+
+<p align="center">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./docs/demo-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="./docs/demo-light.svg">
+  <img src="./docs/demo-light.svg" alt="honkoku-ocr がディレクトリの画像を一括翻刻し、行画像と Koji 記法の翻刻を出力する様子" width="760">
+</picture>
+</p>
 
 [みんなで翻刻OCR](https://yuta1984.github.io/honkoku-ocr-web/)（橋本雄太、CC BY 4.0）の推論パイプラインを
 Python と onnxruntime に移した移植版。ブラウザ版と同じモデル・同じ前処理で、くずし字の古典籍画像から
@@ -19,6 +46,22 @@ on a GPU through onnxruntime's CUDA provider. Resampling is Pillow's, so tensors
 | 出力 | 特殊トークン列 → Koji 記法 / 素テキスト | honkoku-ocr-web |
 
 モデルの設計と学習・評価については [docs/tech.html](docs/tech.html)（原著作物の技術情報ページの複製）を参照。
+
+## 比較
+
+| | **honkoku-ocr-py** | [みんなで翻刻OCR](https://yuta1984.github.io/honkoku-ocr-web/)（ブラウザ版） | [NDL古典籍OCR-Lite](https://github.com/ndl-lab/ndlkotenocr-lite) |
+| :-- | :-: | :-: | :-: |
+| 動く場所 | Python / CLI / サーバ | ブラウザ（WebAssembly, Web Worker） | Python / デスクトップアプリ |
+| 一括処理 | ✅ ディレクトリ単位、スクリプトから呼べる | ❌ 画像を開いてボタンを押す | ✅ ディレクトリ単位 |
+| GPU | ✅ CUDA（encoder） | WebGPU 対応端末のみ | CUDA（ベータ） |
+| 行認識モデル | ConvNeXt V2 + RoBERTa（kuzushiji v18） | 同じ | PARSeq |
+| 出力 | Koji 記法（ふりがな・返り点・送り仮名・割書のタグ付き）+ JSON | Koji 記法、縦書き表示 | 素テキスト + XML/JSON |
+| 行位置の持ち込み | ✅ `run(image, boxes=...)` | 画面上で bbox を編集 | ❌ |
+| 行 bbox の編集 UI | ❌ | ✅ | ❌ |
+| モデルの検証 | サイズと SHA-256 を照合 | IndexedDB キャッシュ | 同梱 |
+| 精度（原著の公表値） | 本文 plain micro CER 0.075（v18） | 同じ | NDL古典籍OCR ver.3 より約 2% 低い |
+
+ブラウザ版の強みは行 bbox の手直しと縦書きの閲覧で、そこはこの移植には無い。自動化と大量処理、他のツールとの接続がこの移植の役割になる。
 
 ## なぜ移植したか
 
