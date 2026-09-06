@@ -292,3 +292,38 @@ Pages of continuous prose (地震 034, 儒医東西評林, 小野湖山翁小伝
 reach squeezed CER 0.02 to 0.06. The published figure for the model, plain CER
 0.075 on the authors' test set, was measured on line crops with their own
 normalisation and cannot be compared with any column here.
+
+## Reading order and line merging on the same pages
+
+Two follow-up experiments on the stored predictions, both recorded so that the
+numbers can be reproduced.
+
+`benchmarks/order_experiment.py` keeps every recognised line and only changes
+their order: XY-Cut as shipped, or a plain column sort (right to left by box
+centre, top to bottom within a column, a new column when centres differ by more
+than the tolerance times the box width). Result file: `corpus-honkoku-order.json`.
+
+| order | normalised squeezed CER, 20 pages |
+| --- | ---: |
+| XY-Cut (shipped) | 0.137 |
+| column sort, tolerance 0.5 | 0.123 |
+| column sort, tolerance 1.0 | 0.186 |
+| XY-Cut blocks, column sort (0.5) inside each block | 0.136 |
+
+The column sort with tolerance 0.5 matches or beats XY-Cut on 18 pages, most
+clearly where a marginal note or a two-tier layout is involved (kamosha-144
+0.462 to 0.314, kirishitan-077 0.130 to 0.010, zisin-012 0.228 to 0.130), and
+loses badly on one 草双紙 page with an illustration and separate text blocks
+(kusazoushi-004 0.180 to 0.311). Tolerance 1.0 merges neighbouring columns and
+is worse almost everywhere. Keeping XY-Cut's blocks and only re-sorting the lines
+inside each block changes almost nothing (0.136), so the difference lies in how
+the page is cut into blocks and in what order the blocks are read, not in the
+sorting within a block. Reading order is therefore a real lever on these
+pages, but a plain column sort is not a safe replacement; the shipped order stays
+XY-Cut, the same as the browser version, and a block-then-column hybrid would
+need a larger set of pages before it could be judged.
+
+Merging boxes that share a column with a vertical gap under one box width was
+also tried: it merged 6 of 498 boxes and changed no metric beyond noise. The
+list gaps that split item and quantity in the 賀茂社記録 pages are several box
+widths wide, and a threshold that wide would also merge separate entries.
