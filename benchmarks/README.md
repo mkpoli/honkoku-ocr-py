@@ -211,6 +211,27 @@ of the default cell differ by five seconds, so single-page medians of two runs
 are indicative only; the defaults stay at 0 and 0 until more pages and machines
 are measured.
 
+Two more pages from the second みんなで翻刻 set were swept the same way with
+threads 0, 4 and 8 (`thread-matrix-zisin.json`, `thread-matrix-kiri.json`; CPU
+fp32, supplied boxes, one setup pass then two timed passes):
+
+| threads | decoder threads | 地災撮要 page, 22 lines | 切支丹御退治記 page, 20 lines |
+| ---: | ---: | ---: | ---: |
+| 0 | 0 | 26.98 (25.82, 28.14) | 46.65 (59.13, 34.16) |
+| 0 | 2 | 34.52 (36.61, 32.42) | 23.02 (25.37, 20.67) |
+| 4 | 0 | 24.34 | 20.92 |
+| 4 | 2 | 22.16 | 19.15 |
+| 8 | 0 | 22.50 | 17.49 |
+| 8 | 2 | 16.85 (16.92, 16.77) | 15.72 (15.53, 15.92) |
+
+On all three pages the cells with explicit thread counts are faster than the
+runtime default and far less variable between runs; 8 encoder threads (the
+number of physical cores here) with 2 decoder threads was the fastest cell on
+both new pages, 4 and 2 on the first. Every cell produced identical text across
+its runs. The defaults remain 0 and 0 because this is one machine; on a CPU
+with hyper-threading, passing the physical core count as `--threads` and 2 as
+`--decoder-threads` is the setting these measurements support.
+
 # Whole pages against みんなで翻刻 transcriptions
 
 `benchmarks/corpus-honkoku/manifest.json` lists twenty pages, one per book,

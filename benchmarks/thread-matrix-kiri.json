@@ -1,0 +1,292 @@
+{
+ "arguments": {
+  "manifest": "benchmarks/corpus-honkoku-60/manifest.json",
+  "sample": "kirishitan-FB81E679-092",
+  "model": "v18",
+  "device": "cpu",
+  "encoder_precision": "auto",
+  "threads": [
+   0,
+   4,
+   8
+  ],
+  "decoder_threads": [
+   0,
+   2
+  ],
+  "overlap": false,
+  "warmups": 0,
+  "repeats": 2
+ },
+ "image": "kirishitan-FB81E679-092.jpg",
+ "image_sha256": "5c1c29c1cf06339a89a3a43864a116a27fa2e5848a710da5738b5e44e746c526",
+ "boxes_supplied": false,
+ "machine": {
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "processor": "x86_64",
+  "cpu_count": 16,
+  "python": "3.12.7",
+  "package_version": "0.3.0",
+  "runtime_versions": {
+   "numpy": "2.5.2",
+   "pillow": "12.3.0",
+   "onnxruntime": "1.29.0",
+   "onnx": "1.22.0"
+  }
+ },
+ "note": "One page on one machine; medians of the repeats after warmup. Not a basis for universal defaults.",
+ "cells": [
+  {
+   "threads": 0,
+   "decoder_threads": 0,
+   "overlap": false,
+   "lines": 20,
+   "first_page_seconds": 25.167019158019684,
+   "total_seconds": [
+    59.12898233497981,
+    34.16154089500196
+   ],
+   "median_seconds": 46.645261614990886,
+   "median_stage_seconds": {
+    "load": 0.5928165825316682,
+    "layout": 0.3453172819572501,
+    "preprocess": 0.6333894674899057,
+    "encoder": 41.30451979703503,
+    "prefill": 0.5394185267505236,
+    "decode": 3.1981633365503512,
+    "total": 46.645261614990886
+   },
+   "identical_text_across_runs": true,
+   "model_identity": {
+    "layout": {
+     "file": "rtmdet-s-1280x1280.onnx",
+     "sha256": "f46267754d406431f6e035f9e20b8552af8ff1ab5ca13bcac8f4b1abbd02090c"
+    },
+    "encoder_conversion": "34c45ef4e7db0c00c377097d68191eb0a585b3e754539d6b1536227eb89b895c",
+    "encoder": {
+     "file": "kuzushiji-v18-encoder-fp32.onnx",
+     "sha256": "3b3c359bd42609b2be21ab7fdbf28d9b86d5160577ea44598d4e590f7d4dfd1c"
+    },
+    "prefill": {
+     "file": "kuzushiji-v18-decoder-prefill-int8.onnx",
+     "sha256": "6f3f19011f8d08f9d5dc9cf9c2e672d9d68cb512438a90486e5b6d7267a129dc"
+    },
+    "step": {
+     "file": "kuzushiji-v18-decoder-step-int8.onnx",
+     "sha256": "bf0e72a807168393acb7b6c0cb1b85b7d6107f2d6f4d6bb8fbb6736be2ac4bae"
+    },
+    "vocabulary": "cf0621e68b0997ea8a9815b156f55c5481084b3c7a8d763fd8753178e0a56f25"
+   }
+  },
+  {
+   "threads": 0,
+   "decoder_threads": 2,
+   "overlap": false,
+   "lines": 20,
+   "first_page_seconds": 38.371248218929395,
+   "total_seconds": [
+    25.36974715499673,
+    20.67071490199305
+   ],
+   "median_seconds": 23.02023102849489,
+   "median_stage_seconds": {
+    "load": 0.5085122780292295,
+    "layout": 0.17949925042921677,
+    "preprocess": 0.25491916737519205,
+    "encoder": 20.901722769078333,
+    "prefill": 0.32942998595535755,
+    "decode": 0.8304497654899023,
+    "total": 23.02023102849489
+   },
+   "identical_text_across_runs": true,
+   "model_identity": {
+    "layout": {
+     "file": "rtmdet-s-1280x1280.onnx",
+     "sha256": "f46267754d406431f6e035f9e20b8552af8ff1ab5ca13bcac8f4b1abbd02090c"
+    },
+    "encoder_conversion": "34c45ef4e7db0c00c377097d68191eb0a585b3e754539d6b1536227eb89b895c",
+    "encoder": {
+     "file": "kuzushiji-v18-encoder-fp32.onnx",
+     "sha256": "3b3c359bd42609b2be21ab7fdbf28d9b86d5160577ea44598d4e590f7d4dfd1c"
+    },
+    "prefill": {
+     "file": "kuzushiji-v18-decoder-prefill-int8.onnx",
+     "sha256": "6f3f19011f8d08f9d5dc9cf9c2e672d9d68cb512438a90486e5b6d7267a129dc"
+    },
+    "step": {
+     "file": "kuzushiji-v18-decoder-step-int8.onnx",
+     "sha256": "bf0e72a807168393acb7b6c0cb1b85b7d6107f2d6f4d6bb8fbb6736be2ac4bae"
+    },
+    "vocabulary": "cf0621e68b0997ea8a9815b156f55c5481084b3c7a8d763fd8753178e0a56f25"
+   }
+  },
+  {
+   "threads": 4,
+   "decoder_threads": 0,
+   "overlap": false,
+   "lines": 20,
+   "first_page_seconds": 22.352752174949273,
+   "total_seconds": [
+    20.68639963096939,
+    21.15500330401119
+   ],
+   "median_seconds": 20.92070146749029,
+   "median_stage_seconds": {
+    "load": 0.470247559947893,
+    "layout": 0.12721977644832805,
+    "preprocess": 0.3863255398464389,
+    "encoder": 18.27276737173088,
+    "prefill": 0.1691592074930668,
+    "decode": 1.4815294509753585,
+    "total": 20.92070146749029
+   },
+   "identical_text_across_runs": true,
+   "model_identity": {
+    "layout": {
+     "file": "rtmdet-s-1280x1280.onnx",
+     "sha256": "f46267754d406431f6e035f9e20b8552af8ff1ab5ca13bcac8f4b1abbd02090c"
+    },
+    "encoder_conversion": "34c45ef4e7db0c00c377097d68191eb0a585b3e754539d6b1536227eb89b895c",
+    "encoder": {
+     "file": "kuzushiji-v18-encoder-fp32.onnx",
+     "sha256": "3b3c359bd42609b2be21ab7fdbf28d9b86d5160577ea44598d4e590f7d4dfd1c"
+    },
+    "prefill": {
+     "file": "kuzushiji-v18-decoder-prefill-int8.onnx",
+     "sha256": "6f3f19011f8d08f9d5dc9cf9c2e672d9d68cb512438a90486e5b6d7267a129dc"
+    },
+    "step": {
+     "file": "kuzushiji-v18-decoder-step-int8.onnx",
+     "sha256": "bf0e72a807168393acb7b6c0cb1b85b7d6107f2d6f4d6bb8fbb6736be2ac4bae"
+    },
+    "vocabulary": "cf0621e68b0997ea8a9815b156f55c5481084b3c7a8d763fd8753178e0a56f25"
+   }
+  },
+  {
+   "threads": 4,
+   "decoder_threads": 2,
+   "overlap": false,
+   "lines": 20,
+   "first_page_seconds": 20.140522176981904,
+   "total_seconds": [
+    19.041372790001333,
+    19.249907315010205
+   ],
+   "median_seconds": 19.14564005250577,
+   "median_stage_seconds": {
+    "load": 0.4775609545176849,
+    "layout": 0.12317940301727504,
+    "preprocess": 0.22684042603941634,
+    "encoder": 17.74892841023393,
+    "prefill": 0.09349849337013438,
+    "decode": 0.4656198435695842,
+    "total": 19.14564005250577
+   },
+   "identical_text_across_runs": true,
+   "model_identity": {
+    "layout": {
+     "file": "rtmdet-s-1280x1280.onnx",
+     "sha256": "f46267754d406431f6e035f9e20b8552af8ff1ab5ca13bcac8f4b1abbd02090c"
+    },
+    "encoder_conversion": "34c45ef4e7db0c00c377097d68191eb0a585b3e754539d6b1536227eb89b895c",
+    "encoder": {
+     "file": "kuzushiji-v18-encoder-fp32.onnx",
+     "sha256": "3b3c359bd42609b2be21ab7fdbf28d9b86d5160577ea44598d4e590f7d4dfd1c"
+    },
+    "prefill": {
+     "file": "kuzushiji-v18-decoder-prefill-int8.onnx",
+     "sha256": "6f3f19011f8d08f9d5dc9cf9c2e672d9d68cb512438a90486e5b6d7267a129dc"
+    },
+    "step": {
+     "file": "kuzushiji-v18-decoder-step-int8.onnx",
+     "sha256": "bf0e72a807168393acb7b6c0cb1b85b7d6107f2d6f4d6bb8fbb6736be2ac4bae"
+    },
+    "vocabulary": "cf0621e68b0997ea8a9815b156f55c5481084b3c7a8d763fd8753178e0a56f25"
+   }
+  },
+  {
+   "threads": 8,
+   "decoder_threads": 0,
+   "overlap": false,
+   "lines": 20,
+   "first_page_seconds": 18.445772690000013,
+   "total_seconds": [
+    16.91551654599607,
+    18.073179062921554
+   ],
+   "median_seconds": 17.494347804458812,
+   "median_stage_seconds": {
+    "load": 0.4977719495072961,
+    "layout": 0.10472798248520121,
+    "preprocess": 0.47445506101939827,
+    "encoder": 14.200275800016243,
+    "prefill": 0.23292069317540154,
+    "decode": 1.964646210137289,
+    "total": 17.494347804458812
+   },
+   "identical_text_across_runs": true,
+   "model_identity": {
+    "layout": {
+     "file": "rtmdet-s-1280x1280.onnx",
+     "sha256": "f46267754d406431f6e035f9e20b8552af8ff1ab5ca13bcac8f4b1abbd02090c"
+    },
+    "encoder_conversion": "34c45ef4e7db0c00c377097d68191eb0a585b3e754539d6b1536227eb89b895c",
+    "encoder": {
+     "file": "kuzushiji-v18-encoder-fp32.onnx",
+     "sha256": "3b3c359bd42609b2be21ab7fdbf28d9b86d5160577ea44598d4e590f7d4dfd1c"
+    },
+    "prefill": {
+     "file": "kuzushiji-v18-decoder-prefill-int8.onnx",
+     "sha256": "6f3f19011f8d08f9d5dc9cf9c2e672d9d68cb512438a90486e5b6d7267a129dc"
+    },
+    "step": {
+     "file": "kuzushiji-v18-decoder-step-int8.onnx",
+     "sha256": "bf0e72a807168393acb7b6c0cb1b85b7d6107f2d6f4d6bb8fbb6736be2ac4bae"
+    },
+    "vocabulary": "cf0621e68b0997ea8a9815b156f55c5481084b3c7a8d763fd8753178e0a56f25"
+   }
+  },
+  {
+   "threads": 8,
+   "decoder_threads": 2,
+   "overlap": false,
+   "lines": 20,
+   "first_page_seconds": 16.164354647975415,
+   "total_seconds": [
+    15.531397466082126,
+    15.915920080966316
+   ],
+   "median_seconds": 15.723658773524221,
+   "median_stage_seconds": {
+    "load": 0.5106298194732517,
+    "layout": 0.11163583042798564,
+    "preprocess": 0.25497851107502356,
+    "encoder": 14.05643692088779,
+    "prefill": 0.11842995439656079,
+    "decode": 0.6593046099296771,
+    "total": 15.723658773524221
+   },
+   "identical_text_across_runs": true,
+   "model_identity": {
+    "layout": {
+     "file": "rtmdet-s-1280x1280.onnx",
+     "sha256": "f46267754d406431f6e035f9e20b8552af8ff1ab5ca13bcac8f4b1abbd02090c"
+    },
+    "encoder_conversion": "34c45ef4e7db0c00c377097d68191eb0a585b3e754539d6b1536227eb89b895c",
+    "encoder": {
+     "file": "kuzushiji-v18-encoder-fp32.onnx",
+     "sha256": "3b3c359bd42609b2be21ab7fdbf28d9b86d5160577ea44598d4e590f7d4dfd1c"
+    },
+    "prefill": {
+     "file": "kuzushiji-v18-decoder-prefill-int8.onnx",
+     "sha256": "6f3f19011f8d08f9d5dc9cf9c2e672d9d68cb512438a90486e5b6d7267a129dc"
+    },
+    "step": {
+     "file": "kuzushiji-v18-decoder-step-int8.onnx",
+     "sha256": "bf0e72a807168393acb7b6c0cb1b85b7d6107f2d6f4d6bb8fbb6736be2ac4bae"
+    },
+    "vocabulary": "cf0621e68b0997ea8a9815b156f55c5481084b3c7a8d763fd8753178e0a56f25"
+   }
+  }
+ ]
+}
