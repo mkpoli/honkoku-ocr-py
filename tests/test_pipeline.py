@@ -121,3 +121,67 @@ def test_identity_and_recognizer_share_verified_encoder(tmp_path, monkeypatch):
     assert ocr.recognizer is ocr.recognizer
     assert ocr.model_identity(list(paths)) == identity
     assert resolutions == [paths['encoder']]
+
+
+def test_batch_is_lazy_and_continues_after_bad_page(tmp_path):
+    from honkoku_ocr import PageFailure, PageInput, PageResult
+    image = Image.new('RGB', (100, 100))
+    consumed, progress = [], []
+    def inputs():
+        for item in (PageInput(image, []), tmp_path / 'missing.png', PageInput(image, [])):
+            consumed.append(item)
+            yield item
+    batch = OCR().process_many(inputs(), progress=lambda i, r: progress.append((i, r)))
+    assert consumed == []
+    assert isinstance(next(batch), PageResult)
+    assert len(consumed) == 1
+    remaining = list(batch)
+    assert isinstance(remaining[0], PageFailure)
+    assert remaining[0].index == 2 and remaining[0].error_type == 'FileNotFoundError'
+    assert isinstance(remaining[1], PageResult)
+    assert [i for i, _ in progress] == [1, 2, 3]
+    assert image.getpixel((0, 0)) == (0, 0, 0)
+
+
+def test_batch_cancellation_does_not_consume_next_input():
+    from threading import Event
+
+    from honkoku_ocr import PageInput
+    stop = Event()
+    def inputs():
+        yield PageInput(Image.new('RGB', (10, 10)), [])
+        pytest.fail('consumed input after cancellation')
+    batch = OCR().process_many(inputs(), cancelled=stop.is_set,
+                              progress=lambda i, r: stop.set())
+    assert len(list(batch)) == 1
+
+
+def test_cancellation_between_lines_closes_owned_page(monkeypatch):
+    from threading import Event
+    stop = Event()
+    prepared = PreparedPage.load(Image.new('RGB', (100, 100)))
+    class CancellingRecognizer:
+        def recognize_result(self, crop):
+            stop.set()
+            return RecognitionResult('字', 'eos', 1, {})
+    ocr = OCR(detector=FakeDetector(), recognizer=CancellingRecognizer())
+    monkeypatch.setattr(ocr, 'prepare', lambda *a, **k: prepared)
+    assert list(ocr.process_many(['page'], cancelled=stop.is_set)) == []
+    with pytest.raises(ValueError):
+        prepared.image.getpixel((0, 0))
+
+
+def test_batch_progress_errors_propagate():
+    from honkoku_ocr import PageInput
+    def progress(*args):
+        raise RuntimeError('callback failed')
+    with pytest.raises(RuntimeError, match='callback failed'):
+        list(OCR().process_many([PageInput(Image.new('RGB', (10, 10)), [])], progress=progress))
+
+
+def test_batch_page_inputs_select_frames(tmp_path):
+    from honkoku_ocr import PageInput
+    path = tmp_path / 'pages.tif'
+    Image.new('RGB', (10, 20)).save(path, save_all=True, append_images=[Image.new('RGB', (30, 40))])
+    results = list(OCR().process_many([PageInput(path, [], 1), PageInput(path, [], 0)]))
+    assert [(r.frame, r.width, r.height) for r in results] == [(1, 30, 40), (0, 10, 20)]

@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import math
+from collections.abc import Callable, Iterable, Iterator
 from dataclasses import asdict, dataclass, field, replace
 from time import perf_counter
 from typing import Protocol
@@ -12,6 +13,7 @@ from PIL import Image, ImageOps
 from . import models
 from .koji import raw_to_koji, raw_to_plain
 from .layout import Box, LayoutDetector
+from .output import safe_error
 from .reading_order import order
 from .recognizer import RecognitionResult, Recognizer, crop_with_margin, js_round
 
@@ -121,6 +123,32 @@ class PageResult:
     warnings: list[str]
 
 
+class ProcessingCancelled(Exception):
+    """Cooperative cancellation; no partial page result is returned."""
+
+
+@dataclass
+class PageInput:
+    """One batch input; files select a frame, PIL images use their current frame."""
+
+    source: object
+    boxes: list[Box] | None = None
+    frame: int = 0
+
+
+@dataclass(frozen=True)
+class PageFailure:
+    index: int
+    frame: int
+    error_type: str
+    message: str
+
+
+def _check_cancelled(cancelled: Callable[[], bool] | None) -> None:
+    if cancelled is not None and cancelled():
+        raise ProcessingCancelled()
+
+
 class OCR:
     """Reuse one instance across pages. Model sessions load only when needed.
 
@@ -221,7 +249,8 @@ class OCR:
         return PreparedPage.load(image, frame=frame, max_dimension=self.max_dimension)
 
     def process(self, image, boxes: list[Box] | None = None, *, frame: int = 0,
-                layout_only: bool = False) -> PageResult:
+                layout_only: bool = False, cancelled: Callable[[], bool] | None = None) -> PageResult:
+        _check_cancelled(cancelled)
         total = perf_counter()
         page = image if isinstance(image, PreparedPage) else self.prepare(image, frame=frame)
         timings = {"load": perf_counter() - total}
@@ -249,6 +278,7 @@ class OCR:
                 recognizer = self.recognizer
                 timings["recognizer_setup"] = perf_counter() - start
             for rank, (scaled, original) in enumerate(work, 1):
+                _check_cancelled(cancelled)
                 result = RecognitionResult("", "not_run", 0, {})
                 if recognizer is not None:
                     with crop_with_margin(page.image, scaled.x, scaled.y,
@@ -262,6 +292,7 @@ class OCR:
                                         original.height, original.confidence, result.raw,
                                         raw_to_koji(result.raw), raw_to_plain(result.raw),
                                         result.stop_reason, result.token_count, result.timings))
+            _check_cancelled(cancelled)
             timings["total"] = perf_counter() - total
             return PageResult(SCHEMA_VERSION, page.original_width, page.original_height,
                               page.image.width, page.image.height, page.frame, self.version,
@@ -269,6 +300,41 @@ class OCR:
         finally:
             if not isinstance(image, PreparedPage):
                 page.image.close()
+
+    def process_many(self, images: Iterable, *, layout_only: bool = False,
+                     progress: Callable[[int, PageResult | PageFailure], None] | None = None,
+                     cancelled: Callable[[], bool] | None = None) -> Iterator[PageResult | PageFailure]:
+        """Yield ordered page results or failures without buffering the inputs.
+
+        Each input is a source accepted by process(), or PageInput for per-page
+        boxes/frame selection. Indices are one-based. Progress runs once before
+        each yield, including failures; callback and input-iterator errors propagate.
+        Cancellation is checked before consuming an input and between lines. It
+        ends the iterator without yielding an unfinished page. An in-flight model
+        call completes before cancellation takes effect. Caller-owned images and
+        PreparedPage objects remain open. One OCR instance is not reentrant.
+        """
+        sources = iter(images)
+        index = 0
+        while True:
+            if cancelled is not None and cancelled():
+                return
+            try:
+                source = next(sources)
+            except StopIteration:
+                return
+            index += 1
+            job = source if isinstance(source, PageInput) else PageInput(source)
+            try:
+                result = self.process(job.source, job.boxes, frame=job.frame,
+                                      layout_only=layout_only, cancelled=cancelled)
+            except ProcessingCancelled:
+                return
+            except Exception as error:
+                result = PageFailure(index, job.frame, type(error).__name__, safe_error(error))
+            if progress is not None:
+                progress(index, result)
+            yield result
 
     def layout(self, image) -> list[Box]:
         return [Box(line.x, line.y, line.width, line.height, line.detection_confidence)
