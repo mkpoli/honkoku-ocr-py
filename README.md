@@ -3,10 +3,10 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./docs/logo-dark.svg">
   <source media="(prefers-color-scheme: light)" srcset="./docs/logo-light.svg">
-  <img src="./docs/logo-light.svg" alt="みんなで翻刻くずし字OCRローカル版 — honkoku-ocr-py" width="520">
+  <img src="./docs/logo-light.svg" alt="みんなで翻刻くずし字OCR ローカル版 — honkoku-ocr-py" width="520">
 </picture>
 
-**ブラウザ版「みんなで翻刻OCR」のPython移植。くずし字画像をコマンドラインで一括翻刻。**
+**ブラウザで動く「みんなで翻刻OCR」をPythonに移植。くずし字の画像から「みんなで翻刻」記法の翻刻をコマンドラインで一括生成する。**
 
 [![MIT](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
 [![models CC BY 4.0](https://img.shields.io/badge/models-CC_BY_4.0-orange)](./NOTICE.md)
@@ -14,7 +14,7 @@
 [![onnxruntime](https://img.shields.io/badge/runs%20on-onnxruntime-5C3EE8)](https://onnxruntime.ai/)
 [![CUDA optional](https://img.shields.io/badge/GPU-CUDA_optional-76B900?logo=nvidia&logoColor=white)](#性能)
 [![model v18](https://img.shields.io/badge/model-kuzushiji_v18-0b7285)](https://yuta1984.github.io/honkoku-ocr-web/tech.html)
-[![tests](https://img.shields.io/badge/tests-25_passing-success?logo=pytest&logoColor=white)](./tests)
+[![ci](https://github.com/mkpoli/honkoku-ocr-py/actions/workflows/ci.yml/badge.svg)](https://github.com/mkpoli/honkoku-ocr-py/actions/workflows/ci.yml)
 [![upstream](https://img.shields.io/badge/upstream-honkoku--ocr--web-8a2f1f)](https://github.com/yuta1984/honkoku-ocr-web)
 
 </div>
@@ -27,11 +27,16 @@
 </picture>
 </p>
 
-[みんなで翻刻OCR](https://yuta1984.github.io/honkoku-ocr-web/)（橋本雄太、CC BY 4.0）の推論パイプラインをPythonおよびonnxruntimeへ移植した実装である。ブラウザ版と同じモデルと前処理を用い、くずし字の古典籍画像からKoji記法（ふりがな・返り点・送り仮名・割書のタグを含む「みんなで翻刻」の記法）の翻刻テキストを出力する。幾何変換・正規化・復号の手順は原実装に準拠しているが、拡大縮小と回転の補間にPillowを用いているため、画素値は完全には一致しない。
+[みんなで翻刻OCR](https://yuta1984.github.io/honkoku-ocr-web/)（橋本雄太、CC BY 4.0）の推論パイプラインを
+Pythonとonnxruntimeに移した移植版。ブラウザ版と同じ重みを使い、くずし字の古典籍画像から
+Koji記法（ふりがな・返り点・送り仮名・割書のタグを含む「みんなで翻刻」の記法）の翻刻テキストを得る。
+幾何・正規化・復号の手順は原実装と同じである。拡大縮小と回転の補間はPillowのものなので画素値は一致せず、
+encoderもブラウザ版のint8版ではなくfp16版（CPUではそれをfp32に直したもの）を使うため、出力は行によって異なる（[性能](#性能)）。
 
 A Python port of the inference pipeline of みんなで翻刻OCR (honkoku-ocr-web, by Yuta Hashimoto,
-CC BY 4.0). Same models, same geometry and normalisation, same output notation; no browser, no UI, and it runs
-on a GPU through onnxruntime's CUDA provider. Resampling is Pillow's, so tensors are equivalent rather than bit-identical.
+CC BY 4.0). Same weights, same geometry, normalisation and decoding, same output notation; no browser and no UI.
+Line detection and the encoder can run on CUDA, the decoder runs on the CPU. Resampling is Pillow's and the encoder
+is the fp16 export rather than the browser's int8 one, so line texts can differ from the browser version.
 
 ## 構成
 
@@ -39,102 +44,254 @@ on a GPU through onnxruntime's CUDA provider. Resampling is Pillow's, so tensors
 |------|------|------|
 | 行検出 | RTMDet-s、入力1024×1024レターボックス、入れ子box除去 | NDL古典籍OCR-Liteのモデル、honkoku-ocr-webの前後処理 |
 | 読み順 | XY-Cut（縦書きは右の段から左へ） | NDL古典籍OCR-Lite / honkoku-ocr-web |
-| 行認識 | ConvNeXt V2 encoder (fp16) + RoBERTa decoder (int8、KVキャッシュ)、greedy、語彙7,710 | honkoku-ocr-web kuzushiji-v18（v17, v16fsも選択可） |
+| 行認識 | ConvNeXt V2 encoder（fp16、CPUではfp32に変換）+ RoBERTa decoder（int8、KVキャッシュ）、greedy、語彙7,710 | honkoku-ocr-web kuzushiji-v18（v17, v16fsも選択可） |
 | 出力 | 特殊トークン列 → Koji記法 / 素テキスト | honkoku-ocr-web |
 
-モデルの設計・学習・評価の詳細は[docs/tech.html](docs/tech.html)（原著作物の技術情報ページの複製）を参照。
+モデルの設計と学習・評価については[docs/tech.html](docs/tech.html)（原著作物の技術情報ページの複製）を参照。
 
 ## 比較
 
 | | **honkoku-ocr-py** | [みんなで翻刻OCR](https://yuta1984.github.io/honkoku-ocr-web/)（ブラウザ版） | [NDL古典籍OCR-Lite](https://github.com/ndl-lab/ndlkotenocr-lite) |
 | :-- | :-: | :-: | :-: |
 | 動く場所 | Python / CLI / サーバ | ブラウザ（WebAssembly, Web Worker） | Python / デスクトップアプリ |
-| 一括処理 | ✅ディレクトリ単位、スクリプトから呼べる | ❌画像を開いてボタンを押す | ✅ディレクトリ単位 |
-| GPU | ✅ CUDA（encoder） | WebGPU対応端末のみ | CUDA（ベータ） |
-| 行認識モデル | ConvNeXt V2 + RoBERTa（kuzushiji v18） | 同じ | PARSeq |
-| 出力 | Koji記法（ふりがな・返り点・送り仮名・割書のタグ付き）+ JSON | Koji記法、縦書き表示 | 素テキスト + XML/JSON |
-| 行位置の持ち込み | ✅ `run(image, boxes=...)` | 画面上でbboxを編集 | ❌ |
-| 行bboxの編集UI | ❌ | ✅ | ❌ |
-| モデルの検証 | サイズとSHA-256を照合 | IndexedDBキャッシュ | 同梱 |
-| 精度（原著の公表値） | 本文plain micro CER 0.075（v18） | 同じ | NDL古典籍OCR ver.3より約2% 低い |
+| 一括処理 | ✅ ディレクトリ単位、失敗した画像を飛ばして続行、`--resume`で再開 | ❌ 画像を開いてボタンを押す | ✅ ディレクトリ単位 |
+| GPU | ✅ CUDA（行検出とencoder） | WebGPU対応端末のみ | CUDA（ベータ） |
+| 行認識モデル | ConvNeXt V2 + RoBERTa（kuzushiji v18） | 同じ重み | PARSeq |
+| 出力 | Koji記法 + JSON（行位置、読み順、停止理由、所要時間、モデルと設定の指紋） | Koji記法、縦書き表示 | 素テキスト + XML/JSON |
+| 行位置の持ち込み | ✅ `--boxes` / `process(image, boxes=...)` | 画面上でbboxを編集 | ❌ |
+| 行bboxの編集UI | ❌（`--preview`で番号付き画像を出す） | ✅ | ❌ |
+| モデルの検証 | 全ファイルのサイズとSHA-256を照合 | IndexedDBキャッシュ | 同梱 |
+| 精度 | 未測定（同じ重み。encoderの精度と画像補間がブラウザ版と異なる） | 本文plain micro CER 0.075（v18、原著の公表値） | NDL古典籍OCR ver.3より約2%低い |
 
-ブラウザ版は行bboxの手動調整や縦書き閲覧に適している。本移植は自動処理、大量処理、他ツールとの連携を担う。
+ブラウザ版の強みは行bboxの手直しと縦書きの閲覧で、そこはこの移植には無い。自動化と大量処理、他のツールとの接続がこの移植の役割になる。
 
 ## なぜ移植したか
 
-ブラウザ版は1枚ずつ画像を開いて手動実行するUIであり、多数の写本画像を機械的に処理する用途には適さない。このリポジトリでは同じモデルを用い、以下の機能を提供する。
+ブラウザ版は1枚ずつ画像を開いてボタンを押す道具で、数十コマの写本を機械的に処理する用途には向かない。
+このリポジトリは同じ重みを、次の使い方ができる形にしたものである。
 
-- **一括処理**: ディレクトリを指定して全画像を順次翻刻し、画像ごとにKoji記法のtxtと、行位置・読み順・認識スコアを含むJSONを出力する。シェルスクリプト、cron、CIから直接実行できる。
-- **他のツールとの接続**: Pythonから`OCR().run()`を呼び出すことで行リストを取得できる。TEIや翻刻プラットフォームへの投入、他OCRとの比較照合、校合ビューアの生成などの後段処理を同一プロセス内で記述できる。
-- **行位置の持ち込み**: `run(image, boxes=...)`により任意の行bboxを指定できる。NDL古典籍OCR-Liteの行検出結果を渡し、両エンジンの認識結果を行ごとに対照することも可能である。
-- **GPU**: encoderをCUDAで実行できる。処理負荷の大半を行認識が占めるため、GPU環境では1コマ数秒で処理が完了する。
-- **再現性**: モデルはバージョン名で固定し、取得時にファイルサイズとSHA-256を照合する。同一の入力に対して常に同一の出力を得る。
-- **ブラウザ不要**: サーバ、WSL、ヘッドレス環境で動作する。IndexedDBやWeb Workerを必要としない。
+- **一括処理**: ディレクトリを渡せば全画像を順に翻刻し、画像ごとにKoji記法のtxtと、行位置・読み順・
+  行検出スコア・所要時間を持つJSONを書き出す。読めない画像があっても残りを処理し、終了コードで知らせる。
+  中断したら`--resume`で続きから再開できる。シェルスクリプトやcron、CIからそのまま呼べる。
+- **他のツールとの接続**: Pythonから`OCR().process()`を呼ぶだけでページの結果が返る。TEIや翻刻プラットフォーム
+  への流し込み、別のOCRとの突き合わせ、校合ビューアの生成といった後段処理を同じプロセスで書ける。
+- **行位置の持ち込み**: `--boxes`や`process(image, boxes=...)`で自前の行bboxを与えられる。たとえばNDL古典籍OCR-Liteの
+  行検出結果をそのまま渡せば、二つのエンジンの読みを行ごとに一対一で比べられる。与えた座標はそのまま結果に戻る。
+- **GPU**: 行検出とencoderをCUDAで動かせる。行認識が支配的なので、GPUがあれば1コマ数秒で終わる。
+- **再現性**: モデルはバージョン名で固定し、取得時にサイズとSHA-256を照合する。JSONには入力画像・各モデル・語彙・
+  設定・パッケージとランタイムの版の指紋が入り、同じ環境で同じ入力を処理すれば同じ出力になる。
+  onnxruntimeの版やデバイスをまたいだ一致は確かめていない。
+- **ブラウザ不要**: サーバやWSL、ヘッドレス環境で動く。IndexedDBのキャッシュもWeb Workerもいらない。
 
-出力形式はブラウザ版と共通のKoji記法であるため、ブラウザ版の翻刻データと併用できる。
+出力はブラウザ版と同じKoji記法なので、ブラウザ版で作った翻刻と混ぜて扱える。
 
 ## 性能
 
-RTX 5070 Ti（CUDA）および16スレッドCPUを用い、国書データベースの写本画像（半丁、約3200×4600pxを長辺3500pxに縮小）を処理した実測値。
+同じ見開き1コマ（6,496×4,613px、長辺3,500pxに縮小、検出21行）を、同じ機械（AMD Ryzen 7 9800X3D、16スレッド）で処理した所要時間。
+ブラウザ版は配信中の[honkoku-ocr-web](https://yuta1984.github.io/honkoku-ocr-web/)（2026-09-06、モデルv18）を
+ヘッドレスChromiumで動かした値で、WebGPUが使えない環境のためencoderはWebAssembly（int8）、認識ワーカーは8本。
+モデルの取得とセッション作成は含まない。
 
-| 環境 | 行検出 | 行検出＋行認識 | 1行あたり |
-|------|--------|----------------|-----------|
-| CUDA (encoder) + CPU (decoder) | 0.3秒/コマ | 1.3〜1.5秒/コマ（8〜15行） | 0.10〜0.16秒 |
-| CPUのみ | 数秒/コマ | 約60〜100秒/コマ | 約7秒 |
+| 実装 | 行検出 | 行認識 | 合計 |
+|------|-------:|-------:|-----:|
+| ブラウザ版（WebAssembly、8ワーカー） | 2.9秒 | 37.5〜43.2秒（2回の実測） | 約40〜46秒 |
+| honkoku-ocr-py CPU、encoder fp32（既定） | 0.2秒 | 19.5秒（encoder 18.2秒、decoder 0.9秒） | 20.6秒 |
+| honkoku-ocr-py CPU、encoder fp16（`--encoder-precision fp16`） | 0.2秒 | 約150秒 | 152秒 |
+| honkoku-ocr-py CUDA（RTX 5070 Ti、encoder fp16、`--threads 2 --decoder-threads 2`） | 0.04秒 | 1.1秒（encoder 0.48秒、decoder 0.36秒、前処理 0.21秒） | 1.46秒（warm、3回の中央値） |
 
-初期化（セッション生成）には約1秒を要する。CPU実行時の速度低下はfp16 encoderに起因する（int8版はonnxruntimeのCPUプロバイダで動作しない）。CPU環境で大量に処理する場合は、GPUを利用するか、行数の少ない画像に適用する必要がある。認識精度はブラウザ版と共通のモデルを用いているため、原著作物の[技術情報](docs/tech.html)に準ずる。読み順判定およびKoji変換の原実装との差異や再現手順は[benchmarks/README.md](benchmarks/README.md)を参照。
+配信されているencoderはfp16で、onnxruntimeのCPUプロバイダではこれをそのまま動かすと1行7.3秒かかる。
+同じ重みをfp32に直したファイルは1行0.86秒で、hidden stateの差は最大1e-3程度、この見開きでは21行中1行が
+行末の全角空白の有無だけ違った。CPUでは初回に変換してキャッシュし（366MB、数秒）、CUDAではfp16のまま使う。
+
+CUDAの行は同じ見開きを1回の暖機のあと3回処理した中央値（1.508、1.444、1.464秒）で、3回とも同じ文字列を出した。モデルの遅延読み込みを含む最初の1コマは3.51秒、プロセスのピークRSSは約2.0GiB。decoderはCUDAでもCPUで動く。
+
+ブラウザ版とこの移植では同じ見開きで検出行数（22行と21行）も行の読みも一部異なる。
+どちらが正しいかは正解翻刻との照合が要る。[benchmarks/ocr.py](benchmarks/ocr.py)は画像と翻刻の一覧（manifest）を受け取って
+ページ単位の所要時間とCERを出す。読み順とKoji変換の原実装との比較は[benchmarks/README.md](benchmarks/README.md)を参照。
 
 ## 使い方
 
 ```sh
 uv sync --extra cpu          # onnxruntime (CPU)
-uv sync --extra gpu          # onnxruntime-gpu と CUDA 12 のランタイム (cpu と同時には入れない)
+uv sync --extra gpu          # onnxruntime-gpu と CUDA 12 のランタイム (cpu とは排他)
 
-uv run honkoku-ocr --download                    # モデルを取得 (約 250 MB、~/.cache/honkoku-ocr/models)
-uv run honkoku-ocr page.jpg -o out               # out/page.txt (Koji 記法、読み順) と out/page.json
+uv run honkoku-ocr --download                    # モデルを取得して照合 (約 250 MB、~/.cache/honkoku-ocr/models)
+uv run honkoku-ocr page.jpg -o out               # out/page__<hash>.txt (Koji 記法、読み順) と out/page__<hash>.json
 uv run honkoku-ocr pages/ -o out --device cuda   # ディレクトリ内の画像を一括処理
+uv run honkoku-ocr pages/ -o out --resume        # 済んだページを飛ばして続きから
 uv run honkoku-ocr page.jpg -o out --plain       # タグ無しの素テキスト
+uv run honkoku-ocr page.jpg -o out --preview     # 行 bbox と読み順を描いた PNG も書く
+uv run honkoku-ocr page.jpg -o out --layout-only # 行検出だけ (行認識モデルを読まない)
+uv run honkoku-ocr page.jpg -o out --boxes out/page__<hash>.json   # 行位置を与えて認識だけ
+uv run honkoku-ocr scans.tif -o out --frame 3    # 多ページ TIFF の 4 コマ目だけ (省略時は全コマ)
 ```
 
-Pythonから:
+主なオプション。全体は`honkoku-ocr --help`。
+
+| オプション | 意味 |
+|------------|------|
+| `--model {v16fs,v17,v18}` | 行認識モデルの版（既定v18） |
+| `--device {cpu,cuda}` | 行検出とencoderのデバイス。decoderは常にCPU |
+| `--encoder-precision {auto,fp16,fp32}` | autoはCPUでfp32、CUDAでfp16 |
+| `--threads N` / `--decoder-threads N` | onnxruntimeのスレッド数。0で既定 |
+| `--offline` | キャッシュに無いモデルを取りに行かず失敗する |
+| `--verify-cache` | キャッシュ済みモデルのSHA-256を照合して終了 |
+| `--max-dimension` `--margin` `--confidence-threshold` `--ios-threshold` | 縮小の長辺（3500）、行cropの余白（45）、行検出のスコア閾値（0.3）、入れ子除去の閾値（0.8） |
+
+**出力の名前**。1画像につき`<stem>__<16桁hex>.json`と`.txt`（`--preview`なら`.preview.png`も）。
+hexは入力の絶対パスのSHA-256の先頭16桁で、同じstemの画像が別のディレクトリにあっても衝突せず、
+別の呼び出しで一部だけ処理しても名前が変わらない。多ページ画像はさらに`__p0001`のようにコマ番号が付く。
+入力ディレクトリを移動すると名前が変わる。以前の版は`<stem>.txt`という名前だったので、
+古い出力を使う処理は`__`以降を除いてstemを取り出すか、JSONの`image`フィールドを見ればよい。
+
+**再開**。各ページのJSONは完了記録で、txt（とpreview）を書き終えてから最後に置かれる。書き込みは一時ファイル経由なので
+途中で止めても壊れたファイルは残らない。`--resume`はJSONの指紋（画像のSHA-256、コマ番号、各モデルと語彙のSHA-256、
+設定、パッケージとコードとランタイムの版）が今回と一致し、txt等のSHA-256も記録どおりのときだけそのページを飛ばす。
+モデルや設定を変えれば作り直す。
+
+読めない画像や処理中に失敗したページは標準エラーに出して次へ進み、最後に`N completed, N skipped, N failed`を出す。
+失敗が1つでもあれば終了コードは1。
+
+## Pythonから
 
 ```python
 from honkoku_ocr import OCR, Box
 
-ocr = OCR(version="v18", device="cuda")
-for line in ocr.run("page.jpg"):
-    print(line.reading_order, line.koji)          # line.raw にタグ付きの生文字列、line.plain に素テキスト
+ocr = OCR("v18", device="cuda")          # モデルは最初に使う段階で読み込む
+for path in sorted(pages.glob("*.jpg")):
+    page = ocr.process(path)             # PageResult
+    for line in page.lines:
+        print(line.reading_order, line.koji)   # line.raw にタグ付きの生文字列、line.plain に素テキスト
+    print(page.timings["total"], page.warnings)
 ```
 
-行位置を指定して実行する場合は`ocr.run(image, boxes=[Box(x, y, w, h, 1.0), ...])`と指定する。画像はEXIFの向きを適用後、長辺3500pxに縮小して処理されるが、出力される座標値は元画像の座標系に基づく。`--device cuda`指定時にCUDAプロバイダが利用できない場合は、CPUへフォールバックせずエラー終了する。モデル取得時にはSHA-256（v18およびRTMDet）とファイルサイズを照合する。
+1つの`OCR`を使い回す。`ocr_image(path)`は1回ごとにモデルを読み直す簡易関数なので、複数ページには向かない。
 
-JSON出力の各行オブジェクトは`reading_order`, `x`, `y`, `width`, `height`, `confidence`（行検出スコア）, `raw`, `koji`, `plain`を含む。
+- `ocr.process(image, boxes=None, *, frame=0, layout_only=False)`は`PageResult`を返す。`image`はパス、
+  `PIL.Image`、または`ocr.prepare(path)`が返す`PreparedPage`。
+- `ocr.run(image, boxes=None)`は`process(...).lines`、`ocr.layout(image)`は行検出だけを行い`Box`の一覧を返す。
+  どちらも必要なモデルしか読まない。
+- 座標はすべてEXIFの向きを反映した元画像のもの（`settings.coordinate_space`は`exif_oriented_original`）。
+  処理は長辺3,500pxに縮小した画像で行い、結果は元画像の座標に戻す。
+- `boxes=[Box(x, y, w, h, confidence), ...]`を与えると行検出を飛ばし、与えた順を読み順、与えた座標をそのまま
+  結果の座標とする。boxは元画像の内側で幅と高さが正、confidenceは0〜1でなければならない。
+- 行検出器や行認識器を差し替えるには`OCR(detector=..., recognizer=...)`。`detect(image, conf_threshold, ios_threshold)`と
+  `recognize_result(crop)`を実装したオブジェクトであればよい。
+
+`PageResult`の内容。
+
+| フィールド | 内容 |
+|-----------|------|
+| `schema_version` | 1 |
+| `width`, `height` | EXIFの向きを反映した元画像の大きさ |
+| `processed_width`, `processed_height` | 縮小後、実際にモデルへ渡した画像の大きさ |
+| `frame` | 多ページ画像のコマ番号（0始まり） |
+| `model`, `settings` | 行認識モデルの版と、デバイス・スレッド・精度・縮小・余白・閾値 |
+| `lines` | 読み順に並んだ`LineResult` |
+| `timings` | 段階ごとの秒数。`load`, `detector_setup`, `layout`, `reading_order`, `recognizer_setup`, `preprocess`, `encoder`, `prefill`, `decode`, `total` |
+| `warnings` | 行末まで復号できなかった行など |
+
+`LineResult`は`reading_order`, `x`, `y`, `width`, `height`, `detection_confidence`（行検出のスコア。与えたboxならその値）,
+`raw`, `koji`, `plain`, `stop_reason`（`eos`は終端トークンで停止、`repetition`は反復崩壊の打ち切り、`max_tokens`は上限192トークン、
+`not_run`は`layout_only`）, `token_count`, `timings`（行ごとの`preprocess`, `encoder`, `prefill`, `decode`）を持つ。
+
+## 出力ファイル
+
+CLIのJSONは`PageResult`に`image`（入力のファイル名）、`fingerprint`、`artifacts`（同時に書いたファイルのSHA-256）を加えたもの。
+
+```json
+{
+  "schema_version": 1,
+  "width": 6496, "height": 4613,
+  "processed_width": 3500, "processed_height": 2485,
+  "frame": 0,
+  "model": "v18",
+  "settings": {"device": "cpu", "threads": 0, "decoder_threads": 0, "encoder_precision": "auto",
+               "max_dimension": 3500, "margin": 45, "conf_threshold": 0.3, "ios_threshold": 0.8,
+               "coordinate_space": "exif_oriented_original"},
+  "lines": [
+    {"reading_order": 1, "x": 4239, "y": 1221, "width": 334, "height": 422,
+     "detection_confidence": 0.6066901683807373,
+     "raw": "<ruby>大印<rt>おほしつし</rt></ruby>", "koji": "大印（おほしつし）", "plain": "大印おほしつし",
+     "stop_reason": "eos", "token_count": 12,
+     "timings": {"preprocess": 0.008, "encoder": 0.672, "prefill": 0.004, "decode": 0.037}}
+  ],
+  "timings": {"load": 0.269, "detector_setup": 0.075, "layout": 0.173, "reading_order": 0.003,
+              "recognizer_setup": 0.551, "preprocess": 0.434, "encoder": 18.227, "prefill": 0.197,
+              "decode": 0.672, "total": 20.61},
+  "warnings": ["line 7: generation stopped by repetition"],
+  "image": "0003.jpg",
+  "fingerprint": {
+    "source_sha256": "e2ed654248a0…", "frame": 0,
+    "models": {"layout": {"file": "rtmdet-s-1280x1280.onnx", "sha256": "f46267754d40…"},
+               "encoder": {"file": "kuzushiji-v18-encoder-fp32.onnx", "sha256": "3b3c359bd426…"},
+               "prefill": {"file": "kuzushiji-v18-decoder-prefill-int8.onnx", "sha256": "6f3f19011f8d…"},
+               "step": {"file": "kuzushiji-v18-decoder-step-int8.onnx", "sha256": "bf0e72a80716…"},
+               "vocabulary": "cf0621e68b09…"},
+    "settings": {"device": "cpu", "...": "..."},
+    "model": "v18", "plain": false, "layout_only": false, "boxes": null,
+    "package_version": "0.1.0", "code_sha256": "dfde67eac894…",
+    "runtime_versions": {"numpy": "2.5.2", "pillow": "12.3.0", "onnxruntime": "1.29.0", "onnx": "1.22.0"}
+  },
+  "artifacts": {"0003__5de8f1b5d7a5d622.txt": "ca6949193d5e…"}
+}
+```
+
+txtは`koji`（`--plain`なら`plain`）を読み順に1行ずつ並べたもの。
 
 ## ブラウザ版との違い
 
-- UI（画像ビューア、bbox編集、縦書き表示、PDF/TIFF/HEIC読み込み、LLM連携）は含まない。
-- encoderはfp16版を用いる。int8版で使用されるConvInteger演算はonnxruntimeのCPU/CUDAプロバイダでサポートされていない。対応バージョンはfp16 encoderが提供されているv16fs、v17、v18である。
-- 行検出にはRTMDetのみを使用する（ブラウザ版の5クラスYOLOは含まない）。
+- UI（画像ビューア、bboxの編集、縦書き表示、PDF/HEICの読み込み、IIIF、LLM連携）は含まない。多ページTIFFは読める。
+- encoderはfp16版を使う。ブラウザ版のWebAssembly経路が使うint8版のConvInteger演算はonnxruntimeのCPU/CUDAプロバイダに無い。
+  CPUではfp16版をfp32に変換したファイルを使う。対応する版はfp16 encoderが配布されているv16fs / v17 / v18。
+- decoderは`--device cuda`でもCPUで動く。
+- 拡大縮小と回転はPillow（縮小はLanczos、回転はbicubic）で、ブラウザのcanvasとは補間が異なる。
+- 画像の端にかかる行では傾き推定の二値化閾値が異なる。ブラウザ版は画像外の画素を透明（輝度0）のまま平均に入れ、
+  この移植は白で埋めてから平均を取る。端から45px以内の行だけに影響する。
+- 行検出はRTMDetのみ（ブラウザ版の5クラスYOLOは含まない）。
 
 ## 環境変数
 
-- `HONKOKU_OCR_MODELS` … モデルの保存先（既定値: `~/.cache/honkoku-ocr/models`）
-- `HONKOKU_OCR_MODEL_URL` … モデル配信元URL（既定値: 原著作物と同一の公開バケット）
+- `HONKOKU_OCR_MODELS` … モデルの保存先（既定`~/.cache/honkoku-ocr/models`）。fp32変換したencoderと来歴ファイル
+  `<name>.json`も同じ場所に置く。
+- `HONKOKU_OCR_MODEL_URL` … モデル配信元（既定は原著作物と同じ公開バケット）
+
+## トラブルシューティング
+
+- **`CUDAExecutionProvider is not available`** … `uv sync --extra gpu`でonnxruntime-gpuとCUDA 12 / cuDNN 9のランタイムを入れる。
+  cpuとgpuのextraは同時に入らない。`--device cpu`に戻せば動く。
+- **`SHA-256 mismatch` / `size ... != expected`** … 取得途中で壊れたか配信元が変わった。`~/.cache/honkoku-ocr/models`の
+  該当ファイルを消して再実行する。`--verify-cache`でキャッシュ全体を照合できる。
+- **`missing from model cache in offline mode`** … `--offline`または`--verify-cache`でキャッシュに無いモデルを求めた。
+  ネットワークのある環境で`honkoku-ocr --download --model v18`を先に実行する。
+- **CPUで1行に数秒かかる** … `--encoder-precision fp16`を指定しているか、fp32変換が失敗している。JSONの
+  `fingerprint.models.encoder.file`が`-fp32.onnx`になっているか確かめる。
+- **`DecompressionBombWarning` / `DecompressionBombError`** … Pillowの既定は約8,900万画素で警告、その2倍で停止する。
+  それより大きなスキャンは事前に縮小するか、`PIL.Image.MAX_IMAGE_PIXELS`を上げる。
+- **`box must lie within the EXIF-oriented image`** … `--boxes`のbboxが画像の外にはみ出している。座標は回転を反映した
+  元画像のもので、幅と高さは正、confidenceは0〜1。
+- **メモリ** … CPUのfp32 encoderは約1GB、CUDAのfp16 encoderはVRAM約1GBを使う。ワーカーを並列に立てるなら
+  その分だけ増える。
 
 ## テスト
 
 ```sh
-uv run --extra dev pytest
+uv sync --extra cpu
+uv run pytest
+uv run ruff check .
 ```
+
+CIはPython 3.10〜3.13でlintとテストを走らせ、ビルドしたwheelから語彙ファイルが読めることを確かめる。
 
 ## ライセンスと帰属
 
-このリポジトリのPythonコードおよびテストコードはMITライセンス（[LICENSE](LICENSE)）の下で公開される。
+このリポジトリのPythonコードとテストはMITライセンス（[LICENSE](LICENSE)）。
 
-原著作物に由来するコンポーネントは、各著作者のCC BY 4.0ライセンスのままである（[LICENSES/CC-BY-4.0.txt](LICENSES/CC-BY-4.0.txt)、一覧は[NOTICE.md](NOTICE.md)を参照）。
-- みんなで翻刻OCR（橋本雄太）: モデル、語彙ファイル（`honkoku_ocr/config/`）、`docs/tech.html`、および推論処理の基本設計。
-- NDL古典籍OCR-Lite（国立国会図書館）: 行検出モデル、XY-Cutアルゴリズム。
-学習データには「みんなで翻刻」の翻刻成果物が用いられている。
+原著作物に由来する部分はそれぞれの著作者のCC BY 4.0のままである（[LICENSES/CC-BY-4.0.txt](LICENSES/CC-BY-4.0.txt)、
+一覧は[NOTICE.md](NOTICE.md)）:
+みんなで翻刻OCR（橋本雄太）— モデル、語彙ファイル`honkoku_ocr/config/`、`docs/tech.html`、および移植元となった推論手順。
+NDL古典籍OCR-Lite（国立国会図書館）— 行検出モデル、XY-Cutの手続き。
+学習データは「みんなで翻刻」の翻刻成果に基づく。
 
-本ツールを引用する場合は、原著作物を明記すること。
+引用する場合は原著作物を挙げること:
 橋本雄太「みんなで翻刻OCR — 市民の力で作ったくずし字AI-OCR」 https://yuta1984.github.io/honkoku-ocr-web/
