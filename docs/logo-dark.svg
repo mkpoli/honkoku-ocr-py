@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="520" height="132" viewBox="0 0 520 132" role="img" aria-label="みんなで翻刻くずし字OCR ローカル版 honkoku-ocr-py">
-<rect x="6" y="6" width="120" height="120" rx="18" fill="#2a2926" stroke="#e08a72" stroke-width="2"/>
-<text x="66" y="92" text-anchor="middle" font-family="'Noto Serif JP','Yu Mincho','Hiragino Mincho ProN',serif" font-size="66" font-weight="600" fill="#e08a72">翻</text>
-<text x="146" y="52" font-family="'Noto Sans JP','Hiragino Sans','Yu Gothic',sans-serif" font-size="27" font-weight="700" fill="#ece8df">みんなで翻刻くずし字OCR</text>
-<text x="146" y="86" font-family="'Noto Sans JP','Hiragino Sans','Yu Gothic',sans-serif" font-size="27" font-weight="700" fill="#e08a72">ローカル版</text>
-<text x="147" y="116" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" fill="#a39d91">honkoku-ocr-py · Python + onnxruntime</text>
+<rect x="6" y="6" width="120" height="120" rx="18" fill="#16243a" stroke="#4da3ff" stroke-width="2"/>
+<text x="66" y="92" text-anchor="middle" font-family="'Noto Serif JP','Yu Mincho','Hiragino Mincho ProN',serif" font-size="66" font-weight="600" fill="#4da3ff">翻</text>
+<text x="146" y="52" font-family="'Noto Sans JP','Hiragino Sans','Yu Gothic',sans-serif" font-size="27" font-weight="700" fill="#e6eef7">みんなで翻刻くずし字OCR</text>
+<text x="146" y="86" font-family="'Noto Sans JP','Hiragino Sans','Yu Gothic',sans-serif" font-size="27" font-weight="700" fill="#4da3ff">ローカル版</text>
+<text x="147" y="116" font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace" font-size="17" fill="#9fb3c8">honkoku-ocr-py · Python + onnxruntime</text>
 </svg>
