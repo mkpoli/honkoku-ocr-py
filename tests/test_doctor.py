@@ -44,3 +44,15 @@ def test_hint_appears_only_with_hyperthreading(monkeypatch):
     assert "hint:" not in doctor.render(data)
     data["package"]["physical_cores"], data["settings"]["device"] = 8, "cuda"
     assert "hint:" not in doctor.render(data)
+
+
+def test_runtime_report_preloads_dlls_only_with_the_gpu_package(monkeypatch):
+    import onnxruntime
+    calls = []
+    monkeypatch.setattr(onnxruntime, "preload_dlls", lambda *a, **k: calls.append(1), raising=False)
+    monkeypatch.setattr(doctor, "_version", lambda name: None)
+    doctor.runtime_report()
+    assert calls == []
+    monkeypatch.setattr(doctor, "_version", lambda name: "1.29.0" if name == "onnxruntime-gpu" else None)
+    doctor.runtime_report()
+    assert calls == [1]

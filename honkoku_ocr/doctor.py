@@ -43,10 +43,11 @@ def runtime_report() -> dict[str, Any]:
         report["cuda_error"] = "onnxruntime is not installed: uv sync --extra cpu (or --extra gpu)"
         return report
     report["onnxruntime"] = ort.__version__
-    try:
-        ort.preload_dlls()
-    except Exception:
-        pass
+    if _version("onnxruntime-gpu"):        # the CPU package prints a CUDA warning from preload_dlls, so only the GPU package is preloaded
+        try:
+            ort.preload_dlls()
+        except Exception:
+            pass
     report["providers"] = list(ort.get_available_providers())
     report["cuda"] = "CUDAExecutionProvider" in report["providers"]
     if not report["cuda"]:
