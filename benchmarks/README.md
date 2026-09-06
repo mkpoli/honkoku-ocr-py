@@ -234,7 +234,9 @@ conventions rather than the page's physical lines:
 | --- | --- | ---: |
 | raw CER | every character, newline and space, in reading order (10,198 reference characters) | 0.260 |
 | squeezed CER | as above with 【】 notes and all whitespace removed (8,394 characters); still charges reading order | 0.162 |
+| normalised CER | squeezed, then katakana folded to hiragana, fullwidth forms, and the variant pairs in `page_eval.VARIANTS` (顛/顚, 祷/禱, 畧/略, 国/國 …) folded on both sides | 0.137 |
 | bag of characters, missed / extra | reference characters with no predicted counterpart, and the reverse, regardless of order and line splits | 0.090 / 0.079 |
+| bag of characters after normalisation, missed / extra | the same on the normalised text | 0.066 / 0.055 |
 | paired-line CER | each reference line against its best predicted line; charges split and merged lines, ignores order | 0.143 |
 
 498 lines were detected for 426 transcription lines; 425 of the transcription
@@ -278,9 +280,10 @@ What the gaps between the columns are made of, from reading the paired lines:
   the 字母 of 変体仮名 (多, 連, 里) where the model writes the modern kana; the
   reference uses 顛, 祷, 畧 where the model has 顚, 禱, 略, and sometimes omits
   返り点 that the model outputs. Page kirishitan-005 has every metric at 0.178
-  for this reason alone. Within paired lines 97 of 3,320 edit operations are
-  kana script changes and most of the rest are runs of unequal length, so the
-  share of pure notation differences is not separated further here.
+  for this reason alone; after normalisation it scores 0.005. Over all pages the
+  normalisation removes 2.5 points of squeezed CER (0.162 to 0.137) and 2.4
+  points of missed characters (0.090 to 0.066); the folded pairs are listed in
+  `page_eval.VARIANTS`, and 変体仮名 written with their 字母 are left alone.
 - **Illustrated pages.** The two 図譜 pages are drawings with scattered labels;
   the transcription positions them with leading spaces and the detector finds
   labels the transcription lacks.

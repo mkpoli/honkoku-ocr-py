@@ -9,6 +9,10 @@ recognition) and the Koji text of the page is compared with the reference page:
 - bag of characters: how many reference characters have no counterpart among
   the predicted characters (missed) and how many predicted characters have none
   in the reference (extra), regardless of order and segmentation;
+- normalised squeezed CER: as squeezed, after folding katakana to hiragana,
+  Unicode compatibility forms, and the variant-kanji pairs in VARIANTS, so that
+  transcription conventions stop counting and what remains is closer to
+  recognition proper;
 - line alignment: each reference line is paired greedily with the unused
   predicted line of lowest normalised edit distance, giving a per-line CER that
   ignores reading order, the number of unpaired reference lines (missed) and
@@ -27,6 +31,7 @@ import os
 import platform
 import re
 import sys
+import unicodedata
 from collections import Counter
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
@@ -37,6 +42,25 @@ from honkoku_ocr.output import atomic_write, package_version, safe_error
 
 _WHITESPACE = re.compile(r"\s+")
 _NOTE = re.compile(r"【[^】]*】")
+# Variant pairs seen between みんなで翻刻 transcriptions and model output on the
+# honkoku corpus, folded to the first form. 変体仮名 written with their 字母 (多, 連,
+# 里, 与) are not folded, since the same characters occur as kanji.
+VARIANTS = {"顚": "顛", "禱": "祷", "略": "畧", "幷": "并", "檜": "桧", "澤": "沢", "萬": "万", "國": "国",
+            "舩": "船", "○": "〇", "ヽ": "ゝ", "ヾ": "ゞ", "凶": "㐫", "鶏": "雞", "壽": "寿", "與": "与",
+            "體": "体", "會": "会", "來": "来", "當": "当", "應": "応", "圖": "図", "廣": "広", "數": "数"}
+
+
+def normalize(text: str) -> str:
+    """Fold script and variant differences that are conventions, not readings."""
+    out = []
+    for ch in text:
+        folded = unicodedata.normalize("NFKC", ch)
+        if len(folded) == 1:          # fullwidth digits and letters; ヿ and other ligatures are kept
+            ch = folded
+        if "ァ" <= ch <= "ヶ":
+            ch = chr(ord(ch) - 0x60)
+        out.append(VARIANTS.get(ch, ch))
+    return "".join(out)
 
 
 def squeeze(text: str) -> str:
@@ -86,10 +110,13 @@ def evaluate_page(reference: str, predicted_lines: list[str]) -> dict:
     reference_lines = [line for line in _NOTE.sub("", reference).splitlines() if line.strip()]
     predicted = "\n".join(predicted_lines)
     ref_sq, hyp_sq = squeeze(reference), squeeze(predicted)
+    ref_nm, hyp_nm = normalize(ref_sq), normalize(hyp_sq)
     return {"reference_characters": len(reference), "raw_errors": edit_distance(reference, predicted),
             "raw_cer": cer(reference, predicted),
             "squeezed_reference_characters": len(ref_sq), "squeezed_errors": edit_distance(ref_sq, hyp_sq),
             "squeezed_cer": cer(ref_sq, hyp_sq), "bag": bag(ref_sq, hyp_sq),
+            "normalized_reference_characters": len(ref_nm), "normalized_errors": edit_distance(ref_nm, hyp_nm),
+            "normalized_cer": cer(ref_nm, hyp_nm), "normalized_bag": bag(ref_nm, hyp_nm),
             "lines": align_lines([squeeze(line) for line in reference_lines], [squeeze(line) for line in predicted_lines])}
 
 
@@ -120,6 +147,10 @@ def totals_of(pages: list[dict]) -> dict:
               "squeezed_reference_characters": sum(p["squeezed_reference_characters"] for p in pages),
               "squeezed_errors": sum(p["squeezed_errors"] for p in pages),
               "bag_missed": sum(p["bag"]["missed"] for p in pages), "bag_extra": sum(p["bag"]["extra"] for p in pages),
+              "normalized_reference_characters": sum(p["normalized_reference_characters"] for p in pages),
+              "normalized_errors": sum(p["normalized_errors"] for p in pages),
+              "normalized_bag_missed": sum(p["normalized_bag"]["missed"] for p in pages),
+              "normalized_bag_extra": sum(p["normalized_bag"]["extra"] for p in pages),
               "reference_lines": sum(p["lines"]["reference_lines"] for p in pages),
               "predicted_lines": sum(p["lines"]["predicted_lines"] for p in pages),
               "paired": sum(p["lines"]["paired"] for p in pages),
@@ -132,6 +163,10 @@ def totals_of(pages: list[dict]) -> dict:
     n = totals["squeezed_reference_characters"]
     totals["bag_missed_share"] = totals["bag_missed"] / n if n else None
     totals["bag_extra_share"] = totals["bag_extra"] / n if n else None
+    m = totals["normalized_reference_characters"]
+    totals["normalized_cer"] = totals["normalized_errors"] / m if m else None
+    totals["normalized_bag_missed_share"] = totals["normalized_bag_missed"] / m if m else None
+    totals["normalized_bag_extra_share"] = totals["normalized_bag_extra"] / m if m else None
     return totals
 
 
@@ -180,7 +215,7 @@ def main(argv=None) -> int:
                  threads=args.threads, decoder_threads=args.decoder_threads, overlap=args.overlap,
                  offline=args.offline, limit=args.limit, log=sys.stderr)
     t = report["totals"]
-    print(f"{t['pages']} pages: CER raw {t['raw_cer']:.4f}, squeezed {t['squeezed_cer']:.4f}, paired lines {t['paired_cer']:.4f}, "
+    print(f"{t['pages']} pages: CER raw {t['raw_cer']:.4f}, squeezed {t['squeezed_cer']:.4f}, normalized {t['normalized_cer']:.4f}, paired lines {t['paired_cer']:.4f}, "
           f"bag missed {t['bag_missed_share']:.4f} extra {t['bag_extra_share']:.4f}; "
           f"lines {t['predicted_lines']}/{t['reference_lines']} predicted/reference, paired {t['paired']}", file=sys.stderr)
     args.output.parent.mkdir(parents=True, exist_ok=True)

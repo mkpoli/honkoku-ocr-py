@@ -1,7 +1,7 @@
 import json
 
 from benchmarks import page_eval
-from benchmarks.page_eval import align_lines, bag, evaluate_page, squeeze
+from benchmarks.page_eval import align_lines, bag, evaluate_page, normalize, squeeze
 
 
 def test_squeeze_removes_whitespace_and_editorial_notes():
@@ -62,3 +62,10 @@ def test_rescore_recomputes_from_stored_predictions(tmp_path):
     assert page_eval.main([str(manifest), "--output", str(out), "--rescore", str(old)]) == 0
     report = json.loads(out.read_text())
     assert report["totals"]["squeezed_errors"] == 0 and report["totals"]["raw_errors"] == 4 and report["rescored_from"]
+
+
+def test_normalize_folds_kana_script_and_variants_only():
+    assert normalize("ニ其前キ顚倒ノヿ祷１") == "に其前き顛倒のヿ祷1"
+    assert normalize("多連里与") == "多連里与"          # 字母 of 変体仮名 stay as they are
+    page = evaluate_page("松樹顛倒ノ由", ["松樹顚倒の由"])
+    assert page["squeezed_errors"] == 2 and page["normalized_errors"] == 0

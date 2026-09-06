@@ -55,6 +55,10 @@
   "squeezed_errors": 1359,
   "bag_missed": 753,
   "bag_extra": 664,
+  "normalized_reference_characters": 8394,
+  "normalized_errors": 1150,
+  "normalized_bag_missed": 554,
+  "normalized_bag_extra": 465,
   "reference_lines": 426,
   "predicted_lines": 498,
   "paired": 425,
@@ -65,7 +69,10 @@
   "squeezed_cer": 0.16190135811293782,
   "paired_cer": 0.14285714285714285,
   "bag_missed_share": 0.08970693352394568,
-  "bag_extra_share": 0.07910412199189898
+  "bag_extra_share": 0.07910412199189898,
+  "normalized_cer": 0.13700262091970455,
+  "normalized_bag_missed_share": 0.06599952346914463,
+  "normalized_bag_extra_share": 0.05539671193709793
  },
  "pages": [
   {
@@ -124,6 +131,15 @@
     "extra": 6,
     "missed_share": 0.08333333333333333,
     "extra_share": 0.038461538461538464
+   },
+   "normalized_reference_characters": 156,
+   "normalized_errors": 72,
+   "normalized_cer": 0.46153846153846156,
+   "normalized_bag": {
+    "missed": 12,
+    "extra": 5,
+    "missed_share": 0.07692307692307693,
+    "extra_share": 0.03205128205128205
    },
    "lines": {
     "reference_lines": 26,
@@ -322,6 +338,15 @@
     "extra": 44,
     "missed_share": 0.21739130434782608,
     "extra_share": 0.10628019323671498
+   },
+   "normalized_reference_characters": 414,
+   "normalized_errors": 94,
+   "normalized_cer": 0.22705314009661837,
+   "normalized_bag": {
+    "missed": 70,
+    "extra": 24,
+    "missed_share": 0.16908212560386474,
+    "extra_share": 0.057971014492753624
    },
    "lines": {
     "reference_lines": 25,
@@ -524,6 +549,15 @@
     "missed_share": 0.17418032786885246,
     "extra_share": 0.20901639344262296
    },
+   "normalized_reference_characters": 488,
+   "normalized_errors": 212,
+   "normalized_cer": 0.4344262295081967,
+   "normalized_bag": {
+    "missed": 77,
+    "extra": 94,
+    "missed_share": 0.15778688524590165,
+    "extra_share": 0.19262295081967212
+   },
    "lines": {
     "reference_lines": 19,
     "predicted_lines": 41,
@@ -677,6 +711,15 @@
     "extra": 23,
     "missed_share": 0.16119402985074627,
     "extra_share": 0.06865671641791045
+   },
+   "normalized_reference_characters": 335,
+   "normalized_errors": 47,
+   "normalized_cer": 0.14029850746268657,
+   "normalized_bag": {
+    "missed": 42,
+    "extra": 11,
+    "missed_share": 0.1253731343283582,
+    "extra_share": 0.03283582089552239
    },
    "lines": {
     "reference_lines": 24,
@@ -855,6 +898,15 @@
     "missed_share": 0.023715415019762844,
     "extra_share": 0.021739130434782608
    },
+   "normalized_reference_characters": 506,
+   "normalized_errors": 18,
+   "normalized_cer": 0.03557312252964427,
+   "normalized_bag": {
+    "missed": 12,
+    "extra": 11,
+    "missed_share": 0.023715415019762844,
+    "extra_share": 0.021739130434782608
+   },
    "lines": {
     "reference_lines": 20,
     "predicted_lines": 22,
@@ -1002,6 +1054,15 @@
    "squeezed_errors": 54,
    "squeezed_cer": 0.14958448753462603,
    "bag": {
+    "missed": 12,
+    "extra": 42,
+    "missed_share": 0.0332409972299169,
+    "extra_share": 0.11634349030470914
+   },
+   "normalized_reference_characters": 361,
+   "normalized_errors": 54,
+   "normalized_cer": 0.14958448753462603,
+   "normalized_bag": {
     "missed": 12,
     "extra": 42,
     "missed_share": 0.0332409972299169,
@@ -1155,6 +1216,15 @@
     "extra": 27,
     "missed_share": 0.08679245283018867,
     "extra_share": 0.0509433962264151
+   },
+   "normalized_reference_characters": 530,
+   "normalized_errors": 121,
+   "normalized_cer": 0.22830188679245284,
+   "normalized_bag": {
+    "missed": 43,
+    "extra": 24,
+    "missed_share": 0.08113207547169811,
+    "extra_share": 0.045283018867924525
    },
    "lines": {
     "reference_lines": 20,
@@ -1316,6 +1386,15 @@
     "extra": 16,
     "missed_share": 0.11801242236024845,
     "extra_share": 0.09937888198757763
+   },
+   "normalized_reference_characters": 161,
+   "normalized_errors": 29,
+   "normalized_cer": 0.18012422360248448,
+   "normalized_bag": {
+    "missed": 18,
+    "extra": 15,
+    "missed_share": 0.11180124223602485,
+    "extra_share": 0.09316770186335403
    },
    "lines": {
     "reference_lines": 25,
@@ -1499,6 +1578,15 @@
     "missed_share": 0.022598870056497175,
     "extra_share": 0.05084745762711865
    },
+   "normalized_reference_characters": 177,
+   "normalized_errors": 10,
+   "normalized_cer": 0.05649717514124294,
+   "normalized_bag": {
+    "missed": 4,
+    "extra": 9,
+    "missed_share": 0.022598870056497175,
+    "extra_share": 0.05084745762711865
+   },
    "lines": {
     "reference_lines": 21,
     "predicted_lines": 22,
@@ -1659,6 +1747,15 @@
     "missed_share": 0.04693140794223827,
     "extra_share": 0.018050541516245487
    },
+   "normalized_reference_characters": 554,
+   "normalized_errors": 49,
+   "normalized_cer": 0.08844765342960288,
+   "normalized_bag": {
+    "missed": 23,
+    "extra": 7,
+    "missed_share": 0.04151624548736462,
+    "extra_share": 0.01263537906137184
+   },
    "lines": {
     "reference_lines": 20,
     "predicted_lines": 20,
@@ -1810,6 +1907,15 @@
    "squeezed_errors": 45,
    "squeezed_cer": 0.12430939226519337,
    "bag": {
+    "missed": 31,
+    "extra": 26,
+    "missed_share": 0.0856353591160221,
+    "extra_share": 0.0718232044198895
+   },
+   "normalized_reference_characters": 362,
+   "normalized_errors": 45,
+   "normalized_cer": 0.12430939226519337,
+   "normalized_bag": {
     "missed": 31,
     "extra": 26,
     "missed_share": 0.0856353591160221,
@@ -1970,6 +2076,15 @@
     "missed_share": 0.01,
     "extra_share": 0.01
    },
+   "normalized_reference_characters": 200,
+   "normalized_errors": 26,
+   "normalized_cer": 0.13,
+   "normalized_bag": {
+    "missed": 2,
+    "extra": 2,
+    "missed_share": 0.01,
+    "extra_share": 0.01
+   },
    "lines": {
     "reference_lines": 20,
     "predicted_lines": 20,
@@ -2125,6 +2240,15 @@
     "missed_share": 0.1775,
     "extra_share": 0.1775
    },
+   "normalized_reference_characters": 400,
+   "normalized_errors": 2,
+   "normalized_cer": 0.005,
+   "normalized_bag": {
+    "missed": 2,
+    "extra": 2,
+    "missed_share": 0.005,
+    "extra_share": 0.005
+   },
    "lines": {
     "reference_lines": 20,
     "predicted_lines": 20,
@@ -2274,6 +2398,15 @@
     "missed_share": 0.017241379310344827,
     "extra_share": 0.01293103448275862
    },
+   "normalized_reference_characters": 232,
+   "normalized_errors": 3,
+   "normalized_cer": 0.01293103448275862,
+   "normalized_bag": {
+    "missed": 3,
+    "extra": 2,
+    "missed_share": 0.01293103448275862,
+    "extra_share": 0.008620689655172414
+   },
    "lines": {
     "reference_lines": 14,
     "predicted_lines": 14,
@@ -2396,6 +2529,15 @@
    "squeezed_errors": 30,
    "squeezed_cer": 0.057803468208092484,
    "bag": {
+    "missed": 7,
+    "extra": 24,
+    "missed_share": 0.01348747591522158,
+    "extra_share": 0.046242774566473986
+   },
+   "normalized_reference_characters": 519,
+   "normalized_errors": 30,
+   "normalized_cer": 0.057803468208092484,
+   "normalized_bag": {
     "missed": 7,
     "extra": 24,
     "missed_share": 0.01348747591522158,
@@ -2547,6 +2689,15 @@
     "missed_share": 0.3771186440677966,
     "extra_share": 0.2754237288135593
    },
+   "normalized_reference_characters": 236,
+   "normalized_errors": 73,
+   "normalized_cer": 0.3093220338983051,
+   "normalized_bag": {
+    "missed": 62,
+    "extra": 38,
+    "missed_share": 0.2627118644067797,
+    "extra_share": 0.16101694915254236
+   },
    "lines": {
     "reference_lines": 8,
     "predicted_lines": 11,
@@ -2653,6 +2804,15 @@
     "extra": 71,
     "missed_share": 0.204,
     "extra_share": 0.284
+   },
+   "normalized_reference_characters": 250,
+   "normalized_errors": 134,
+   "normalized_cer": 0.536,
+   "normalized_bag": {
+    "missed": 38,
+    "extra": 58,
+    "missed_share": 0.152,
+    "extra_share": 0.232
    },
    "lines": {
     "reference_lines": 27,
@@ -2848,6 +3008,15 @@
     "missed_share": 0.09262759924385633,
     "extra_share": 0.15122873345935728
    },
+   "normalized_reference_characters": 529,
+   "normalized_errors": 51,
+   "normalized_cer": 0.09640831758034027,
+   "normalized_bag": {
+    "missed": 16,
+    "extra": 47,
+    "missed_share": 0.030245746691871456,
+    "extra_share": 0.0888468809073724
+   },
    "lines": {
     "reference_lines": 21,
     "predicted_lines": 24,
@@ -3020,6 +3189,15 @@
     "extra": 16,
     "missed_share": 0.024444444444444446,
     "extra_share": 0.011851851851851851
+   },
+   "normalized_reference_characters": 1350,
+   "normalized_errors": 30,
+   "normalized_cer": 0.022222222222222223,
+   "normalized_bag": {
+    "missed": 30,
+    "extra": 13,
+    "missed_share": 0.022222222222222223,
+    "extra_share": 0.00962962962962963
    },
    "lines": {
     "reference_lines": 34,
@@ -3246,6 +3424,15 @@
     "extra": 16,
     "missed_share": 0.08675078864353312,
     "extra_share": 0.025236593059936908
+   },
+   "normalized_reference_characters": 634,
+   "normalized_errors": 50,
+   "normalized_cer": 0.07886435331230283,
+   "normalized_bag": {
+    "missed": 50,
+    "extra": 11,
+    "missed_share": 0.07886435331230283,
+    "extra_share": 0.017350157728706624
    },
    "lines": {
     "reference_lines": 26,
