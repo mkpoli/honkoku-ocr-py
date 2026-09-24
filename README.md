@@ -145,7 +145,7 @@ JSON manifestを受け取り、ページ単位の所要時間と、正解があ�
 
 ## 使い方
 
-PyPIの最新は0.3.0（2026-09-06）で、ここに書く使い方はその版のもの。変更点は[CHANGELOG.md](CHANGELOG.md)を参照。
+PyPIの最新は0.4.0（2026-09-24）で、ここに書く使い方はその版のもの。変更点は[CHANGELOG.md](CHANGELOG.md)を参照。
 
 PyPIから:
 
