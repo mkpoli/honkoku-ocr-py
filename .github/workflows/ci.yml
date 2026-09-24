@@ -26,4 +26,4 @@ jobs:
           uv build
           WHEEL="$(readlink -f dist/*.whl)"
           cd "$(mktemp -d)"
-          uv run --isolated --no-project --with "$WHEEL" python -c "import honkoku_ocr, sys; from honkoku_ocr import models; assert 'site-packages' in honkoku_ocr.__file__, honkoku_ocr.__file__; assert len(models.vocab('v18')) == 7710"
+          uv run --isolated --no-project --with "$WHEEL" python -c "import honkoku_ocr, sys; from honkoku_ocr import models; assert 'site-packages' in honkoku_ocr.__file__, honkoku_ocr.__file__; assert len(models.vocab('v19')) == 7710"

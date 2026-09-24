@@ -1,4 +1,4 @@
-"""Opt-in checks against the real v18 encoder in the local model cache.
+"""Opt-in checks against the real v19 encoder in the local model cache.
 
 Run with HONKOKU_OCR_REAL_MODELS=1; skipped otherwise. Downloads nothing: the
 fp16 encoder must already be cached (honkoku-ocr --download).
@@ -17,9 +17,9 @@ pytestmark = pytest.mark.skipif(os.environ.get("HONKOKU_OCR_REAL_MODELS") != "1"
 
 @pytest.fixture(scope="module")
 def encoder_fp16() -> Path:
-    path = models.model_dir() / models.specification("v18").files["encoder"]
+    path = models.model_dir() / models.specification("v19").files["encoder"]
     if not path.exists():
-        pytest.skip("v18 encoder is not in the model cache")
+        pytest.skip("v19 encoder is not in the model cache")
     return path
 
 

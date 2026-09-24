@@ -46,7 +46,7 @@
 
 ## モデルの契約
 
-- 対応する版は`models.SPECS`（v16fs, v17, v18）。すべて入力256×2048、語彙7,710、decoderのKVキャッシュは
+- 対応する版は`models.SPECS`（v16fs, v17, v18, v19）。すべて入力256×2048、語彙7,710、decoderのKVキャッシュは
   24テンソル（6層×self/cross×K/V）、生成上限192トークン。`ModelSpec`がこれを持ち、`Recognizer`は
   セッション作成時にグラフの入出力名と語彙数を照合して合わなければ`RuntimeError`を出す。
 - 配信ファイルは`EXPECTED`のサイズとSHA-256で照合する。取得は一時ファイル経由で、照合に通ったものだけが
@@ -111,7 +111,7 @@ CLIの各ページJSONは完了記録で、txt（とpreview）を書いた後に
 uv sync --extra cpu
 uv run pytest            # 90前後のテスト。モデルもネットワークも要らない
 uv run ruff check .
-HONKOKU_OCR_REAL_MODELS=1 uv run pytest tests/test_real_encoder.py   # キャッシュ済みv18でfp32変換を検算
+HONKOKU_OCR_REAL_MODELS=1 uv run pytest tests/test_real_encoder.py   # キャッシュ済みv19でfp32変換を検算
 ```
 
 一つの論理的変更につき一つのコミット。座標や丸め、余白、閾値、正規化の定数を変えるときは原実装の

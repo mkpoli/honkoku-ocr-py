@@ -7,7 +7,7 @@
 
 - **みんなで翻刻OCR (honkoku-ocr-web)** — 橋本雄太（国立歴史民俗博物館）
   https://github.com/yuta1984/honkoku-ocr-web／https://yuta1984.github.io/honkoku-ocr-web/
-  ライセンスCC BY 4.0。行認識モデル（kuzushiji-v16fs / v17 / v18、ConvNeXt V2 encoder + RoBERTa decoder）、
+  ライセンスCC BY 4.0。行認識モデル（kuzushiji-v16fs / v17 / v18 / v19、ConvNeXt V2 encoder + RoBERTa decoder）、
   語彙ファイル、前処理・復号・Koji記法変換の手続き、技術情報ページ（docs/tech.html）はこの著作物に由来する。
   学習データは「みんなで翻刻」（https://honkoku.org）の翻刻成果に基づく。
 - **NDL古典籍OCR-Lite** — 国立国会図書館
@@ -22,7 +22,7 @@
   送り仮名・返り点のカタカナ化、Koji記法への変換を、原実装と同じ定数・手順で実装している。
 - 画像UI（OpenSeadragonビューア、行bbox編集、縦書き表示、PDF/HEIC読み込み、LLM連携）は含まない。
 - encoderにはfp16版ONNXを用いる（int8版のConvInteger演算はonnxruntimeのCPU/CUDA実行プロバイダに実装がないため）。
-  そのためfp16 encoderが配布されているv16fs / v17 / v18のみに対応する。CPUではfp16版を読み込み時にfp32へ変換した
+  そのためfp16 encoderが配布されているv16fs / v17 / v18 / v19のみに対応する。CPUではfp16版を読み込み時にfp32へ変換した
   ファイルを使う。重みの値は同じで、出力は行によってfp16版とわずかに異なる。
 - 行検出の入力への縮小は、ブラウザのcanvas drawImageに合わせて平均化しない双一次補間（Pillowのアフィン変換）で行う。
 - Koji記法への変換で、返り点・送り仮名・縦点を割書より先に記号へ直す。原実装は割書を先に変換するため、割書の中に

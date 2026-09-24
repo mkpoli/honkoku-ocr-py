@@ -45,7 +45,7 @@ honkoku-ocr --doctor                      # what this installation can run
 
 ```python
 from honkoku_ocr import OCR
-ocr = OCR("v18", device="cpu")            # models load on first use; reuse one instance
+ocr = OCR("v19", device="cpu")            # models load on first use; reuse one instance
 page = ocr.process("page.jpg")            # PageResult: lines in reading order, timings, warnings
 print("\n".join(line.koji for line in page.lines))
 ```
@@ -60,7 +60,7 @@ with the browser version are in [benchmarks/README.md](benchmarks/README.md); a 
 |------|------|------|
 | 行検出 | RTMDet-s、入力1024×1024レターボックス、入れ子box除去 | NDL古典籍OCR-Liteのモデル、honkoku-ocr-webの前後処理 |
 | 読み順 | XY-Cut（縦書きは右の段から左へ） | NDL古典籍OCR-Lite / honkoku-ocr-web |
-| 行認識 | ConvNeXt V2 encoder（fp16、CPUではfp32に変換）+ RoBERTa decoder（int8、KVキャッシュ）、greedy、語彙7,710 | honkoku-ocr-web kuzushiji-v18（v17, v16fsも選択可） |
+| 行認識 | ConvNeXt V2 encoder（fp16、CPUではfp32に変換）+ RoBERTa decoder（int8、KVキャッシュ）、greedy、語彙7,710 | honkoku-ocr-web kuzushiji-v19（v18, v17, v16fsも選択可） |
 | 出力 | 特殊トークン列 → Koji記法 / 素テキスト | honkoku-ocr-web |
 
 モデルの設計と学習・評価については[docs/tech.html](docs/tech.html)（原著作物の技術情報ページの複製）を参照。
@@ -72,12 +72,12 @@ with the browser version are in [benchmarks/README.md](benchmarks/README.md); a 
 | 動く場所 | Python / CLI / サーバ | ブラウザ（WebAssembly, Web Worker） |
 | 一括処理 | ディレクトリ単位。スクリプトやcronから呼べ、失敗した画像を飛ばして続行、`--resume`で再開 | タブに開いた複数画像を「全画像OCR実行」でまとめて処理。結果は画面から保存する |
 | GPU | CUDA（行検出とencoder） | WebGPU対応端末のみ |
-| 行認識モデル | ConvNeXt V2 + RoBERTa（kuzushiji v18） | 同じ重み |
+| 行認識モデル | ConvNeXt V2 + RoBERTa（kuzushiji v19） | 同じ重み |
 | 出力 | Koji記法 + JSON（行位置、読み順、停止理由、所要時間、モデルと設定の指紋）+ PAGE XML | Koji記法、縦書き表示、XML/docx |
 | 行位置の持ち込み | `--boxes` / `process(image, boxes=...)` | 画面上でbboxを編集 |
 | 行bboxの編集UI | 無し（`--preview`で番号付き画像を出す） | あり |
 | モデルの検証 | 全ファイルのサイズとSHA-256を照合 | IndexedDBキャッシュ |
-| 精度 | 未測定（同じ重み。encoderの精度と画像補間がブラウザ版と異なる） | 本文plain micro CER 0.075（v18、[技術情報](docs/tech.html)の公表値） |
+| 精度 | 未測定（同じ重み。encoderの精度と画像補間がブラウザ版と異なる） | 本文CER 0.056（v19、全角空白を除く。[技術情報](docs/tech.html)の公表値） |
 
 ブラウザ版の強みは行bboxの手直しと縦書きの閲覧で、そこはこの移植には無い。自動化と大量処理、他のツールとの接続がこの移植の役割になる。
 
@@ -182,7 +182,7 @@ uv run honkoku-ocr --iiif https://dl.ndl.go.jp/api/iiif/2540583/manifest.json --
 
 | オプション | 意味 |
 |------------|------|
-| `--model {v16fs,v17,v18}` | 行認識モデルの版（既定v18） |
+| `--model {v16fs,v17,v18,v19}` | 行認識モデルの版（既定v19） |
 | `--device {cpu,cuda}` | 行検出とencoderのデバイス。decoderは常にCPU |
 | `--encoder-precision {auto,fp16,fp32}` | autoはCPUでfp32、CUDAでfp16 |
 | `--threads N` / `--decoder-threads N` | onnxruntimeのスレッド数。0で既定 |
@@ -217,7 +217,7 @@ from pathlib import Path
 
 from honkoku_ocr import OCR, Box
 
-ocr = OCR("v18", device="cuda")          # モデルは最初に使う段階で読み込む
+ocr = OCR("v19", device="cuda")          # モデルは最初に使う段階で読み込む
 for path in sorted(Path("pages").glob("*.jpg")):
     page = ocr.process(path)             # PageResult
     for line in page.lines:
@@ -237,7 +237,7 @@ from threading import Event
 from honkoku_ocr import OCR, PageFailure
 
 stop = Event()                            # 別スレッドから stop.set() で中断できる
-ocr = OCR("v18", device="cuda", overlap=True)
+ocr = OCR("v19", device="cuda", overlap=True)
 for outcome in ocr.process_many(sorted(Path("pages").glob("*.jpg")), cancelled=stop.is_set,
                                 progress=lambda i, o: print(i, type(o).__name__)):
     if isinstance(outcome, PageFailure):
@@ -329,7 +329,7 @@ txtは`koji`（`--plain`なら`plain`）を読み順に1行ずつ並べたもの
 
 - UI（画像ビューア、bboxの編集、縦書き表示、HEICの読み込み、LLM連携）は含まない。多ページTIFF、PDF（`pdf` extra）、IIIFマニフェストは読める。
 - encoderはfp16版を使う。ブラウザ版のWebAssembly経路が使うint8版のConvInteger演算はonnxruntimeのCPU/CUDAプロバイダに無い。
-  CPUではfp16版をfp32に変換したファイルを使う。対応する版はfp16 encoderが配布されているv16fs / v17 / v18。
+  CPUではfp16版をfp32に変換したファイルを使う。対応する版はfp16 encoderが配布されているv16fs / v17 / v18 / v19。
 - decoderは`--device cuda`でもCPUで動く。
 - 行検出の入力（1024×1024）への縮小はブラウザのcanvasと同じ平均化しない双一次補間で行う。ページの長辺3,500pxへの縮小と
   行画像の縮小・回転はPillow（Lanczos、bicubic）で、ブラウザのcanvasとは補間が異なる。
@@ -353,7 +353,7 @@ txtは`koji`（`--plain`なら`plain`）を読み順に1行ずつ並べたもの
 - **`SHA-256 mismatch` / `size ... != expected`** … 取得途中で壊れたか配信元が変わった。`~/.cache/honkoku-ocr/models`の
   該当ファイルを消して再実行する。`--verify-cache`でキャッシュ全体を照合できる。
 - **`missing from model cache in offline mode`** … `--offline`または`--verify-cache`でキャッシュに無いモデルを求めた。
-  ネットワークのある環境で`honkoku-ocr --download --model v18`を先に実行する。
+  ネットワークのある環境で`honkoku-ocr --download --model v19`を先に実行する。
 - **CPUで1行に数秒かかる** … `--encoder-precision fp16`を指定しているか、fp32変換が失敗している。JSONの
   `fingerprint.models.encoder.file`が`-fp32.onnx`になっているか確かめる。
 - **`DecompressionBombWarning` / `DecompressionBombError`** … Pillowの既定は約8,900万画素で警告、その2倍で停止する。

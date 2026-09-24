@@ -5,13 +5,13 @@ from honkoku_ocr import cli, doctor, models
 
 def test_report_describes_cache_without_touching_it(tmp_path, monkeypatch, capsys):
     monkeypatch.setenv("HONKOKU_OCR_MODELS", str(tmp_path))
-    spec = models.specification("v18").files
+    spec = models.specification("v19").files
     (tmp_path / spec["layout"]).write_bytes(b"x" * 10)           # wrong size
     (tmp_path / spec["encoder"]).write_bytes(b"")
     fp32 = tmp_path / spec["encoder"].replace("-fp16", "-fp32")
     fp32.write_bytes(b"fp32")
     fp32.with_name(fp32.name + ".json").write_text(json.dumps({"converter": models.FP32_CONVERTER, "size": 4}))
-    data = doctor.report("v18", {"device": "cpu"})
+    data = doctor.report("v19", {"device": "cpu"})
     assert data["cache"]["files"]["layout"] == {"file": spec["layout"], "present": True, "size": 10, "size_ok": False}
     assert data["cache"]["files"]["prefill"]["present"] is False
     assert data["cache"]["fp32_encoder"]["current_converter"] and data["cache"]["fp32_encoder"]["size_ok"]
@@ -33,11 +33,11 @@ def test_runtime_report_without_onnxruntime(monkeypatch):
     monkeypatch.setattr(builtins, "__import__", fake_import)
     data = doctor.runtime_report()
     assert data["onnxruntime"] is None and data["cuda"] is False and "not installed" in data["cuda_error"]
-    assert "missing" in doctor.render(doctor.report("v18"))
+    assert "missing" in doctor.render(doctor.report("v19"))
 
 
 def test_hint_appears_only_with_hyperthreading(monkeypatch):
-    data = doctor.report("v18", {"device": "cpu"})
+    data = doctor.report("v19", {"device": "cpu"})
     data["package"]["physical_cores"], data["package"]["cpu_count"] = 8, 16
     assert "--threads 8 --decoder-threads 2" in doctor.render(data)
     data["package"]["physical_cores"] = 16

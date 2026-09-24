@@ -22,6 +22,9 @@ CONFIG_DIR = Path(__file__).parent / "config"
 # 配信ファイルのサイズと SHA-256。取得後に照合し、キャッシュ読込時はサイズを確かめる。
 EXPECTED = {
     "rtmdet-s-1280x1280.onnx": (40188733, "f46267754d406431f6e035f9e20b8552af8ff1ab5ca13bcac8f4b1abbd02090c"),
+    "kuzushiji-v19-encoder-fp16.onnx": (183086925, "a783edb25180a0aaf148b4561d4d742a403b3823a8de38d97f94f7c8567894f3"),
+    "kuzushiji-v19-decoder-prefill-int8.onnx": (34286083, "aadbd475d00052ed7a99fd51653fa8d218a5c382eaa089f9766cd9cb24333318"),
+    "kuzushiji-v19-decoder-step-int8.onnx": (31050707, "2907b39c8de6041a0645b23a30c57bd9ea55a2d91ef9aa06b425102a069411f4"),
     "kuzushiji-v18-encoder-fp16.onnx": (183086925, "18425099ce3277d31526e133768b1fc0831d2356887567a62898e47b621375cc"),
     "kuzushiji-v18-decoder-prefill-int8.onnx": (34286083, "6f3f19011f8d08f9d5dc9cf9c2e672d9d68cb512438a90486e5b6d7267a129dc"),
     "kuzushiji-v18-decoder-step-int8.onnx": (31050707, "bf0e72a807168393acb7b6c0cb1b85b7d6107f2d6f4d6bb8fbb6736be2ac4bae"),
@@ -55,8 +58,8 @@ class ModelSpec:
         return CONFIG_DIR / f"kuzushiji-vocab-{self.version}.json"
 
 
-DEFAULT_VERSION = "v18"
-SPECS = {version: ModelSpec(version) for version in ("v16fs", "v17", "v18")}
+DEFAULT_VERSION = "v19"
+SPECS = {version: ModelSpec(version) for version in ("v16fs", "v17", "v18", "v19")}
 
 
 def specification(version: str) -> ModelSpec:
