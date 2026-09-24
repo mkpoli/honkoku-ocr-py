@@ -105,6 +105,7 @@ with the browser version are in [benchmarks/README.md](benchmarks/README.md); a 
 
 同じ見開き1コマ（6,496×4,613px、長辺3,500pxに縮小、Python版21行・ブラウザ版22行）を、同じ機械（AMD Ryzen 7 9800X3D、16スレッド）で処理した所要時間。
 ブラウザ版は配信中の[honkoku-ocr-web](https://yuta1984.github.io/honkoku-ocr-web/)（2026-09-06、モデルv18）を2通りの環境で動かした値。
+Python版もv18で測った（v19は構成が同じ）。
 LinuxのヘッドレスChromiumではWebGPUアダプターを取得できず、encoderはWebAssembly（int8）、認識ワーカーは8本。
 WindowsのヘッドレスChromeでは同じRTX 5070 TiのWebGPUアダプターを確認し、fp16 encoder・認識ワーカー2本で別途測定した。
 モデルの取得とセッション作成は含まない。
@@ -282,6 +283,8 @@ for outcome in ocr.process_many(sorted(Path("pages").glob("*.jpg")), cancelled=s
 ## 出力ファイル
 
 CLIのJSONは`PageResult`に`image`（入力のファイル名）、`fingerprint`、`artifacts`（同時に書いたファイルのSHA-256）を加えたもの。
+次の例は『蝦夷藪話』の1コマをCPUで処理したもので、`lines`は割書を含む1行だけを残し、ハッシュは先頭12桁で切ってある。
+所要時間は別の処理と並行して測ったため、[性能](#性能)の表より長い。
 
 ```json
 {
@@ -289,35 +292,38 @@ CLIのJSONは`PageResult`に`image`（入力のファイル名）、`fingerprint
   "width": 6496, "height": 4613,
   "processed_width": 3500, "processed_height": 2485,
   "frame": 0,
-  "model": "v18",
+  "model": "v19",
   "settings": {"device": "cpu", "threads": 0, "decoder_threads": 0, "encoder_precision": "auto",
                "max_dimension": 3500, "margin": 45, "conf_threshold": 0.3, "ios_threshold": 0.8,
-               "coordinate_space": "exif_oriented_original"},
+               "coordinate_space": "exif_oriented_original", "overlap": false},
   "lines": [
-    {"reading_order": 1, "x": 4239, "y": 1221, "width": 334, "height": 422,
-     "detection_confidence": 0.6066901683807373,
-     "raw": "<ruby>大印<rt>おほしつし</rt></ruby>", "koji": "大印（おほしつし）", "plain": "大印おほしつし",
-     "stop_reason": "eos", "token_count": 12,
-     "timings": {"preprocess": 0.008, "encoder": 0.672, "prefill": 0.004, "decode": 0.037}}
+    {"reading_order": 8, "x": 2394, "y": 898, "width": 195, "height": 2997,
+     "detection_confidence": 0.7125413417816162,
+     "raw": "正徳元<WARI>云<WARI_SEP>　卯</WARI>年十月廿三日出船翌辰年十一月",
+     "koji": "正徳元《割書：云｜　卯》年十月廿三日出船翌辰年十一月",
+     "plain": "正徳元云　卯年十月廿三日出船翌辰年十一月",
+     "stop_reason": "eos", "token_count": 24,
+     "timings": {"preprocess": 0.034, "encoder": 1.398, "prefill": 0.006, "decode": 0.087}}
   ],
-  "timings": {"load": 0.269, "detector_setup": 0.075, "layout": 0.173, "reading_order": 0.003,
-              "recognizer_setup": 0.551, "preprocess": 0.434, "encoder": 18.227, "prefill": 0.197,
-              "decode": 0.672, "total": 20.61},
-  "warnings": ["line 7: generation stopped by repetition"],
+  "timings": {"load": 0.329, "detector_setup": 0.102, "layout": 0.15, "reading_order": 0.003,
+              "recognizer_setup": 0.45, "preprocess": 0.608, "encoder": 34.177, "prefill": 0.466,
+              "decode": 2.15, "total": 38.448},
+  "warnings": [],
   "image": "0003.jpg",
   "fingerprint": {
     "source_sha256": "e2ed654248a0…", "frame": 0,
     "models": {"layout": {"file": "rtmdet-s-1280x1280.onnx", "sha256": "f46267754d40…"},
-               "encoder": {"file": "kuzushiji-v18-encoder-fp32.onnx", "sha256": "3b3c359bd426…"},
-               "prefill": {"file": "kuzushiji-v18-decoder-prefill-int8.onnx", "sha256": "6f3f19011f8d…"},
-               "step": {"file": "kuzushiji-v18-decoder-step-int8.onnx", "sha256": "bf0e72a80716…"},
+               "encoder_conversion": "5f7fcd70eee1…",
+               "encoder": {"file": "kuzushiji-v19-encoder-fp32.onnx", "sha256": "cdf485f42b3d…"},
+               "prefill": {"file": "kuzushiji-v19-decoder-prefill-int8.onnx", "sha256": "aadbd475d000…"},
+               "step": {"file": "kuzushiji-v19-decoder-step-int8.onnx", "sha256": "2907b39c8de6…"},
                "vocabulary": "cf0621e68b09…"},
     "settings": {"device": "cpu", "...": "..."},
-    "model": "v18", "plain": false, "layout_only": false, "boxes": null,
-    "package_version": "0.2.0", "code_sha256": "dfde67eac894…",
-    "runtime_versions": {"numpy": "2.5.2", "pillow": "12.3.0", "onnxruntime": "1.29.0", "onnx": "1.22.0"}
+    "model": "v19", "plain": false, "layout_only": false, "boxes": null,
+    "package_version": "0.4.0", "code_sha256": "621add14b806…",
+    "runtime_versions": {"numpy": "2.5.3", "pillow": "12.3.0", "onnxruntime": "1.30.0", "onnx": "1.23.0"}
   },
-  "artifacts": {"0003__5de8f1b5d7a5d622.txt": "ca6949193d5e…"}
+  "artifacts": {"0003__d77f653a5851fe9e.txt": "818c81377b52…"}
 }
 ```
 
