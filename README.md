@@ -381,7 +381,7 @@ CIはPython 3.10〜3.14でlintとテストを走らせ、ビルドしたwheelか
 
 ## スポンサー
 
-honkoku-ocr-pyは、くずし字が好きで、一人で作っています。今は仕事がなく、わずかなTAの給料では家賃や食費もまかなえません。[Ko-fi](https://ko-fi.com/mkpoli)で1ドルでも応援していただけると、今日のごはん代になります。企業スポンサーのご相談はmkpoli@mkpo.liまでどうぞ。
+honkoku-ocr-pyは個人で開発しており、外部からの資金援助はなく、どなたでも無料でご利用いただけます。お役に立っているようでしたら、[Ko-fi](https://ko-fi.com/mkpoli)でチップをいただけると、改善を続ける時間になります。スポンサーにご興味のある企業様は、mkpoli@mkpo.liまでご連絡ください。
 
 [![Support me on Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/mkpoli)
 
