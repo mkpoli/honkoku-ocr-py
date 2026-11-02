@@ -379,6 +379,12 @@ uv run ruff check .
 
 CIはPython 3.10〜3.14でlintとテストを走らせ、ビルドしたwheelから語彙ファイルが読めることを確かめる。
 
+## スポンサー
+
+honkoku-ocr-pyは個人で開発しており、外部からの資金援助はなく、どなたでも無料でご利用いただけます。お役に立っているようでしたら、[Ko-fi](https://ko-fi.com/mkpoli)または[OFUSE](https://ofuse.me/mkpoli)でチップをいただけると、改善を続ける時間になります。スポンサーにご興味のある企業様は、mkpoli@mkpo.liまでご連絡ください。
+
+[![Support me on Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/mkpoli)
+
 ## ライセンスと帰属
 
 このリポジトリのPythonコードとテストはMITライセンス（[LICENSE](LICENSE)）。
